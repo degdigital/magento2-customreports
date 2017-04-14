@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class ExportCsv extends \Magento\Backend\App\Action
 {
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_export_report';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */

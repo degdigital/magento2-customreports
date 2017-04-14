@@ -19,7 +19,7 @@ class Listing extends \Magento\Backend\App\Action
         //Call page factory to render layout and page content
         $resultPage = $this->resultPageFactory->create();
         //Set the menu which will be active for this page
-        $resultPage->setActiveMenu(self::ADMIN_RESOURCE);
+        $resultPage->setActiveMenu('DEG_CustomReports::customreports');
 
         //Set the header title of grid
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Custom Reports'));

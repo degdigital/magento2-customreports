@@ -13,7 +13,7 @@ class Save extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'DEG_CustomReports:customreports';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_save';
 
     /**
      * @var DataPersistorInterface

@@ -3,7 +3,7 @@ namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 class Delete extends \Magento\Backend\App\Action
 {  
-    const ADMIN_RESOURCE = 'DEG_CustomReports:customreports';   
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_delete';
           
     public function execute()
     {
