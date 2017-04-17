@@ -40,16 +40,6 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="deg_customreports_customreports_columns">
-        <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">customreport_id</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
-        </selectionsColumn>
         <column name="customreport_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
