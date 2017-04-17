@@ -30,14 +30,14 @@ class Report extends \Magento\Backend\App\Action
     
     public function execute()
     {
-        $this->builder->build($this->getRequest());
+        $customReport = $this->builder->build($this->getRequest());
         //Call page factory to render layout and page content
         $resultPage = $this->resultPageFactory->create();
         //Set the menu which will be active for this page
         $resultPage->setActiveMenu('DEG_CustomReports::customreports');
 
         //Set the header title of grid
-        $resultPage->getConfig()->getTitle()->prepend(__('The Report'));
+        $resultPage->getConfig()->getTitle()->prepend($customReport->getReportName());
         return $resultPage;
 
     }

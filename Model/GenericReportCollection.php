@@ -21,7 +21,7 @@ class GenericReportCollection extends \Magento\Framework\Data\Collection\Abstrac
     {
         $resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
 
-        $connection = $resourceConnection->getConnection('readonly');
+        $connection = $resourceConnection->getConnectionByName('readonly');
 
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
     }
