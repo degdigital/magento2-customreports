@@ -16,7 +16,7 @@ This module has the potential to make irreversable changes to your database if s
 * CSV Export
 
 ## Adding a readonly user
-```
+```php
 #!php
 
 'db' => 
