@@ -9,10 +9,10 @@ class NewAction extends \Magento\Backend\App\Action
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory)
     {
-        $this->resultPageFactory = $resultPageFactory;        
+        $this->resultPageFactory = $resultPageFactory;
         return parent::__construct($context);
     }
-    
+
     public function execute()
     {
         //Call page factory to render layout and page content
@@ -23,5 +23,5 @@ class NewAction extends \Magento\Backend\App\Action
         //Set the header title of grid
         $resultPage->getConfig()->getTitle()->prepend(__('New Report'));
         return $resultPage;
-    }    
+    }
 }

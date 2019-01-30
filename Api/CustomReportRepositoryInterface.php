@@ -4,7 +4,7 @@ namespace DEG\CustomReports\Api;
 use DEG\CustomReports\Api\Data\CustomReportInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-interface CustomReportRepositoryInterface 
+interface CustomReportRepositoryInterface
 {
     public function save(CustomReportInterface $page);
 

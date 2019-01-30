@@ -40,6 +40,18 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="deg_customreports_customreports_columns">
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">deg_customreports_customreports.deg_customreports_customreports.deg_customreports_customreports_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">report</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
         <column name="customreport_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
