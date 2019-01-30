@@ -77,7 +77,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                     'csv' => [
                         'urlPath' => '*/*/exportCsv',
                         'label' => 'CSV'
-                    ]
+                    ],
+                    'excel' => [
+                        'urlPath' => '*/*/exportXml',
+                        'label' => 'Excel'
+                    ],
                 ]
             ]
         ];
