@@ -3,6 +3,7 @@
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use DEG\CustomReports\Block\Adminhtml\Report\Export;
 
 /**
  * Class Index
@@ -49,6 +50,7 @@ class ExportCsv extends \Magento\Backend\App\Action
 
         /** @var @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
         $reportGrid = $this->_view->getLayout()->createBlock('DEG\CustomReports\Block\Adminhtml\Report\Grid', 'report.grid');
+        /** @var Export $exportBlock */
         $exportBlock = $reportGrid->getChildBlock('grid.export');
         return $this->_fileFactory->create(
             $fileName,
