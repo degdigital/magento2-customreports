@@ -46,7 +46,7 @@ class ExportXml extends \Magento\Backend\App\Action
         $customReport = $this->builder->build($this->getRequest());
 
         $this->_view->loadLayout();
-        $fileName = $customReport->getReportName() . '.xslx';
+        $fileName = $customReport->getReportName() . '.xml';
 
         /** @var @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
         $reportGrid = $this->_view->getLayout()->createBlock('DEG\CustomReports\Block\Adminhtml\Report\Grid', 'report.grid');
