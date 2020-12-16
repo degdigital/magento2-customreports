@@ -51,7 +51,7 @@ class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
                         "label" => __("Edit")
                     ];
                 }
-                if ($this->authorization->isAllowed('DEG_CustomReports::customreports_view_reportf')) {
+                if ($this->authorization->isAllowed('DEG_CustomReports::customreports_view_report')) {
                     $item[$name]["report"] = [
                         "href" => $this->getContext()->getUrl(
                             "deg_customreports_customreports/customreport/report", ["customreport_id" => $id]),
