@@ -1,9 +1,6 @@
 <?php
 namespace DEG\CustomReports\Block\Adminhtml;
 
-use Magento\Framework\Registry;
-
-
 class Report extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
@@ -19,7 +16,6 @@ class Report extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
         $this->removeButton('add');
         $this->_addBackButton();
-
     }
 
     /**
@@ -29,8 +25,4 @@ class Report extends \Magento\Backend\Block\Widget\Grid\Container
     {
         return $this->getUrl('*/*/listing');
     }
-
-
-
-
 }

@@ -2,13 +2,13 @@
 
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use DEG\CustomReports\Block\Adminhtml\Report\Export;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Index
  */
-class ExportCsv extends \Magento\Backend\App\Action
+class ExportXml extends \Magento\Backend\App\Action
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_export_report';
     /**
@@ -46,7 +46,7 @@ class ExportCsv extends \Magento\Backend\App\Action
         $customReport = $this->builder->build($this->getRequest());
 
         $this->_view->loadLayout();
-        $fileName = $customReport->getReportName() . '.csv';
+        $fileName = $customReport->getReportName() . '.xml';
 
         /** @var @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
         $reportGrid = $this->_view->getLayout()->createBlock('DEG\CustomReports\Block\Adminhtml\Report\Grid', 'report.grid');
@@ -54,7 +54,7 @@ class ExportCsv extends \Magento\Backend\App\Action
         $exportBlock = $reportGrid->getChildBlock('grid.export');
         return $this->_fileFactory->create(
             $fileName,
-            $exportBlock->getCsvFile(),
+            $exportBlock->getExcelFile(),
             DirectoryList::VAR_DIR
         );
     }

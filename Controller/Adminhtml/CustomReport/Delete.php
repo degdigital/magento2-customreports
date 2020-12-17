@@ -2,9 +2,9 @@
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 class Delete extends \Magento\Backend\App\Action
-{  
+{
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_delete';
-          
+
     public function execute()
     {
         // check if we know what should be deleted
@@ -33,7 +33,5 @@ class Delete extends \Magento\Backend\App\Action
         $this->messageManager->addError(__('We can not find a report to delete.'));
         // go to grid
         return $resultRedirect->setPath('*/*/listing');
-        
-    }    
-    
+    }
 }

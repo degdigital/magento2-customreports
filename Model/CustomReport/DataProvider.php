@@ -1,10 +1,11 @@
 <?php
 namespace DEG\CustomReports\Model\CustomReport;
+
 use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
+
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
-
     protected $collection;
 
     /**

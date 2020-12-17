@@ -2,10 +2,9 @@
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use Magento\Backend\App\Action;
-use DEG\CustomReports\Model\Page;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-            
+
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -79,5 +78,5 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['customreport_id' => $this->getRequest()->getParam('customreport_id')]);
         }
         return $resultRedirect->setPath('*/*/listing');
-    }    
+    }
 }

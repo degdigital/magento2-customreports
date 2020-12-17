@@ -1,19 +1,19 @@
 <?php
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
+
 class Listing extends \Magento\Backend\App\Action
 {
-    
-    const ADMIN_RESOURCE='DEG_CustomReports::customreports';       
-        
+    const ADMIN_RESOURCE='DEG_CustomReports::customreports';
+
     protected $resultPageFactory;
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory)
     {
-        $this->resultPageFactory = $resultPageFactory;        
+        $this->resultPageFactory = $resultPageFactory;
         return parent::__construct($context);
     }
-    
+
     public function execute()
     {
         //Call page factory to render layout and page content
@@ -24,6 +24,5 @@ class Listing extends \Magento\Backend\App\Action
         //Set the header title of grid
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Custom Reports'));
         return $resultPage;
-
     }
 }

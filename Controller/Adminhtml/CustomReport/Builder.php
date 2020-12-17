@@ -8,8 +8,8 @@ namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use DEG\CustomReports\Model\CustomReportFactory;
 use Magento\Framework\App\RequestInterface;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface as Logger;
 
 class Builder
 {
@@ -66,6 +66,4 @@ class Builder
         $this->registry->register('current_customreport', $customReport);
         return $customReport;
     }
-
-
 }

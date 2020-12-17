@@ -1,16 +1,15 @@
 <?php
 namespace DEG\CustomReports\Model;
 
-use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Api\Data\CustomReportInterface;
-use DEG\CustomReports\Model\CustomReportFactory;
 use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Api\SearchResultsInterfaceFactory;
+
 class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepositoryInterface
 {
     protected $objectFactory;
@@ -18,22 +17,18 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
     public function __construct(
         CustomReportFactory $objectFactory,
         CollectionFactory $collectionFactory,
-        SearchResultsInterfaceFactory $searchResultsFactory       
-    )
-    {
+        SearchResultsInterfaceFactory $searchResultsFactory
+    ) {
         $this->objectFactory        = $objectFactory;
         $this->collectionFactory    = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
     }
-    
+
     public function save(CustomReportInterface $object)
     {
-        try
-        {
+        try {
             $object->save();
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
         }
         return $object;
@@ -46,8 +41,8 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         if (!$object->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
-        return $object;        
-    }       
+        return $object;
+    }
 
     public function delete(CustomReportInterface $object)
     {
@@ -56,18 +51,18 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
-        return true;    
-    }    
+        return true;
+    }
 
     public function deleteById($id)
     {
         return $this->delete($this->getById($id));
-    }    
+    }
 
     public function getList(SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);  
+        $searchResults->setSearchCriteria($criteria);
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $fields = [];
@@ -80,7 +75,7 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
             if ($fields) {
                 $collection->addFieldToFilter($fields, $conditions);
             }
-        }  
+        }
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $criteria->getSortOrders();
         if ($sortOrders) {
@@ -94,10 +89,11 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         }
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
-        $objects = [];                                     
+        $objects = [];
         foreach ($collection as $objectModel) {
             $objects[] = $objectModel;
         }
         $searchResults->setItems($objects);
-        return $searchResults;        
-    }}
+        return $searchResults;
+    }
+}

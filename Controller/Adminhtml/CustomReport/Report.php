@@ -1,10 +1,10 @@
 <?php
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
+
 class Report extends \Magento\Backend\App\Action
 {
-    
     const ADMIN_RESOURCE='DEG_CustomReports::customreports_view_report';
-        
+
     private $resultPageFactory;
 
     /**
@@ -27,7 +27,7 @@ class Report extends \Magento\Backend\App\Action
         $this->builder = $builder;
         return parent::__construct($context);
     }
-    
+
     public function execute()
     {
         $customReport = $this->builder->build($this->getRequest());
@@ -39,6 +39,5 @@ class Report extends \Magento\Backend\App\Action
         //Set the header title of grid
         $resultPage->getConfig()->getTitle()->prepend($customReport->getReportName());
         return $resultPage;
-
     }
 }

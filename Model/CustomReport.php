@@ -1,9 +1,7 @@
 <?php
 namespace DEG\CustomReports\Model;
 
-use DEG\CustomReports\Model\GenericReportCollectionFactory;
 use Magento\Framework\App\ObjectManager;
-
 
 class CustomReport extends \Magento\Framework\Model\AbstractModel implements \DEG\CustomReports\Api\Data\CustomReportInterface, \Magento\Framework\DataObject\IdentityInterface
 {
@@ -23,7 +21,6 @@ class CustomReport extends \Magento\Framework\Model\AbstractModel implements \DE
     {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->genericReportCollectionFactory = $genericReportCollectionFactory ?: ObjectManager::getInstance()->get(GenericReportCollectionFactory::class);
-
     }
 
     protected function _construct()
