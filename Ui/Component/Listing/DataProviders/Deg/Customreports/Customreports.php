@@ -1,22 +1,27 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace DEG\CustomReports\Ui\Component\Listing\DataProviders\Deg\Customreports;
 
-class Customreports extends \Magento\Ui\DataProvider\AbstractDataProvider
+use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+
+class Customreports extends AbstractDataProvider
 {
     /**
      * Customreports constructor.
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
+     *
+     * @param string                                                                $name
+     * @param string                                                                $primaryFieldName
+     * @param string                                                                $requestFieldName
      * @param \DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory $collectionFactory
-     * @param array $meta
-     * @param array $data
+     * @param array                                                                 $meta
+     * @param array                                                                 $data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
-        \DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory $collectionFactory,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {

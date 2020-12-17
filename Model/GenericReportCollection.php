@@ -1,16 +1,19 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace DEG\CustomReports\Model;
 
+use Exception;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as Logger;
 
-class GenericReportCollection extends \Magento\Framework\Data\Collection\AbstractDb
+class GenericReportCollection extends AbstractDb
 {
     /**
      * GenericReportCollection constructor.
@@ -21,12 +24,13 @@ class GenericReportCollection extends \Magento\Framework\Data\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null          $connection
      * @param \Magento\Framework\App\ResourceConnection|null               $resourceConnection
      */
-    public function __construct(EntityFactoryInterface $entityFactory,
-                                Logger $logger,
-                                FetchStrategyInterface $fetchStrategy,
-                                AdapterInterface $connection = null,
-                                ResourceConnection $resourceConnection = null)
-    {
+    public function __construct(
+        EntityFactoryInterface $entityFactory,
+        Logger $logger,
+        FetchStrategyInterface $fetchStrategy,
+        AdapterInterface $connection = null,
+        ResourceConnection $resourceConnection = null
+    ) {
         $resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
 
         $connection = $resourceConnection->getConnectionByName('readonly');
@@ -36,22 +40,23 @@ class GenericReportCollection extends \Magento\Framework\Data\Collection\Abstrac
 
     /**
      * Intentionally left empty since this is a generic resource.
-     */
+     *
+     * @noinspection PhpMissingReturnTypeInspection*/
     public function getResource()
     {
     }
 
     /**
-     * @param JoinDataInterface $join
+     * @param JoinDataInterface      $join
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @throws \Exception
+     *
      * @return $this
+     * @throws \Exception
      */
     public function joinExtensionAttribute(
         JoinDataInterface $join,
         JoinProcessorInterface $extensionAttributesJoinProcessor
-    ) {
-        throw new \Exception('joinExtensionAttribute is not allowed in GenericReportCollection');
-        return $this;
+    ): GenericReportCollection {
+        throw new Exception('joinExtensionAttribute is not allowed in GenericReportCollection');
     }
 }

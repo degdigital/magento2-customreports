@@ -1,12 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
+use DEG\CustomReports\Api\CustomReportRepositoryInterface;
+use DEG\CustomReports\Model\CustomReport;
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -19,17 +23,24 @@ class Save extends \Magento\Backend\App\Action
      * @var DataPersistorInterface
      */
     protected $dataPersistor;
+    /**
+     * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
+     */
+    private $customReportRepository;
 
     /**
-     * @param Action\Context         $context
-     * @param DataPersistorInterface $dataPersistor
+     * @param Action\Context                                         $context
+     * @param DataPersistorInterface                                 $dataPersistor
+     * @param \DEG\CustomReports\Api\CustomReportRepositoryInterface $customReportRepository
      */
     public function __construct(
         Action\Context $context,
-        DataPersistorInterface $dataPersistor
+        DataPersistorInterface $dataPersistor,
+        CustomReportRepositoryInterface $customReportRepository
     ) {
         $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
+        $this->customReportRepository = $customReportRepository;
     }
 
     /**
@@ -37,50 +48,52 @@ class Save extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            if (isset($data['is_active']) && $data['is_active'] === 'true') {
-                $data['is_active'] = DEG\CustomReports\Model\CustomReport::STATUS_ENABLED;
-            }
             if (empty($data['customreport_id'])) {
                 $data['customreport_id'] = null;
             }
 
-            /** @var DEG\CustomReports\Model\CustomReport $model */
-            $model = $this->_objectManager->create('DEG\CustomReports\Model\CustomReport');
+            /** @var \DEG\CustomReports\Model\CustomReport $customReport */
+            $customReport = $this->_objectManager->create(CustomReport::class);
 
             $id = $this->getRequest()->getParam('customreport_id');
             if ($id) {
-                $model->load($id);
+                $customReport = $this->customReportRepository->getById($id);
             }
 
-            $model->setData($data);
+            $customReport->setData($data);
 
             try {
-                $model->save();
-                $this->messageManager->addSuccess(__('You saved the report.'));
+                $this->customReportRepository->save($customReport);
+                $this->messageManager->addSuccessMessage(__('You saved the report.'));
                 $this->dataPersistor->clear('deg_customreports_customreport');
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit',
-                        ['customreport_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['customreport_id' => $customReport->getId(), '_current' => true]
+                    );
                 }
 
                 return $resultRedirect->setPath('*/*/listing');
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the data.'));
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (Exception $e) {
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the data.'));
             }
 
             $this->dataPersistor->set('deg_customreports_customreport', $data);
 
-            return $resultRedirect->setPath('*/*/edit',
-                ['customreport_id' => $this->getRequest()->getParam('customreport_id')]);
+            return $resultRedirect->setPath(
+                '*/*/edit',
+                ['customreport_id' => $this->getRequest()->getParam('customreport_id')]
+            );
         }
 
         return $resultRedirect->setPath('*/*/listing');

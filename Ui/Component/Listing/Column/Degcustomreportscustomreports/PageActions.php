@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Ui\Component\Listing\Column\Degcustomreportscustomreports;
 
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\Column;
 
-class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
+class PageActions extends Column
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
@@ -24,7 +26,7 @@ class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        \Magento\Framework\AuthorizationInterface $authorization,
+        AuthorizationInterface $authorization,
         array $components = [],
         array $data = []
     ) {
@@ -42,7 +44,7 @@ class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
      *
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource["data"]["items"])) {
             foreach ($dataSource["data"]["items"] as &$item) {
@@ -51,14 +53,18 @@ class PageActions extends \Magento\Ui\Component\Listing\Columns\Column
                 if ($this->authorization->isAllowed('DEG_CustomReports::customreports_edit')) {
                     $item[$name]["view"] = [
                         "href" => $this->getContext()->getUrl(
-                            "deg_customreports_customreports/customreport/edit", ["customreport_id" => $id]),
+                            "deg_customreports_customreports/customreport/edit",
+                            ["customreport_id" => $id]
+                        ),
                         "label" => __("Edit"),
                     ];
                 }
                 if ($this->authorization->isAllowed('DEG_CustomReports::customreports_view_report')) {
                     $item[$name]["report"] = [
                         "href" => $this->getContext()->getUrl(
-                            "deg_customreports_customreports/customreport/report", ["customreport_id" => $id]),
+                            "deg_customreports_customreports/customreport/report",
+                            ["customreport_id" => $id]
+                        ),
                         "label" => __("Report"),
                     ];
                 }

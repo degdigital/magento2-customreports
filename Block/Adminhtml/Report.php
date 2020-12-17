@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Block\Adminhtml;
 
-class Report extends \Magento\Backend\Block\Widget\Grid\Container
+use Magento\Backend\Block\Widget\Grid\Container;
+
+class Report extends Container
 {
     /**
      * @return string
      */
-    public function getBackUrl()
+    public function getBackUrl(): string
     {
         return $this->getUrl('*/*/listing');
     }

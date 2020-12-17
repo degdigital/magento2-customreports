@@ -1,25 +1,28 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Api;
 
 use DEG\CustomReports\Api\Data\CustomReportInterface;
+use DEG\CustomReports\Model\CustomReport;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface CustomReportRepositoryInterface
 {
     /**
-     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $page
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
      *
-     * @return mixed
+     * @return \DEG\CustomReports\Api\Data\CustomReportInterface
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(CustomReportInterface $page);
+    public function save(CustomReportInterface $customReport): CustomReportInterface;
 
     /**
      * @param $id
      *
-     * @return mixed
+     * @return \DEG\CustomReports\Model\CustomReport
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($id);
+    public function getById($id): CustomReport;
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
@@ -29,16 +32,19 @@ interface CustomReportRepositoryInterface
     public function getList(SearchCriteriaInterface $criteria);
 
     /**
-     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $page
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
      *
-     * @return mixed
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(CustomReportInterface $page);
+    public function delete(CustomReportInterface $customReport): bool;
 
     /**
      * @param $id
      *
-     * @return mixed
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function deleteById($id);
+    public function deleteById($id): bool;
 }

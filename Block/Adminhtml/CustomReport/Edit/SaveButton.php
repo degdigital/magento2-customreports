@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace DEG\CustomReports\Block\Adminhtml\CustomReport\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
@@ -8,7 +9,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
     /**
      * @return array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         return [
             'label' => __('Save Report'),

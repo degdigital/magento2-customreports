@@ -1,17 +1,25 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace DEG\CustomReports\Block\Adminhtml\CustomReport\Edit;
+
+use Magento\Backend\Block\Widget\Context;
 
 class GenericButton
 {
     //putting all the button methods in here.  No "right", but the whole
     //button/GenericButton thing seems -- not that great -- to begin with
     /**
+     * @var \Magento\Backend\Block\Widget\Context
+     */
+    private $context;
+
+    /**
      * GenericButton constructor.
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context
+        Context $context
     ) {
         $this->context = $context;
     }
@@ -19,7 +27,7 @@ class GenericButton
     /**
      * @return string
      */
-    public function getBackUrl()
+    public function getBackUrl(): string
     {
         return $this->getUrl('*/*/listing');
     }
@@ -27,7 +35,7 @@ class GenericButton
     /**
      * @return string
      */
-    public function getDeleteUrl()
+    public function getDeleteUrl(): string
     {
         return $this->getUrl('*/*/delete', ['object_id' => $this->getObjectId()]);
     }
@@ -38,7 +46,7 @@ class GenericButton
      *
      * @return string
      */
-    public function getUrl($route = '', $params = [])
+    public function getUrl($route = '', $params = []): string
     {
         return $this->context->getUrlBuilder()->getUrl($route, $params);
     }

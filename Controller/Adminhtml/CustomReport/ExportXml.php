@@ -1,14 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use DEG\CustomReports\Block\Adminhtml\Report\Export;
+use DEG\CustomReports\Block\Adminhtml\Report\Grid;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
 
-/**
- * Class Index
- */
-class ExportXml extends \Magento\Backend\App\Action
+class ExportXml extends Action
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_export_report';
     /**
@@ -22,16 +24,14 @@ class ExportXml extends \Magento\Backend\App\Action
     private $builder;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param \Magento\Backend\App\Action\Context                          $context
+     * @param \Magento\Framework\App\Response\Http\FileFactory             $fileFactory
+     * @param \DEG\CustomReports\Controller\Adminhtml\CustomReport\Builder $builder
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \DEG\CustomReports\Controller\Adminhtml\CustomReport\Builder $builder
-
+        Context $context,
+        FileFactory $fileFactory,
+        Builder $builder
     ) {
         $this->_fileFactory = $fileFactory;
         $this->builder = $builder;
@@ -43,18 +43,21 @@ class ExportXml extends \Magento\Backend\App\Action
      * Export customer grid to CSV format
      *
      * @return \Magento\Framework\App\ResponseInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Exception
      */
-    public function execute()
+    public function execute(): ResponseInterface
     {
+        /** @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
+        /** @var $exportBlock Export */
+
         $customReport = $this->builder->build($this->getRequest());
-
         $this->_view->loadLayout();
-        $fileName = $customReport->getReportName() . '.xml';
-
-        /** @var @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
-        $reportGrid = $this->_view->getLayout()->createBlock('DEG\CustomReports\Block\Adminhtml\Report\Grid', 'report.grid');
-        /** @var Export $exportBlock */
+        $fileName = $customReport->getReportName().'.xml';
+        $reportGrid = $this->_view->getLayout()
+            ->createBlock(Grid::class, 'report.grid');
         $exportBlock = $reportGrid->getChildBlock('grid.export');
+
         return $this->_fileFactory->create(
             $fileName,
             $exportBlock->getExcelFile(),

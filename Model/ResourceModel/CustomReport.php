@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace DEG\CustomReports\Model\ResourceModel;
 
-class CustomReport extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+class CustomReport extends AbstractDb
 {
     protected function _construct()
     {
