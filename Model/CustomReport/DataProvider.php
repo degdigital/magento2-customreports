@@ -1,4 +1,5 @@
 <?php
+
 namespace DEG\CustomReports\Model\CustomReport;
 
 use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
@@ -19,13 +20,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
-     * @param CollectionFactory $collectionFactory
+     * @param string                 $name
+     * @param string                 $primaryFieldName
+     * @param string                 $requestFieldName
+     * @param CollectionFactory      $collectionFactory
      * @param DataPersistorInterface $dataPersistor
-     * @param array $meta
-     * @param array $data
+     * @param array                  $meta
+     * @param array                  $data
      */
     public function __construct(
         $name,
@@ -46,6 +47,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Prepares Meta
      *
      * @param array $meta
+     *
      * @return array
      */
     public function prepareMeta(array $meta)

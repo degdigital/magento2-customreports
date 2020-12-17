@@ -5,6 +5,9 @@ class Report extends \Magento\Backend\App\Action
 {
     const ADMIN_RESOURCE='DEG_CustomReports::customreports_view_report';
 
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
     private $resultPageFactory;
 
     /**
@@ -28,6 +31,9 @@ class Report extends \Magento\Backend\App\Action
         return parent::__construct($context);
     }
 
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
         $customReport = $this->builder->build($this->getRequest());

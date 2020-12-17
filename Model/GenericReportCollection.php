@@ -12,6 +12,15 @@ use Psr\Log\LoggerInterface as Logger;
 
 class GenericReportCollection extends \Magento\Framework\Data\Collection\AbstractDb
 {
+    /**
+     * GenericReportCollection constructor.
+     *
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface    $entityFactory
+     * @param \Psr\Log\LoggerInterface                                     $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null          $connection
+     * @param \Magento\Framework\App\ResourceConnection|null               $resourceConnection
+     */
     public function __construct(EntityFactoryInterface $entityFactory,
                                 Logger $logger,
                                 FetchStrategyInterface $fetchStrategy,

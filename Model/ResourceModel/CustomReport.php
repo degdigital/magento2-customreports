@@ -1,4 +1,5 @@
 <?php
+
 namespace DEG\CustomReports\Model\ResourceModel;
 
 class CustomReport extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb

@@ -1,4 +1,5 @@
 <?php
+
 namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use Magento\Backend\App\Action;
@@ -20,7 +21,7 @@ class Save extends \Magento\Backend\App\Action
     protected $dataPersistor;
 
     /**
-     * @param Action\Context $context
+     * @param Action\Context         $context
      * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
@@ -33,8 +34,8 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Save action
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
@@ -65,8 +66,10 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('You saved the report.'));
                 $this->dataPersistor->clear('deg_customreports_customreport');
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['customreport_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath('*/*/edit',
+                        ['customreport_id' => $model->getId(), '_current' => true]);
                 }
+
                 return $resultRedirect->setPath('*/*/listing');
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -75,8 +78,11 @@ class Save extends \Magento\Backend\App\Action
             }
 
             $this->dataPersistor->set('deg_customreports_customreport', $data);
-            return $resultRedirect->setPath('*/*/edit', ['customreport_id' => $this->getRequest()->getParam('customreport_id')]);
+
+            return $resultRedirect->setPath('*/*/edit',
+                ['customreport_id' => $this->getRequest()->getParam('customreport_id')]);
         }
+
         return $resultRedirect->setPath('*/*/listing');
     }
 }

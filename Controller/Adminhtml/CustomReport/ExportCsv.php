@@ -16,6 +16,9 @@ class ExportCsv extends \Magento\Backend\App\Action
      */
     protected $_fileFactory;
 
+    /**
+     * @var \DEG\CustomReports\Controller\Adminhtml\CustomReport\Builder
+     */
     private $builder;
 
     /**

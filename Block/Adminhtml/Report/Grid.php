@@ -11,6 +11,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     private $registry;
 
+    /**
+     * Grid constructor.
+     *
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data            $backendHelper
+     * @param \Magento\Framework\Registry             $registery
+     * @param array                                   $data
+     */
     public function __construct(\Magento\Backend\Block\Template\Context $context,
                                 \Magento\Backend\Helper\Data $backendHelper,
                                 Registry $registery,
@@ -20,6 +28,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $this->registry = $registery;
     }
 
+    /**
+     * @return \DEG\CustomReports\Block\Adminhtml\Report\Grid|void
+     */
     public function _prepareLayout()
     {
 
@@ -36,6 +47,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         parent::_prepareLayout();
     }
 
+    /**
+     * @param $collection
+     *
+     * @return mixed
+     */
     public function getColumnListFromCollection($collection)
     {
         $columnsCollection = clone $collection;

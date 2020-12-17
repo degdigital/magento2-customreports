@@ -5,6 +5,9 @@ class Delete extends \Magento\Backend\App\Action
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_delete';
 
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         // check if we know what should be deleted

@@ -1,15 +1,17 @@
 {
-  "name": "degdigital/magento2-customreports",
-  "description": "A Magento 2 module that allows an administrator to create reports in the admin panel.  This is modeled after the Clean Reports module for Magento 1.",
-  "type": "magento2-module",
-  "license": [
-    "OSL-3.0",
-    "AFL-3.0"
-  ],
-  "autoload": {
-    "files": [ "registration.php" ],
-    "psr-4": {
-      "DEG\\CustomReports\\": ""
+    "name": "degdigital/magento2-customreports",
+    "description": "A Magento 2 module that allows an administrator to create reports in the admin panel.  This is modeled after the Clean Reports module for Magento 1.",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "DEG\\CustomReports\\": ""
+        }
     }
-  }
 }

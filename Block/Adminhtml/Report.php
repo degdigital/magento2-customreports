@@ -1,8 +1,17 @@
 <?php
+
 namespace DEG\CustomReports\Block\Adminhtml;
 
 class Report extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return string
+     */
+    public function getBackUrl()
+    {
+        return $this->getUrl('*/*/listing');
+    }
+
     /**
      * constructor
      *
@@ -16,13 +25,5 @@ class Report extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
         $this->removeButton('add');
         $this->_addBackButton();
-    }
-
-    /**
-     * @return string
-     */
-    public function getBackUrl()
-    {
-        return $this->getUrl('*/*/listing');
     }
 }

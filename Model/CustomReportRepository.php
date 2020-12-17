@@ -12,8 +12,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepositoryInterface
 {
+    /**
+     * @var \DEG\CustomReports\Model\CustomReportFactory
+     */
     protected $objectFactory;
+    /**
+     * @var \DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory
+     */
     protected $collectionFactory;
+
+    /**
+     * CustomReportRepository constructor.
+     *
+     * @param \DEG\CustomReports\Model\CustomReportFactory                          $objectFactory
+     * @param \DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\Api\SearchResultsInterfaceFactory                  $searchResultsFactory
+     */
     public function __construct(
         CustomReportFactory $objectFactory,
         CollectionFactory $collectionFactory,
@@ -24,6 +38,12 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         $this->searchResultsFactory = $searchResultsFactory;
     }
 
+    /**
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $object
+     *
+     * @return \DEG\CustomReports\Api\Data\CustomReportInterface
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function save(CustomReportInterface $object)
     {
         try {
@@ -34,6 +54,12 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         return $object;
     }
 
+    /**
+     * @param $id
+     *
+     * @return \DEG\CustomReports\Model\CustomReport
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function getById($id)
     {
         $object = $this->objectFactory->create();
@@ -44,6 +70,12 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         return $object;
     }
 
+    /**
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $object
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     public function delete(CustomReportInterface $object)
     {
         try {
@@ -54,11 +86,23 @@ class CustomReportRepository implements \DEG\CustomReports\Api\CustomReportRepos
         return true;
     }
 
+    /**
+     * @param $id
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function deleteById($id)
     {
         return $this->delete($this->getById($id));
     }
 
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
+     *
+     * @return mixed
+     */
     public function getList(SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();

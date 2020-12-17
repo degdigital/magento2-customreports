@@ -1,4 +1,5 @@
 <?php
+
 namespace DEG\CustomReports\Model\ResourceModel\CustomReport;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
@@ -8,3 +9,4 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_init('DEG\CustomReports\Model\CustomReport', 'DEG\CustomReports\Model\ResourceModel\CustomReport');
     }
 }
+

@@ -12,6 +12,9 @@ namespace DEG\CustomReports\Block\Adminhtml\Report;
  */
 class Export extends \Magento\Backend\Block\Widget\Grid\Export
 {
+    /**
+     * @return $this|\DEG\CustomReports\Block\Adminhtml\Report\Export
+     */
     public function _prepareLayout()
     {
         return $this;
