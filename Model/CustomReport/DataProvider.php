@@ -61,7 +61,7 @@ class DataProvider extends AbstractDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;

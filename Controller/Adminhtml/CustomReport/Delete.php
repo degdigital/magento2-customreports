@@ -9,7 +9,7 @@ use Magento\Backend\App\Action\Context;
 
 class Delete extends Action
 {
-    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_delete';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_delete';
     /**
      * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
      */

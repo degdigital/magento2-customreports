@@ -8,7 +8,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Listing extends Action
 {
-    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreport';
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -36,7 +36,7 @@ class Listing extends Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('DEG_CustomReports::customreports');
+        $resultPage->setActiveMenu('DEG_CustomReports::customreport');
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Custom Reports'));
 
         return $resultPage;

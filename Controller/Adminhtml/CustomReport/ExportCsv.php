@@ -12,7 +12,7 @@ use Magento\Framework\App\ResponseInterface;
 
 class ExportCsv extends Action
 {
-    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_export_report';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_export_report';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */

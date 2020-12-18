@@ -33,12 +33,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $this->currentCustomReportRegistry = $currentCustomReportRegistry;
     }
 
-    /**
-     * @return \DEG\CustomReports\Block\Adminhtml\Report\Grid|void
-     */
-    public function _prepareLayout(): Grid
+    public function _prepareLayout()
     {
-        /** @var $customReport \DEG\CustomReports\Model\CustomReport */
         $customReport = $this->currentCustomReportRegistry->get();
         $genericCollection = $customReport->getGenericReportCollection();
         $columnList = $this->getColumnListFromCollection($genericCollection);

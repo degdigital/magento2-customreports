@@ -17,7 +17,7 @@ class Save extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_save';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_save';
 
     /**
      * @var DataPersistorInterface

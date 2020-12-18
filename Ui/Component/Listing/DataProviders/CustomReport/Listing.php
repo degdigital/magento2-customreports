@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace DEG\CustomReports\Ui\Component\Listing\DataProviders\Deg\Customreports;
+namespace DEG\CustomReports\Ui\Component\Listing\DataProviders\CustomReport;
 
 use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
-class Customreports extends AbstractDataProvider
+class Listing extends AbstractDataProvider
 {
     /**
      * Customreports constructor.

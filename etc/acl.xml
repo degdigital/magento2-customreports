@@ -3,13 +3,13 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="DEG_CustomReports::customreports" title="Manage customreports">
-                    <resource id="DEG_CustomReports::customreports_add_new" title="Add New Report"/>
-                    <resource id="DEG_CustomReports::customreports_edit" title="Edit Report"/>
-                    <resource id="DEG_CustomReports::customreports_save" title="Save Report"/>
-                    <resource id="DEG_CustomReports::customreports_delete" title="Delete Report"/>
-                    <resource id="DEG_CustomReports::customreports_view_report" title="View Report"/>
-                    <resource id="DEG_CustomReports::customreports_export_report" title="Export Report"/>
+                <resource id="DEG_CustomReports::customreport" title="Manage Custom Reports">
+                    <resource id="DEG_CustomReports::customreport_add_new" title="Add New Report"/>
+                    <resource id="DEG_CustomReports::customreport_edit" title="Edit Report"/>
+                    <resource id="DEG_CustomReports::customreport_save" title="Save Report"/>
+                    <resource id="DEG_CustomReports::customreport_delete" title="Delete Report"/>
+                    <resource id="DEG_CustomReports::customreport_view_report" title="View Report"/>
+                    <resource id="DEG_CustomReports::customreport_export_report" title="Export Report"/>
                 </resource>
             </resource>
         </resources>

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DEG\CustomReports\Ui\Component\Listing\Column\Degcustomreportscustomreports;
+namespace DEG\CustomReports\Ui\Component\Listing\Column\CustomReport;
 
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -50,19 +50,19 @@ class PageActions extends Column
             foreach ($dataSource["data"]["items"] as &$item) {
                 $name = $this->getData("name");
                 $id = $item["customreport_id"] ?? "X";
-                if ($this->authorization->isAllowed('DEG_CustomReports::customreports_edit')) {
+                if ($this->authorization->isAllowed('DEG_CustomReports::customreport_edit')) {
                     $item[$name]["view"] = [
                         "href" => $this->getContext()->getUrl(
-                            "deg_customreports_customreports/customreport/edit",
+                            "deg_customreports/customreport/edit",
                             ["customreport_id" => $id]
                         ),
                         "label" => __("Edit"),
                     ];
                 }
-                if ($this->authorization->isAllowed('DEG_CustomReports::customreports_view_report')) {
+                if ($this->authorization->isAllowed('DEG_CustomReports::customreport_view_report')) {
                     $item[$name]["report"] = [
                         "href" => $this->getContext()->getUrl(
-                            "deg_customreports_customreports/customreport/report",
+                            "deg_customreports/customreport/report",
                             ["customreport_id" => $id]
                         ),
                         "label" => __("Report"),

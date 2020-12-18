@@ -8,7 +8,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends Action
 {
-    const ADMIN_RESOURCE = 'DEG_CustomReports::customreports_edit';
+    const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_edit';
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */

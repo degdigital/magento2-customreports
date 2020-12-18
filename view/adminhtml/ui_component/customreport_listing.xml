@@ -2,23 +2,23 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">deg_customreports_customreports.deg_customreports_customreports_data_source</item>
-            <item name="deps" xsi:type="string">deg_customreports_customreports.deg_customreports_customreports_data_source</item>
+            <item name="provider" xsi:type="string">customreport_listing.customreport_listing_data_source</item>
+            <item name="deps" xsi:type="string">customreport_listing.customreport_listing_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">deg_customreports_customreports_columns</item>
+        <item name="spinner" xsi:type="string">customreport_listing_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
                 <item name="label" xsi:type="string">Add New</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/CustomReport/new</item>
+                <item name="url" xsi:type="string">*/customreport/new</item>
             </item>
         </item>
     </argument>
-    <dataSource name="deg_customreports_customreports_data_source">
+    <dataSource name="customreport_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">DEG\CustomReports\Ui\Component\Listing\DataProviders\Deg\Customreports\Customreports</argument>
-            <argument name="name" xsi:type="string">deg_customreports_customreports_data_source</argument>
+            <argument name="class" xsi:type="string">DEG\CustomReports\Ui\Component\Listing\DataProviders\CustomReport\Listing</argument>
+            <argument name="name" xsi:type="string">customreport_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">customreport_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -39,11 +39,11 @@
     <listingToolbar name="listing_top">
         <paging name="listing_paging"/>
     </listingToolbar>
-    <columns name="deg_customreports_customreports_columns">
+    <columns name="customreport_listing_columns">
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">deg_customreports_customreports.deg_customreports_customreports.deg_customreports_customreports_columns.actions</item>
+                    <item name="provider" xsi:type="string">customreport_listing.customreport_listing_columns.actions</item>
                     <item name="target" xsi:type="string">applyAction</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">report</item>
@@ -61,7 +61,7 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="DEG\CustomReports\Ui\Component\Listing\Column\Degcustomreportscustomreports\PageActions">
+        <actionsColumn name="actions" class="DEG\CustomReports\Ui\Component\Listing\Column\CustomReport\PageActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
