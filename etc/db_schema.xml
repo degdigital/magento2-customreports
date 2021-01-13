@@ -10,4 +10,34 @@
             <column name="customreport_id"/>
         </constraint>
     </table>
+    <table name="deg_customreports_automatedexports" resource="default" engine="innodb" comment="deg_customreports_automatedexports">
+        <column xsi:type="int" name="automatedexport_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="text" name="title" nullable="false" comment="Title"/>
+        <column xsi:type="varchar" name="cron_expr" nullable="false" length="255" comment="Cron Expression"/>
+        <column xsi:type="varchar" name="export_types" nullable="false" length="255" comment="Export Types"/>
+        <column xsi:type="varchar" name="file_types" nullable="false" length="255" comment="File Types"/>
+        <column xsi:type="varchar" name="filename_pattern" nullable="false" length="255" comment="Filename Pattern"/>
+        <column xsi:type="text" name="export_location" nullable="false" comment="Filename Pattern"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Modification Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="automatedexport_id"/>
+        </constraint>
+    </table>
+    <table name="deg_customreports_automatedexports_link" resource="default" engine="innodb" comment="deg_customreports_automatedexports_link">
+        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Link ID"/>
+        <column xsi:type="int" name="customreport_id" padding="10" unsigned="true" nullable="false" comment="Custom Report ID"/>
+        <column xsi:type="int" name="automatedexport_id" padding="10" unsigned="true" nullable="false" comment="Automated Export ID"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Modification Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="link_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="AUTOMATEDEXPORT_LINK_CUSTOMREPORT_ID" table="deg_customreports_automatedexports_link" column="customreport_id" referenceTable="deg_customreports" referenceColumn="customreport_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="AUTOMATEDEXPORT_LINK_AUTOMATEDEXPORT_ID" table="deg_customreports_automatedexports_link" column="automatedexport_id" referenceTable="deg_customreports_automatedexports" referenceColumn="automatedexport_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="UNIQUE_CUSTOMREPORT_ID_AUTOMATEDEXPORT_ID">
+            <column name="customreport_id"/>
+            <column name="automatedexport_id"/>
+        </constraint>
+    </table>
 </schema>

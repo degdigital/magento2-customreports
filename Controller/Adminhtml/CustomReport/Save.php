@@ -31,16 +31,16 @@ class Save extends Action
     /**
      * @param Action\Context                                         $context
      * @param DataPersistorInterface                                 $dataPersistor
-     * @param \DEG\CustomReports\Api\CustomReportRepositoryInterface $customReportRepository
+     * @param \DEG\CustomReports\Api\CustomReportRepositoryInterface $automatedExportRepository
      */
     public function __construct(
         Action\Context $context,
         DataPersistorInterface $dataPersistor,
-        CustomReportRepositoryInterface $customReportRepository
+        CustomReportRepositoryInterface $automatedExportRepository
     ) {
         $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
-        $this->customReportRepository = $customReportRepository;
+        $this->customReportRepository = $automatedExportRepository;
     }
 
     /**

@@ -7,13 +7,29 @@
 // @codingStandardsIgnoreFile
 namespace DEG\CustomReports\Block\Adminhtml\Report;
 
+use DEG\CustomReports\Api\Data\CustomReportInterface;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Convert\Excel;
+use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Export extends \Magento\Backend\Block\Widget\Grid\Export
 {
+    private TimezoneInterface $timeZone;
+
+    public function __construct(
+        Context $context,
+        CollectionFactory $collectionFactory,
+        TimezoneInterface $timeZone,
+        array $data = []
+    ) {
+        parent::__construct($context, $collectionFactory, $data);
+        $this->timeZone = $timeZone;
+    }
+
     /**
      * @return $this|\DEG\CustomReports\Block\Adminhtml\Report\Export
      */
@@ -85,5 +101,59 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
             'value' => $file,
             'rm' => true  // can delete file after use
         ];
+    }
+
+    /**
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
+     * @param                                                   $automatedExport
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function getCronCsvFile(CustomReportInterface $customReport, $automatedExport)
+    {
+        $string = $automatedExport->getFilenamePattern();
+        $name = $this->replaceVariables($string, $customReport, $automatedExport);
+
+        $this->_path = 'export/fbssadditionalexports';
+
+        $file = $this->_path.'/'.$name.'.csv';
+
+        $this->_directory->create($this->_path);
+        $stream = $this->_directory->openFile($file, 'w+');
+
+        $stream->writeCsv($this->_getExportHeaders());
+        $stream->lock();
+        $this->_exportIterateCollection('_exportCsvItem', [$stream]);
+        if ($this->getCountTotals()) {
+            $stream->writeCsv($this->_getExportTotals());
+        }
+        $stream->unlock();
+        $stream->close();
+
+        return [
+            'type' => 'filename',
+            'value' => $file,
+            'rm' => false  // can delete file after use
+        ];
+    }
+
+    protected function replaceVariables($string, $customReport, $automatedExport)
+    {
+        $formattedReportName = strtolower(str_replace(' ', '_', $customReport->getReportName()));
+
+        $replaceableVariables = [
+            '%d%' => $this->timeZone->date()->format('d'),
+            '%m%' => $this->timeZone->date()->format('m'),
+            '%y%' => $this->timeZone->date()->format('y'),
+            '%Y%' => $this->timeZone->date()->format('Y'),
+            '%h%' => $this->timeZone->date()->format('H'),
+            '%i%' => $this->timeZone->date()->format('i'),
+            '%s%' => $this->timeZone->date()->format('s'),
+            '%reportname%' => $formattedReportName,
+        ];
+        $string = str_replace(array_keys($replaceableVariables), array_values($replaceableVariables), $string);
+
+        return $string;
     }
 }

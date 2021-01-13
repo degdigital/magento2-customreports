@@ -2,4 +2,19 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="DEG\CustomReports\Api\CustomReportRepositoryInterface" type="DEG\CustomReports\Model\CustomReportRepository"/>
     <preference for="DEG\CustomReports\Api\Data\CustomReportInterface" type="DEG\CustomReports\Model\CustomReport"/>
+
+    <preference for="DEG\CustomReports\Api\AutomatedExportRepositoryInterface" type="DEG\CustomReports\Model\AutomatedExportRepository"/>
+    <preference for="DEG\CustomReports\Api\Data\AutomatedExportInterface" type="DEG\CustomReports\Model\AutomatedExport"/>
+
+    <preference for="DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface" type="\DEG\CustomReports\Model\AutomatedExportLinkRepository"/>
+    <preference for="DEG\CustomReports\Api\Data\AutomatedExportLinkInterface" type="DEG\CustomReports\Model\AutomatedExportLink"/>
+
+    <preference for="DEG\CustomReports\Api\CreateDynamicCronInterface" type="DEG\CustomReports\Model\Service\CreateDynamicCron"/>
+    <preference for="DEG\CustomReports\Api\DeleteDynamicCronInterface" type="DEG\CustomReports\Model\Service\DeleteDynamicCron"/>
+
+    <type name="DEG\CustomReports\Model\AutomatedExport\Cron">
+        <arguments>
+            <argument name="logger" xsi:type="object">Magento\Cron\Model\VirtualLogger</argument>
+        </arguments>
+    </type>
 </config>

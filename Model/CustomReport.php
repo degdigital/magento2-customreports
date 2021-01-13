@@ -11,6 +11,14 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Zend_Db_Expr;
 
+/**
+ * @method int getId()
+ * @method string getReportName()
+ * @method string getReportSql()
+ * @method CustomReport setId(int $id)
+ * @method CustomReport setReportName(string $reportName)
+ * @method CustomReport setReportSql(string $reportSql)
+ */
 class CustomReport extends AbstractModel implements CustomReportInterface, IdentityInterface
 {
     const CACHE_TAG = 'deg_customreports_customreport';
