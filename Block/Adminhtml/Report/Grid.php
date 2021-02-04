@@ -107,7 +107,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                     ],
                     'excel' => [
                         'urlPath' => '*/*/exportXml',
-                        'label' => 'Excel',
+                        'label' => 'Excel XML',
                     ],
                 ],
             ],
