@@ -12,9 +12,8 @@ use Magento\Cron\Model\Schedule;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Result\PageFactory;
 use Psr\Log\LoggerInterface;
-use Xtento\OrderExport\Model\AbstractAutomaticExport;
 
-class Cron extends AbstractAutomaticExport
+class Cron
 {
     private AutomatedExportRepositoryInterface $automatedExportRepository;
     private DeleteDynamicCronInterface $deleteDynamicCron;
@@ -94,7 +93,7 @@ class Cron extends AbstractAutomaticExport
                 }
             }
         } catch (Exception $e) {
-            $this->xtentoLogger->critical('Cronjob exception for job_code '.$jobCode.': '.$e->getMessage());
+            $this->logger->critical('Cronjob exception for job_code '.$jobCode.': '.$e->getMessage());
         }
 
         return true;
