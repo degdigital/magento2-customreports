@@ -38,7 +38,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $customReport = $this->currentCustomReportRegistry->get();
         $genericCollection = $customReport->getGenericReportCollection();
         $columnList = $this->getColumnListFromCollection($genericCollection);
-        if (is_object($genericCollection) && $genericCollection->getSize()) {
+        if (is_object($genericCollection)) {
             $this->addColumnSet($columnList);
             $this->addGridExportBlock();
             $this->setCollection($genericCollection);
