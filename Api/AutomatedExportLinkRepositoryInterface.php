@@ -3,7 +3,6 @@
 namespace DEG\CustomReports\Api;
 
 use DEG\CustomReports\Api\Data\AutomatedExportLinkInterface;
-use DEG\CustomReports\Model\AutomatedExportLink;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 interface AutomatedExportLinkRepositoryInterface
