@@ -9,8 +9,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class CustomReports implements OptionSourceInterface
 {
-    private CustomReportRepositoryInterface $customReportRepository;
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private $customReportRepository;
+    private $searchCriteriaBuilder;
 
     public function __construct(
         CustomReportRepositoryInterface $customReportRepository,

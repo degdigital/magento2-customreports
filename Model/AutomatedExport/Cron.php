@@ -15,12 +15,12 @@ use Psr\Log\LoggerInterface;
 
 class Cron
 {
-    private AutomatedExportRepositoryInterface $automatedExportRepository;
-    private DeleteDynamicCronInterface $deleteDynamicCron;
-    private PageFactory $resultPageFactory;
-    private CurrentCustomReport $currentCustomReportRegistry;
-    private CustomReportRepositoryInterface $customReportRepository;
-    private LoggerInterface $logger;
+    private $automatedExportRepository;
+    private $deleteDynamicCron;
+    private $resultPageFactory;
+    private $currentCustomReportRegistry;
+    private $customReportRepository;
+    private $logger;
 
     /**
      * Cron constructor.

@@ -12,10 +12,10 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 
 class AutomatedExport extends AbstractDb
 {
-    private AutomatedExportLinkFactory $automatedExportLinkFactory;
-    private AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository;
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-    private CreateDynamicCronInterface $setDynamicCronService;
+    private $automatedExportLinkFactory;
+    private $automatedExportLinkRepository;
+    private $searchCriteriaBuilder;
+    private $setDynamicCronService;
 
     public function __construct(
         Context $context,

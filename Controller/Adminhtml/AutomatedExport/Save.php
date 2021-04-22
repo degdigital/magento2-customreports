@@ -27,7 +27,7 @@ class Save extends Action
      * @var \DEG\CustomReports\Api\AutomatedExportRepositoryInterface
      */
     private $automatedExportRepository;
-    private AutomatedExportInterfaceFactory $automatedExportFactory;
+    private $automatedExportFactory;
 
     /**
      * @param Action\Context                                              $context

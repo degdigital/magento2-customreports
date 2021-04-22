@@ -12,7 +12,7 @@ class CreateDynamicCron implements CreateDynamicCronInterface
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
      */
-    protected ValueFactory $configValueFactory;
+    protected $configValueFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory

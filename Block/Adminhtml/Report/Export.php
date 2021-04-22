@@ -18,7 +18,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class Export extends \Magento\Backend\Block\Widget\Grid\Export
 {
-    private TimezoneInterface $timeZone;
+    private $timeZone;
 
     public function __construct(
         Context $context,
