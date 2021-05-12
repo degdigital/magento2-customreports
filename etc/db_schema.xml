@@ -17,7 +17,7 @@
         <column xsi:type="varchar" name="export_types" nullable="false" length="255" comment="Export Types"/>
         <column xsi:type="varchar" name="file_types" nullable="false" length="255" comment="File Types"/>
         <column xsi:type="varchar" name="filename_pattern" nullable="false" length="255" comment="Filename Pattern"/>
-        <column xsi:type="text" name="export_location" nullable="false" comment="Filename Pattern"/>
+        <column xsi:type="text" name="export_location" nullable="false" comment="Export location"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Modification Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
