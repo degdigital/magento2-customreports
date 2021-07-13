@@ -115,8 +115,6 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
         $string = $automatedExport->getFilenamePattern();
         $name = $this->replaceVariables($string, $customReport, $automatedExport);
 
-        $this->_path = 'export/fbssadditionalexports';
-
         $file = $this->_path.'/'.$name.'.csv';
 
         $this->_directory->create($this->_path);
