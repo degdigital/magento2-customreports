@@ -150,6 +150,7 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
             '%h%' => $this->timeZone->date()->format('H'),
             '%i%' => $this->timeZone->date()->format('i'),
             '%s%' => $this->timeZone->date()->format('s'),
+            '%W%' => $this->timeZone->date()->format('W'),
             '%reportname%' => $formattedReportName,
         ];
         $string = str_replace(array_keys($replaceableVariables), array_values($replaceableVariables), $string);
