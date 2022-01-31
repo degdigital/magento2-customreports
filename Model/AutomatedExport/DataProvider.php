@@ -2,8 +2,10 @@
 
 namespace DEG\CustomReports\Model\AutomatedExport;
 
+use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class DataProvider extends AbstractDataProvider
@@ -21,7 +23,12 @@ class DataProvider extends AbstractDataProvider
     /**
      * @var array
      */
-    protected array $loadedData;
+    protected array $loadedData = [];
+
+    /**
+     * @var \DEG\CustomReports\Api\AutomatedExportRepositoryInterface
+     */
+    private AutomatedExportRepositoryInterface $automatedExportRepository;
 
     /**
      * @param string                                                                   $name
@@ -29,6 +36,7 @@ class DataProvider extends AbstractDataProvider
      * @param string                                                                   $requestFieldName
      * @param \DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\Request\DataPersistorInterface                    $dataPersistor
+     * @param \DEG\CustomReports\Api\AutomatedExportRepositoryInterface                $automatedExportRepository
      * @param array                                                                    $meta
      * @param array                                                                    $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -39,6 +47,7 @@ class DataProvider extends AbstractDataProvider
         string $requestFieldName,
         CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
+        AutomatedExportRepositoryInterface $automatedExportRepository,
         array $meta = [],
         array $data = []
     ) {
@@ -46,6 +55,7 @@ class DataProvider extends AbstractDataProvider
         $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         $this->meta = $this->prepareMeta($this->meta);
+        $this->automatedExportRepository = $automatedExportRepository;
     }
 
     /**
@@ -73,7 +83,12 @@ class DataProvider extends AbstractDataProvider
         $items = $this->collection->addCustomreportIds()->getItems();
 
         foreach ($items as $item) {
-            $this->loadedData[$item->getId()] = $item->getData();
+            try {
+                if ($automatedExport = $this->automatedExportRepository->getById($item->getId())) {
+                    $this->loadedData[$item->getId()] = $automatedExport->getData();
+                }
+            } catch (NoSuchEntityException $exception) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            }
         }
 
         $data = $this->dataPersistor->get('deg_customreports_automatedexport');
