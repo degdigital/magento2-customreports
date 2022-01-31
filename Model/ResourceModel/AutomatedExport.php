@@ -6,6 +6,7 @@ use DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface;
 use DEG\CustomReports\Api\CreateDynamicCronInterface;
 use DEG\CustomReports\Model\AutomatedExportLinkFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -17,12 +18,18 @@ class AutomatedExport extends AbstractDb
     private SearchCriteriaBuilder $searchCriteriaBuilder;
     private CreateDynamicCronInterface $createDynamicCronService;
 
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    private EncryptorInterface $encryptor;
+
     public function __construct(
         Context $context,
         AutomatedExportLinkFactory $automatedExportLinkFactory,
         AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CreateDynamicCronInterface $createDynamicCronService,
+        EncryptorInterface $encryptor,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
@@ -30,6 +37,7 @@ class AutomatedExport extends AbstractDb
         $this->automatedExportLinkRepository = $automatedExportLinkRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->createDynamicCronService = $createDynamicCronService;
+        $this->encryptor = $encryptor;
     }
 
     protected function _construct()
@@ -53,6 +61,8 @@ class AutomatedExport extends AbstractDb
         if (is_array($fileTypes)) {
             $object->setFileTypes(implode(',', $fileTypes));
         }
+
+        $object->setRemotePassword($this->encryptor->encrypt($object->getRemotePassword()));
 
         return parent::_beforeSave($object);
     }
@@ -140,6 +150,8 @@ class AutomatedExport extends AbstractDb
         if (!is_array($fileTypes)) {
             $object->setFileTypes(explode(',', $fileTypes));
         }
+
+        $object->setRemotePassword($this->encryptor->decrypt($object->getRemotePassword()));
 
         return parent::_afterLoad($object);
     }
