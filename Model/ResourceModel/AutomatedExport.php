@@ -12,24 +12,24 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 
 class AutomatedExport extends AbstractDb
 {
-    private $automatedExportLinkFactory;
-    private $automatedExportLinkRepository;
-    private $searchCriteriaBuilder;
-    private $setDynamicCronService;
+    private AutomatedExportLinkFactory $automatedExportLinkFactory;
+    private AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private CreateDynamicCronInterface $createDynamicCronService;
 
     public function __construct(
         Context $context,
         AutomatedExportLinkFactory $automatedExportLinkFactory,
         AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CreateDynamicCronInterface $setDynamicCronService,
+        CreateDynamicCronInterface $createDynamicCronService,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->automatedExportLinkFactory = $automatedExportLinkFactory;
         $this->automatedExportLinkRepository = $automatedExportLinkRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->setDynamicCronService = $setDynamicCronService;
+        $this->createDynamicCronService = $createDynamicCronService;
     }
 
     protected function _construct()
@@ -67,7 +67,7 @@ class AutomatedExport extends AbstractDb
     protected function _afterSave(AbstractModel $object): AutomatedExport
     {
         $this->saveAutomatedExportLinks($object);
-        $this->setDynamicCron($object);
+        $this->createDynamicCron($object);
 
         return parent::_afterSave($object);
     }
@@ -105,9 +105,9 @@ class AutomatedExport extends AbstractDb
     /**
      * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
      */
-    private function setDynamicCron(AbstractModel $object)
+    private function createDynamicCron(AbstractModel $object)
     {
-        return $this->setDynamicCronService->execute($object);
+        $this->createDynamicCronService->execute($object);
     }
 
     /**
@@ -115,7 +115,7 @@ class AutomatedExport extends AbstractDb
      *
      * @return \DEG\CustomReports\Model\ResourceModel\AutomatedExport
      */
-    protected function _afterLoad(AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object): AutomatedExport
     {
         /** @var $automatedExportLink \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface */
 

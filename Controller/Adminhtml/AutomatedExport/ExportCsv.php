@@ -6,22 +6,23 @@ use DEG\CustomReports\Block\Adminhtml\Report\Export;
 use DEG\CustomReports\Block\Adminhtml\Report\Grid;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 
-class ExportCsv extends Action
+class ExportCsv extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::automatedexport_export_report';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
-    protected $fileFactory;
+    protected FileFactory $fileFactory;
 
     /**
      * @var \DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder
      */
-    private $builder;
+    private Builder $builder;
 
     /**
      * @param \Magento\Backend\App\Action\Context                          $context

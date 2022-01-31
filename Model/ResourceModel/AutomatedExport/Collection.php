@@ -3,7 +3,6 @@
 namespace DEG\CustomReports\Model\ResourceModel\AutomatedExport;
 
 use DEG\CustomReports\Model\ResourceModel\AutomatedExport;
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
@@ -13,7 +12,7 @@ class Collection extends AbstractCollection
         $this->_init(\DEG\CustomReports\Model\AutomatedExport::class, AutomatedExport::class);
     }
 
-    public function addCustomreportIds()
+    public function addCustomreportIds(): Collection
     {
         $this->getSelect()->joinLeft(
             ['link' => $this->getTable('deg_customreports_automatedexports_link')],

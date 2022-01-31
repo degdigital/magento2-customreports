@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Block\Adminhtml\CustomReport\Edit;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class SaveButtonTest extends TestCase
 {
-    protected $block;
+    protected object $block;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(
             'DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\SaveButton'
         );

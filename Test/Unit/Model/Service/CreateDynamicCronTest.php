@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit\DEG\CustomReports\Model\Service;
 
+use DEG\CustomReports\Model\AutomatedExport;
 use DEG\CustomReports\Model\Service\CreateDynamicCron;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -11,10 +14,10 @@ class CreateDynamicCronTest extends TestCase
     /**
      * @var CreateDynamicCron
      */
-    protected $createDynamicCron;
+    protected CreateDynamicCron $createDynamicCron;
 
     /**
-     * @var ValueFactory|Mock
+     * @var ValueFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configValueFactory;
 
@@ -40,11 +43,14 @@ class CreateDynamicCronTest extends TestCase
         unset($this->configValueFactory);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testExecute(): void
     {
-        $automatedExport = $this->createMock(\DEG\CustomReports\Model\AutomatedExport::class);
+        $automatedExport = $this->createMock(AutomatedExport::class);
 
-        $valueMock = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
+        $valueMock = $this->getMockBuilder(Value::class)
             ->setMethods(['load', 'setValue', 'setPath', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -54,7 +60,6 @@ class CreateDynamicCronTest extends TestCase
         $valueMock->method('setValue')->willReturnSelf();
         $valueMock->method('setPath')->willReturnSelf();
         $valueMock->method('save')->willReturnSelf();
-
 
         $this->createDynamicCron->execute($automatedExport);
     }

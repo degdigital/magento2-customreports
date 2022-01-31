@@ -1,12 +1,23 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
+
+/** @noinspection MessDetectorValidationInspection */
 
 namespace DEG\CustomReports\Test\Unit\Model;
 
+use ArrayObject;
 use DEG\CustomReports\Model\AutomatedExportLinkFactory;
 use DEG\CustomReports\Model\AutomatedExportLinkRepository;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExportLink;
+use DEG\CustomReports\Model\ResourceModel\AutomatedExportLink\Collection;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExportLink\CollectionFactory;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
 
@@ -15,25 +26,25 @@ class AutomatedExportLinkRepositoryTest extends TestCase
     /**
      * @var AutomatedExportLinkRepository
      */
-    protected $automatedExportLinkRepository;
+    protected AutomatedExportLinkRepository $automatedExportLinkRepository;
 
     /**
-     * @var AutomatedExportLinkFactory|Mock
+     * @var AutomatedExportLinkFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $automatedExportLinkFactory;
 
     /**
-     * @var CollectionFactory|Mock
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var SearchResultsInterfaceFactory|Mock
+     * @var SearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultsFactory;
 
     /**
-     * @var AutomatedExportLink|Mock
+     * @var AutomatedExportLink|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $automatedExportLinkResource;
 
@@ -48,7 +59,12 @@ class AutomatedExportLinkRepositoryTest extends TestCase
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->searchResultsFactory = $this->createMock(SearchResultsInterfaceFactory::class);
         $this->automatedExportLinkResource = $this->createMock(AutomatedExportLink::class);
-        $this->automatedExportLinkRepository = new AutomatedExportLinkRepository($this->automatedExportLinkFactory, $this->collectionFactory, $this->searchResultsFactory, $this->automatedExportLinkResource);
+        $this->automatedExportLinkRepository = new AutomatedExportLinkRepository(
+            $this->automatedExportLinkFactory,
+            $this->collectionFactory,
+            $this->searchResultsFactory,
+            $this->automatedExportLinkResource
+        );
     }
 
     /**
@@ -65,6 +81,9 @@ class AutomatedExportLinkRepositoryTest extends TestCase
         unset($this->automatedExportLinkResource);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testSave(): void
     {
         $model = $this->createMock(\DEG\CustomReports\Model\AutomatedExportLink::class);
@@ -72,6 +91,10 @@ class AutomatedExportLinkRepositoryTest extends TestCase
         $this->automatedExportLinkRepository->save($model);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     public function testDeleteById(): void
     {
         $model = $this->createMock(\DEG\CustomReports\Model\AutomatedExportLink::class);
@@ -83,26 +106,26 @@ class AutomatedExportLinkRepositoryTest extends TestCase
 
     public function testGetList(): void
     {
-        $criteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $criteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
-        $searchMock = $this->createMock(\Magento\Framework\Api\SearchResultsInterface::class);
+        $searchMock = $this->createMock(SearchResultsInterface::class);
         $this->searchResultsFactory->method('create')->willReturn($searchMock);
 
-        $filterGroup = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
+        $filterGroup = $this->createMock(FilterGroup::class);
         $criteriaMock->method('getFilterGroups')->willReturn([$filterGroup]);
 
-        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(Filter::class);
         $filterGroup->method('getFilters')->willReturn([$filter]);
 
-        $collectionMock = $this->createMock(\DEG\CustomReports\Model\ResourceModel\AutomatedExportLink\Collection
-                                            ::class);
+        $collectionMock = $this->createMock(Collection
+        ::class);
         $this->collectionFactory->method('create')->willReturn($collectionMock);
 
-        $sortOrdersMock = $this->createMock(\Magento\Framework\Api\SortOrder::class);
+        $sortOrdersMock = $this->createMock(SortOrder::class);
         $criteriaMock->method('getSortOrders')->willReturn([$sortOrdersMock]);
 
         $collectionMock->method('getIterator')
-            ->willReturn(new \ArrayObject([$this->createMock(DataObject::class)]));
+            ->willReturn(new ArrayObject([$this->createMock(DataObject::class)]));
 
         $this->automatedExportLinkRepository->getList($criteriaMock);
     }

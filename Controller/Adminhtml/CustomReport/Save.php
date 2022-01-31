@@ -6,11 +6,12 @@ use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Model\CustomReport;
 use Exception;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends Action
+class Save extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -22,11 +23,11 @@ class Save extends Action
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    protected DataPersistorInterface $dataPersistor;
     /**
      * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
      */
-    private $customReportRepository;
+    private CustomReportRepositoryInterface $customReportRepository;
 
     /**
      * @param Action\Context                                         $context
@@ -38,8 +39,8 @@ class Save extends Action
         DataPersistorInterface $dataPersistor,
         CustomReportRepositoryInterface $automatedExportRepository
     ) {
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
+        $this->dataPersistor = $dataPersistor;
         $this->customReportRepository = $automatedExportRepository;
     }
 

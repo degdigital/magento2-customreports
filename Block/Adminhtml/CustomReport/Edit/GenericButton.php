@@ -11,7 +11,7 @@ class GenericButton
     /**
      * @var \Magento\Backend\Block\Widget\Context
      */
-    private $context;
+    private Context $context;
 
     /**
      * GenericButton constructor.
@@ -46,7 +46,7 @@ class GenericButton
      *
      * @return string
      */
-    public function getUrl($route = '', $params = []): string
+    public function getUrl(string $route = '', array $params = []): string
     {
         return $this->context->getUrlBuilder()->getUrl($route, $params);
     }

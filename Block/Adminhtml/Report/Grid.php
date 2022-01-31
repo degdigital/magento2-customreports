@@ -2,6 +2,7 @@
 
 namespace DEG\CustomReports\Block\Adminhtml\Report;
 
+use DEG\CustomReports\Api\CustomReportManagementInterface;
 use DEG\CustomReports\Registry\CurrentCustomReport;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
@@ -13,80 +14,75 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     /**
      * @var \DEG\CustomReports\Registry\CurrentCustomReport
      */
-    private $currentCustomReportRegistry;
+    private CurrentCustomReport $currentCustomReportRegistry;
+
+    /**
+     * @var \DEG\CustomReports\Api\CustomReportManagementInterface
+     */
+    private CustomReportManagementInterface $customReportManagement;
 
     /**
      * Grid constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context         $context
-     * @param \Magento\Backend\Helper\Data                    $backendHelper
-     * @param \DEG\CustomReports\Registry\CurrentCustomReport $currentCustomReportRegistry
-     * @param array                                           $data
+     * @param \Magento\Backend\Block\Template\Context                $context
+     * @param \Magento\Backend\Helper\Data                           $backendHelper
+     * @param \DEG\CustomReports\Registry\CurrentCustomReport        $currentCustomReportRegistry
+     * @param \DEG\CustomReports\Api\CustomReportManagementInterface $customReportManagement
+     * @param array                                                  $data
      */
     public function __construct(
         Context $context,
         Data $backendHelper,
         CurrentCustomReport $currentCustomReportRegistry,
+        CustomReportManagementInterface $customReportManagement,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
         $this->currentCustomReportRegistry = $currentCustomReportRegistry;
+        $this->customReportManagement = $customReportManagement;
     }
 
     public function _prepareLayout()
     {
         $customReport = $this->currentCustomReportRegistry->get();
-        $genericCollection = $customReport->getGenericReportCollection();
-        $columnList = $this->getColumnListFromCollection($genericCollection);
-        if (is_object($genericCollection)) {
-            $this->addColumnSet($columnList);
-            $this->addGridExportBlock();
-            $this->setCollection($genericCollection);
-        }
+        $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
+        $columnList = $this->customReportManagement->getColumnsList($customReport);
+        $this->addColumnSet($columnList);
+        $this->addGridExportBlock();
+        $this->setCollection($genericCollection);
         parent::_prepareLayout();
     }
 
     /**
-     * @param $collection
+     * @param $columnList
      *
-     * @return mixed
+     * @return void
      */
-    public function getColumnListFromCollection($collection)
-    {
-        $columnsCollection = clone $collection;
-        $columnsCollection->getSelect()->limitPage(1, 1);
-
-        return $columnsCollection->getFirstItem();
-    }
-
-    /**
-     * @param $dataItem
-     */
-    public function addColumnSet($dataItem)
+    public function addColumnSet($columnList)
     {
         /** @var $columnSet \Magento\Backend\Block\Widget\Grid\ColumnSet * */
         $columnSet = $this->_layout->createBlock(
             ColumnSet::class,
             'deg_customreports_grid.grid.columnSet'
         );
-        foreach ($dataItem->getData() as $key => $val) {
+        foreach ($columnList as $columnName) {
             if ($this->_defaultSort === false) {
-                $this->_defaultSort = $key;
+                $this->_defaultSort = $columnName;
             }
             /** @var $column \Magento\Backend\Block\Widget\Grid\Column * */
             $data = [
                 'data' => [
-                    'header' => $key,
-                    'index' => $key,
+                    'header' => $columnName,
+                    'index' => $columnName,
                     'type' => 'text',
                 ],
             ];
             $column = $this->_layout->createBlock(
                 Column::class,
-                'deg_customreports_grid.grid.column.'.$key,
+                'deg_customreports_grid.grid.column.'.$columnName,
                 $data
             );
-            $columnSet->setChild($key, $column);
+            $columnSet->setChild($columnName, $column);
         }
         $this->setChild('grid.columnSet', $columnSet);
     }
@@ -95,10 +91,24 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Add the export block as a child block to the grid.
      *
      * @return $this
+     * @noinspection PhpParamsInspection
      */
     public function addGridExportBlock(): Grid
     {
-        $exportArguments = [
+        $exportBlock = $this->_layout->createBlock(
+            Export::class,
+            'deg_customreports_grid.grid.export',
+            $this->getExportArguments()
+        );
+        $this->setChild('grid.export', $exportBlock);
+        $exportBlock->lazyPrepareLayout();
+
+        return $this;
+    }
+
+    public function getExportArguments(): array
+    {
+        return [
             'data' => [
                 'exportTypes' => [
                     'csv' => [
@@ -112,15 +122,5 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                 ],
             ],
         ];
-
-        $exportBlock = $this->_layout->createBlock(
-            Export::class,
-            'deg_customreports_grid.grid.export',
-            $exportArguments
-        );
-        $this->setChild('grid.export', $exportBlock);
-        $exportBlock->lazyPrepareLayout();
-
-        return $this;
     }
 }

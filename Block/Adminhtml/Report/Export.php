@@ -18,7 +18,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class Export extends \Magento\Backend\Block\Widget\Grid\Export
 {
-    private $timeZone;
+    private TimezoneInterface $timeZone;
 
     public function __construct(
         Context $context,
@@ -67,7 +67,8 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
 
     /**
      * Retrieve a file container array by grid data as MS Excel 2003 XML Document
-     * Return array with keys type and value
+     * Return array with keys type and value.
+     * See \Magento\Backend\Block\Widget\Grid\Export::getCsvFile.
      *
      * @param string $sheetName
      *
@@ -104,13 +105,15 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
     }
 
     /**
+     * See \Magento\Backend\Block\Widget\Grid\Export::getCsvFile.
+     *
      * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
      * @param                                                   $automatedExport
      *
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function getCronCsvFile(CustomReportInterface $customReport, $automatedExport)
+    public function getCronCsvFile(CustomReportInterface $customReport, $automatedExport): array
     {
         $string = $automatedExport->getFilenamePattern();
         $name = $this->replaceVariables($string, $customReport, $automatedExport);
@@ -136,6 +139,15 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
         ];
     }
 
+    /**
+     * @param $string
+     * @param $customReport
+     * @param $automatedExport
+     *
+     * @return array|string|string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @noinspection PhpUnusedParameterInspection
+     */
     protected function replaceVariables($string, $customReport, $automatedExport)
     {
         $formattedReportName = strtolower(str_replace(' ', '_', $customReport->getReportName()));
@@ -151,8 +163,7 @@ class Export extends \Magento\Backend\Block\Widget\Grid\Export
             '%W%' => $this->timeZone->date()->format('W'),
             '%reportname%' => $formattedReportName,
         ];
-        $string = str_replace(array_keys($replaceableVariables), array_values($replaceableVariables), $string);
 
-        return $string;
+        return str_replace(array_keys($replaceableVariables), array_values($replaceableVariables), $string);
     }
 }

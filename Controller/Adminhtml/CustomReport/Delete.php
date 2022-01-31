@@ -6,14 +6,16 @@ use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Redirect;
 
-class Delete extends Action
+class Delete extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_delete';
     /**
      * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
      */
-    private $customReportRepository;
+    private CustomReportRepositoryInterface $customReportRepository;
 
     public function __construct(
         Context $context,
@@ -24,9 +26,9 @@ class Delete extends Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function execute()
+    public function execute(): Redirect
     {
         $id = $this->getRequest()->getParam('object_id');
         $resultRedirect = $this->resultRedirectFactory->create();

@@ -15,11 +15,11 @@ class Builder
     /**
      * @var CustomReportFactory
      */
-    private $customReportFactory;
+    private CustomReportFactory $customReportFactory;
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private Logger $logger;
     /**
      * @var \Magento\Framework\Registry
      */
@@ -27,7 +27,7 @@ class Builder
     /**
      * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
      */
-    private $customReportRepository;
+    private CustomReportRepositoryInterface $customReportRepository;
     /**
      * @param \DEG\CustomReports\Model\CustomReportFactory           $customReportFactory
      * @param \Psr\Log\LoggerInterface                               $logger

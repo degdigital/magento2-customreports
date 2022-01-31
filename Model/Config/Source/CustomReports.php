@@ -9,8 +9,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class CustomReports implements OptionSourceInterface
 {
-    private $customReportRepository;
-    private $searchCriteriaBuilder;
+    private CustomReportRepositoryInterface $customReportRepository;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     public function __construct(
         CustomReportRepositoryInterface $customReportRepository,
@@ -22,8 +22,6 @@ class CustomReports implements OptionSourceInterface
 
     public function toOptionArray(): array
     {
-        /** @var \DEG\CustomReports\Model\CustomReport $customReport */
-
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $customReports = $this->customReportRepository->getList($searchCriteria);
 

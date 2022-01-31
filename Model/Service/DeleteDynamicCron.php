@@ -10,7 +10,7 @@ class DeleteDynamicCron implements DeleteDynamicCronInterface
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
      */
-    protected $configValueFactory;
+    protected ValueFactory $configValueFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
@@ -25,6 +25,7 @@ class DeleteDynamicCron implements DeleteDynamicCronInterface
      * @param string $automatedExportModelName
      *
      * @throws \Exception
+     * @noinspection PhpDeprecationInspection
      */
     public function execute(string $automatedExportModelName)
     {

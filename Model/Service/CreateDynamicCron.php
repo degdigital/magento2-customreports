@@ -12,7 +12,7 @@ class CreateDynamicCron implements CreateDynamicCronInterface
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
      */
-    protected $configValueFactory;
+    protected ValueFactory $configValueFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
@@ -27,6 +27,7 @@ class CreateDynamicCron implements CreateDynamicCronInterface
      * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
      *
      * @throws \Exception
+     * @noinspection PhpDeprecationInspection
      */
     public function execute(AutomatedExportInterface $automatedExport)
     {

@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Controller\Adminhtml\AutomatedExport;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
 use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder;
+use DEG\CustomReports\Model\CustomReport;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 use DEG\CustomReports\Model\CustomReportFactory;
 use Magento\Framework\App\RequestInterface;
@@ -43,7 +45,7 @@ class BuilderTest extends TestCase
         $this->logger = $this->getLogger();
         $this->registry = $this->getRegistry();
         $this->requestMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -70,52 +72,43 @@ class BuilderTest extends TestCase
 
     protected function getLogger()
     {
-        $mockHelper = $this
+        return $this
             ->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->setMethods(['critical'])
             ->getMockForAbstractClass();
-
-        return $mockHelper;
     }
 
     protected function getRegistry()
     {
-        $mockHelper = $this
+        return $this
             ->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['register'])
             ->getMockForAbstractClass();
-
-        return $mockHelper;
     }
 
     protected function getCustomReport()
     {
-        $mockHelper = $this
-            ->getMockBuilder(\DEG\CustomReports\Model\CustomReport::class)
+        return $this
+            ->getMockBuilder(CustomReport::class)
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMockForAbstractClass();
-
-        return $mockHelper;
     }
 
-
-    protected function getModel()
+    protected function getModel(): object
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $model = $objectManager->getObject(
-            \DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder::class,
+        return $objectManager->getObject(
+            Builder::class,
             [
                 "customReportFactory" => $this->customReportFactory,
                 "logger" => $this->logger,
-                "registry" => $this->registry
+                "registry" => $this->registry,
             ]
         );
-
-        return $model;
     }
 
     public function testBuild(): void
@@ -128,7 +121,6 @@ class BuilderTest extends TestCase
         $this->getModel()->build($this->requestMock);
     }
 
-
     public function testBuildNullId(): void
     {
         $this->requestMock
@@ -138,7 +130,6 @@ class BuilderTest extends TestCase
 
         $this->getModel()->build($this->requestMock);
     }
-
 
     public function testBuildLogger(): void
     {

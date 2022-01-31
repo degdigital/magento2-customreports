@@ -1,12 +1,23 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
+
+/** @noinspection MessDetectorValidationInspection */
 
 namespace DEG\CustomReports\Test\Unit\Model;
 
+use ArrayObject;
 use DEG\CustomReports\Model\CustomReportFactory;
 use DEG\CustomReports\Model\CustomReportRepository;
 use DEG\CustomReports\Model\ResourceModel\CustomReport;
+use DEG\CustomReports\Model\ResourceModel\CustomReport\Collection;
 use DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
 
@@ -15,25 +26,25 @@ class CustomReportRepositoryTest extends TestCase
     /**
      * @var CustomReportRepository
      */
-    protected $customReportRepository;
+    protected CustomReportRepository $customReportRepository;
 
     /**
-     * @var CustomReportFactory|Mock
+     * @var CustomReportFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customReportFactory;
 
     /**
-     * @var CollectionFactory|Mock
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var SearchResultsInterfaceFactory|Mock
+     * @var SearchResultsInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultsFactory;
 
     /**
-     * @var CustomReport|Mock
+     * @var CustomReport|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customReportResource;
 
@@ -48,7 +59,12 @@ class CustomReportRepositoryTest extends TestCase
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->searchResultsFactory = $this->createMock(SearchResultsInterfaceFactory::class);
         $this->customReportResource = $this->createMock(CustomReport::class);
-        $this->customReportRepository = new CustomReportRepository($this->customReportFactory, $this->collectionFactory, $this->searchResultsFactory, $this->customReportResource);
+        $this->customReportRepository = new CustomReportRepository(
+            $this->customReportFactory,
+            $this->collectionFactory,
+            $this->searchResultsFactory,
+            $this->customReportResource
+        );
     }
 
     /**
@@ -65,6 +81,9 @@ class CustomReportRepositoryTest extends TestCase
         unset($this->customReportResource);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
     public function testSave(): void
     {
         $model = $this->createMock(\DEG\CustomReports\Model\CustomReport::class);
@@ -72,6 +91,10 @@ class CustomReportRepositoryTest extends TestCase
         $this->customReportRepository->save($model);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     public function testDeleteById(): void
     {
         $model = $this->createMock(\DEG\CustomReports\Model\CustomReport::class);
@@ -81,29 +104,28 @@ class CustomReportRepositoryTest extends TestCase
         $this->customReportRepository->deleteById(1);
     }
 
-
     public function testGetList(): void
     {
-        $criteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $criteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
-        $searchMock = $this->createMock(\Magento\Framework\Api\SearchResultsInterface::class);
+        $searchMock = $this->createMock(SearchResultsInterface::class);
         $this->searchResultsFactory->method('create')->willReturn($searchMock);
 
-        $filterGroup = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
+        $filterGroup = $this->createMock(FilterGroup::class);
         $criteriaMock->method('getFilterGroups')->willReturn([$filterGroup]);
 
-        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(Filter::class);
         $filterGroup->method('getFilters')->willReturn([$filter]);
 
-        $collectionMock = $this->createMock(\DEG\CustomReports\Model\ResourceModel\CustomReport\Collection
-                                            ::class);
+        $collectionMock = $this->createMock(Collection
+        ::class);
         $this->collectionFactory->method('create')->willReturn($collectionMock);
 
-        $sortOrdersMock = $this->createMock(\Magento\Framework\Api\SortOrder::class);
+        $sortOrdersMock = $this->createMock(SortOrder::class);
         $criteriaMock->method('getSortOrders')->willReturn([$sortOrdersMock]);
 
         $collectionMock->method('getIterator')
-            ->willReturn(new \ArrayObject([$this->createMock(DataObject::class)]));
+            ->willReturn(new ArrayObject([$this->createMock(DataObject::class)]));
 
         $this->customReportRepository->getList($criteriaMock);
     }

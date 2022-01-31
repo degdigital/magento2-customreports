@@ -1,12 +1,20 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Controller\Adminhtml\CustomReport;
 
 use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Controller\Adminhtml\CustomReport\Save;
+use DEG\CustomReports\Model\CustomReport;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
 
 class SaveTest extends TestCase
@@ -14,20 +22,20 @@ class SaveTest extends TestCase
     /**
      * @var Save
      */
-    protected $save;
+    protected Save $save;
 
     /**
-     * @var Context|Mock
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var DataPersistorInterface|Mock
+     * @var DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataPersistor;
 
     /**
-     * @var CustomReportRepositoryInterface|Mock
+     * @var CustomReportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $automatedExportRepository;
 
@@ -59,16 +67,16 @@ class SaveTest extends TestCase
         parent::setUp();
 
         $this->context = $this->createMock(Context::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->context->method('getRequest')->willReturn($this->requestMock);
 
-        $this->redirectPageMock = $this->createMock(\Magento\Framework\Controller\Result\RedirectFactory::class);
+        $this->redirectPageMock = $this->createMock(RedirectFactory::class);
         $this->context->method('getResultRedirectFactory')->willReturn($this->redirectPageMock);
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->context->method('getObjectManager')->willReturn($this->objectManagerMock);
 
-        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->context->method('getMessageManager')->willReturn($this->messageManagerMock);
 
         $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
@@ -89,17 +97,20 @@ class SaveTest extends TestCase
         unset($this->automatedExportRepository);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testExecute(): void
     {
         $data = [
-            'customreport_id' => 1
+            'customreport_id' => 1,
         ];
         $this->requestMock->method('getPostValue')->willReturn($data);
 
-        $redirectPageMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
+        $redirectPageMock = $this->createMock(Redirect::class);
         $this->redirectPageMock->method('create')->willReturn($redirectPageMock);
 
-        $customReportMock = $this->createMock(\DEG\CustomReports\Model\CustomReport::class);
+        $customReportMock = $this->createMock(CustomReport::class);
         $this->objectManagerMock->method('create')->willReturn($customReportMock);
 
         $redirectPageMock->method('setPath')->willReturnSelf();

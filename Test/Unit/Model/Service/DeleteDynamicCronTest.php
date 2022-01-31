@@ -1,8 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Model\Service;
 
 use DEG\CustomReports\Model\Service\DeleteDynamicCron;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -11,10 +13,10 @@ class DeleteDynamicCronTest extends TestCase
     /**
      * @var DeleteDynamicCron
      */
-    protected $deleteDynamicCron;
+    protected DeleteDynamicCron $deleteDynamicCron;
 
     /**
-     * @var ValueFactory|Mock
+     * @var ValueFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configValueFactory;
 
@@ -40,11 +42,14 @@ class DeleteDynamicCronTest extends TestCase
         unset($this->configValueFactory);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testExecute(): void
     {
         $automatedExportModelName = 'pathModel';
 
-        $valueMock = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
+        $valueMock = $this->getMockBuilder(Value::class)
             ->setMethods(['load', 'setValue', 'setPath', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -4,6 +4,7 @@ namespace DEG\CustomReports\Api;
 
 use DEG\CustomReports\Api\Data\AutomatedExportLinkInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 
 interface AutomatedExportLinkRepositoryInterface
 {
@@ -28,7 +29,7 @@ interface AutomatedExportLinkRepositoryInterface
      *
      * @return \Magento\Framework\Api\SearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $criteria);
+    public function getList(SearchCriteriaInterface $criteria): SearchResultsInterface;
 
     /**
      * @param \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface $automatedExportLink

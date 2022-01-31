@@ -1,11 +1,17 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Controller\Adminhtml\AutomatedExport;
 
+use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Listing;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
 use PHPUnit\Framework\TestCase;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder;
 
 class ListingTest extends TestCase
 {
@@ -22,30 +28,27 @@ class ListingTest extends TestCase
         $this->resultPageFactory = $this->getResultPageFactory();
 
         $this->contextMock = $this->createMock(Context::class);
-
     }
 
     protected function getResultPageFactory()
     {
-         $mockPageResult = $this
-             ->getMockBuilder(PageFactory::class)
-             ->disableOriginalConstructor()
-             ->setMethods(['create'])
-             ->getMockForAbstractClass();
+        $mockPageResult = $this
+            ->getMockBuilder(PageFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMockForAbstractClass();
 
         $mockPage = $this
-            ->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+            ->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['setActiveMenu', 'getConfig'])
             ->getMockForAbstractClass();
 
-
         $mockConfig = $this
-            ->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+            ->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTitle'])
             ->getMockForAbstractClass();
-
 
         $mockPageResult->expects($this->any())
             ->method('create')
@@ -64,31 +67,27 @@ class ListingTest extends TestCase
 
     protected function getMockTitle()
     {
-        $mockTitle = $this
-            ->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        return $this
+            ->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->setMethods(['prepend'])
             ->getMockForAbstractClass();
-
-        return $mockTitle;
     }
 
-    protected function getModel()
+    protected function getModel(): object
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $model = $objectManager->getObject(
-            \DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Listing::class,
+        return $objectManager->getObject(
+            Listing::class,
             [
                 "context" => $this->contextMock,
                 "resultPageFactory" => $this->resultPageFactory,
             ]
         );
-
-        return $model;
     }
 
-    public function testExecuteExeptionType(): void
+    public function testExecuteExceptionType(): void
     {
         $this->titleMock->expects($this->at(0))
             ->method('prepend')

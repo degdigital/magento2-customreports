@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
+/** @noinspection MessDetectorValidationInspection */
 
 namespace DEG\CustomReports\Test\Unit\Model\AutomatedExport;
 
 use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Api\DeleteDynamicCronInterface;
+use DEG\CustomReports\Api\ExportReportServiceInterface;
+use DEG\CustomReports\Model\AutomatedExport;
 use DEG\CustomReports\Model\AutomatedExport\Cron;
 use DEG\CustomReports\Registry\CurrentCustomReport;
+use Magento\Cron\Model\Schedule;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -17,35 +23,35 @@ class CronTest extends TestCase
     /**
      * @var Cron
      */
-    protected $cron;
+    protected Cron $cron;
 
     /**
-     * @var AutomatedExportRepositoryInterface|Mock
+     * @var AutomatedExportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $automatedExportRepository;
 
     /**
-     * @var CustomReportRepositoryInterface|Mock
+     * @var CustomReportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customReportRepository;
 
     /**
-     * @var DeleteDynamicCronInterface|Mock
+     * @var DeleteDynamicCronInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $deleteDynamicCron;
 
     /**
-     * @var PageFactory|Mock
+     * @var PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactory;
 
     /**
-     * @var CurrentCustomReport|Mock
+     * @var CurrentCustomReport|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currentCustomReportRegistry;
 
     /**
-     * @var LoggerInterface|Mock
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
@@ -60,9 +66,15 @@ class CronTest extends TestCase
         $this->customReportRepository = $this->createMock(CustomReportRepositoryInterface::class);
         $this->deleteDynamicCron = $this->createMock(DeleteDynamicCronInterface::class);
         $this->resultPageFactory = $this->createMock(PageFactory::class);
+        $this->exportReportService = $this->createMock(ExportReportServiceInterface::class);
         $this->currentCustomReportRegistry = $this->createMock(CurrentCustomReport::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->cron = new Cron($this->automatedExportRepository, $this->customReportRepository, $this->deleteDynamicCron, $this->resultPageFactory, $this->currentCustomReportRegistry, $this->logger);
+        $this->cron = new Cron(
+            $this->automatedExportRepository,
+            $this->deleteDynamicCron,
+            $this->logger,
+            $this->exportReportService
+        );
     }
 
     /**
@@ -81,16 +93,20 @@ class CronTest extends TestCase
         unset($this->logger);
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testExecute(): void
     {
-        $scheduleMock = $this->getMockBuilder(\Magento\Cron\Model\Schedule::class)
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
             ->setMethods(['getJobCode'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $scheduleMock->method('getJobCode')->willReturn('automated_export_2');
 
-        $automatedExportMock = $this->getMockBuilder(\DEG\CustomReports\Model\AutomatedExport::class)
+        $automatedExportMock = $this->getMockBuilder(AutomatedExport::class)
             ->setMethods(['getId', 'getCustomreportIds', 'getExportTypes', 'getFileTypes'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,11 +116,11 @@ class CronTest extends TestCase
 
         $automatedExportMock->method('getCustomreportIds')->willReturn([1]);
 
-        $resultPageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $resultPageMock = $this->createMock(Page::class);
         $this->resultPageFactory->method('create')->willReturn($resultPageMock);
 
         $layoutMock = $this->getMockBuilder(AbstractBlock::class)->setMethods(['getChildBlock', 'createBlock'])
-                ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()->getMock();
         $resultPageMock->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->method('createBlock')->willReturn($layoutMock);
