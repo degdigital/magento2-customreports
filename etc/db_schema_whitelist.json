@@ -1,0 +1,50 @@
+{
+    "deg_customreports": {
+        "column": {
+            "customreport_id": true,
+            "report_name": true,
+            "report_sql": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "deg_customreports_automatedexports": {
+        "column": {
+            "automatedexport_id": true,
+            "title": true,
+            "cron_expr": true,
+            "export_types": true,
+            "file_types": true,
+            "filename_pattern": true,
+            "export_location": true,
+            "remote_host": true,
+            "remote_username": true,
+            "remote_password": true,
+            "remote_port": true,
+            "remote_location": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "deg_customreports_automatedexports_link": {
+        "column": {
+            "link_id": true,
+            "customreport_id": true,
+            "automatedexport_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_DA81D7DE2A6EEC6EB253A4434DCE1126": true,
+            "FK_D52B09C5AAEB70105D4E22ECBBA6689F": true,
+            "UNQ_590A143841EF117BB3F5FFD046443649": true
+        }
+    }
+}
