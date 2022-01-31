@@ -12,7 +12,7 @@ class PageActions extends Column
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    private $authorization;
+    private AuthorizationInterface $authorization;
 
     /**
      * PageActions constructor.

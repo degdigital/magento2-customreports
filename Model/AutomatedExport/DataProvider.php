@@ -8,26 +8,30 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class DataProvider extends AbstractDataProvider
 {
+    /**
+     * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExport\Collection
+     */
     protected $collection;
 
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    protected DataPersistorInterface $dataPersistor;
 
     /**
      * @var array
      */
-    protected $loadedData;
+    protected array $loadedData;
 
     /**
-     * @param string                 $name
-     * @param string                 $primaryFieldName
-     * @param string                 $requestFieldName
-     * @param CollectionFactory      $collectionFactory
-     * @param DataPersistorInterface $dataPersistor
-     * @param array                  $meta
-     * @param array                  $data
+     * @param string                                                                   $name
+     * @param string                                                                   $primaryFieldName
+     * @param string                                                                   $requestFieldName
+     * @param \DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory $collectionFactory
+     * @param \Magento\Framework\App\Request\DataPersistorInterface                    $dataPersistor
+     * @param array                                                                    $meta
+     * @param array                                                                    $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,
@@ -38,9 +42,9 @@ class DataProvider extends AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
 

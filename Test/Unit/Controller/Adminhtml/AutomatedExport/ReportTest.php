@@ -1,11 +1,16 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace Tests\Unit\DEG\CustomReports\Controller\Adminhtml\AutomatedExport;
 
 use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder;
 use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Report;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -14,20 +19,20 @@ class ReportTest extends TestCase
     /**
      * @var Report
      */
-    protected $report;
+    protected Report $report;
 
     /**
-     * @var Context|Mock
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var PageFactory|Mock
+     * @var PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactory;
 
     /**
-     * @var Builder|Mock
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builder;
 
@@ -67,16 +72,16 @@ class ReportTest extends TestCase
 
     public function testExecute(): void
     {
-        $pageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
+        $pageMock = $this->getMockBuilder(Page::class)
             ->setMethods(['setActiveMenu', 'getConfig'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultPageFactory->method('create')->willReturn($pageMock);
 
-        $configMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $configMock = $this->createMock(Config::class);
         $pageMock->method('getConfig')->willReturn($configMock);
 
-        $titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $titleMock = $this->createMock(Title::class);
         $configMock->method('getTitle')->willReturn($titleMock);
 
         $this->report->execute();

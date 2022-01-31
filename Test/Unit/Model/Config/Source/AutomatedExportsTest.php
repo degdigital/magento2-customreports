@@ -1,10 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Model\Config\Source;
 
 use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use DEG\CustomReports\Model\Config\Source\AutomatedExports;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResultsInterface;
 use PHPUnit\Framework\TestCase;
 
 class AutomatedExportsTest extends TestCase
@@ -12,15 +15,15 @@ class AutomatedExportsTest extends TestCase
     /**
      * @var AutomatedExports
      */
-    protected $automatedExports;
+    protected AutomatedExports $automatedExports;
 
     /**
-     * @var SearchCriteriaBuilder|Mock
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var AutomatedExportRepositoryInterface|Mock
+     * @var AutomatedExportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $automatedExportRepository;
 
@@ -50,10 +53,10 @@ class AutomatedExportsTest extends TestCase
 
     public function testToOptionArray(): void
     {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteriaMock);
 
-        $searchResults = $this->createMock(\Magento\Framework\Api\SearchResultsInterface::class);
+        $searchResults = $this->createMock(SearchResultsInterface::class);
         $this->automatedExportRepository->method('getList')->willReturn($searchResults);
 
         $this->automatedExports->toOptionArray();

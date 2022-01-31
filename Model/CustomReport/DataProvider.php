@@ -13,12 +13,12 @@ class DataProvider extends AbstractDataProvider
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    protected DataPersistorInterface $dataPersistor;
 
     /**
      * @var array
      */
-    protected $loadedData;
+    protected array $loadedData;
 
     /**
      * @param string                 $name
@@ -28,6 +28,7 @@ class DataProvider extends AbstractDataProvider
      * @param DataPersistorInterface $dataPersistor
      * @param array                  $meta
      * @param array                  $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $name,
@@ -38,9 +39,9 @@ class DataProvider extends AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
 

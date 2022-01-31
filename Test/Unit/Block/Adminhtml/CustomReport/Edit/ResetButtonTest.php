@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Block\Adminhtml\CustomReport\Edit;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class ResetButtonTest extends TestCase
 {
-    protected $block;
+    protected object $block;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(
             'DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\ResetButton'
         );
@@ -22,7 +24,7 @@ class ResetButtonTest extends TestCase
             'label' => __('Reset'),
             'class' => 'reset',
             'on_click' => 'location.reload();',
-            'sort_order' => 30
+            'sort_order' => 30,
         ]);
     }
 }

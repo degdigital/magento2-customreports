@@ -9,8 +9,8 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class AutomatedExports implements OptionSourceInterface
 {
-    private $searchCriteriaBuilder;
-    private $automatedExportRepository;
+    private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private AutomatedExportRepositoryInterface $automatedExportRepository;
 
     /**
      * AutomatedExports constructor.

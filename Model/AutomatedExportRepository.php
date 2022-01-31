@@ -14,24 +14,27 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AutomatedExportRepository implements AutomatedExportRepositoryInterface
 {
     /**
      * @var \DEG\CustomReports\Model\AutomatedExportFactory
      */
-    protected $automatedExportFactory;
+    protected AutomatedExportFactory $automatedExportFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory
      */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
     /**
      * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
-    private $searchResultsFactory;
+    private SearchResultsInterfaceFactory $searchResultsFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExport
      */
-    private $automatedExportResource;
+    private ResourceModel\AutomatedExport $automatedExportResource;
 
     /**
      * AutomatedExportRepository constructor.
@@ -54,7 +57,7 @@ class AutomatedExportRepository implements AutomatedExportRepositoryInterface
     }
 
     /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface|\DEG\CustomReports\Model\AutomatedExport $automatedExport
+     * @param AutomatedExportInterface|AutomatedExport $automatedExport
      *
      * @return \DEG\CustomReports\Api\Data\AutomatedExportInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
@@ -83,7 +86,7 @@ class AutomatedExportRepository implements AutomatedExportRepositoryInterface
     }
 
     /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface|\DEG\CustomReports\Model\AutomatedExport $automatedExport
+     * @param AutomatedExportInterface|AutomatedExport $automatedExport
      *
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException

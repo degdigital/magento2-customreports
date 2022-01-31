@@ -1,10 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Model\Config\Source;
 
 use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Model\Config\Source\CustomReports;
+use DEG\CustomReports\Model\CustomReport;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResultsInterface;
 use PHPUnit\Framework\TestCase;
 
 class CustomReportsTest extends TestCase
@@ -12,15 +16,15 @@ class CustomReportsTest extends TestCase
     /**
      * @var CustomReports
      */
-    protected $customReports;
+    protected CustomReports $customReports;
 
     /**
-     * @var CustomReportRepositoryInterface|Mock
+     * @var CustomReportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customReportRepository;
 
     /**
-     * @var SearchCriteriaBuilder|Mock
+     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilder;
 
@@ -50,13 +54,13 @@ class CustomReportsTest extends TestCase
 
     public function testToOptionArray(): void
     {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteriaMock);
 
-        $searchResults = $this->createMock(\Magento\Framework\Api\SearchResultsInterface::class);
+        $searchResults = $this->createMock(SearchResultsInterface::class);
         $this->customReportRepository->method('getList')->willReturn($searchResults);
 
-        $customReport = $this->createMock(\DEG\CustomReports\Model\CustomReport::class);
+        $customReport = $this->createMock(CustomReport::class);
         $searchResults->method('getItems')->willReturn($customReport);
 
         $this->customReports->toOptionArray();

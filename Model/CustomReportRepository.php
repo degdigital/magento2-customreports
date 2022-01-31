@@ -14,24 +14,27 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomReportRepository implements CustomReportRepositoryInterface
 {
     /**
      * @var \DEG\CustomReports\Model\CustomReportFactory
      */
-    protected $customReportFactory;
+    protected CustomReportFactory $customReportFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\CustomReport\CollectionFactory
      */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
     /**
      * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
-    private $searchResultsFactory;
+    private SearchResultsInterfaceFactory $searchResultsFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\CustomReport
      */
-    private $customReportResource;
+    private ResourceModel\CustomReport $customReportResource;
 
     /**
      * CustomReportRepository constructor.

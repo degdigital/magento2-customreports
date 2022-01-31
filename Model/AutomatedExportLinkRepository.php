@@ -19,19 +19,19 @@ class AutomatedExportLinkRepository implements AutomatedExportLinkRepositoryInte
     /**
      * @var \DEG\CustomReports\Model\AutomatedExportLinkFactory
      */
-    protected $automatedExportLinkFactory;
+    protected AutomatedExportLinkFactory $automatedExportLinkFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExportLink\CollectionFactory
      */
-    protected $collectionFactory;
+    protected CollectionFactory $collectionFactory;
     /**
      * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
-    private $searchResultsFactory;
+    private SearchResultsInterfaceFactory $searchResultsFactory;
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExportLink
      */
-    private $automatedExportLinkResource;
+    private ResourceModel\AutomatedExportLink $automatedExportLinkResource;
 
     /**
      * AutomatedExportLinkRepository constructor.
@@ -45,7 +45,7 @@ class AutomatedExportLinkRepository implements AutomatedExportLinkRepositoryInte
         AutomatedExportLinkFactory $automatedExportLinkFactory,
         CollectionFactory $collectionFactory,
         SearchResultsInterfaceFactory $searchResultsFactory,
-        \DEG\CustomReports\Model\ResourceModel\AutomatedExportLink $automatedExportLinkResource
+        ResourceModel\AutomatedExportLink $automatedExportLinkResource
     ) {
         $this->automatedExportLinkFactory = $automatedExportLinkFactory;
         $this->collectionFactory = $collectionFactory;
@@ -54,7 +54,7 @@ class AutomatedExportLinkRepository implements AutomatedExportLinkRepositoryInte
     }
 
     /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface|\DEG\CustomReports\Model\AutomatedExportLink $automatedExportLink
+     * @param AutomatedExportLinkInterface|AutomatedExportLink $automatedExportLink
      *
      * @return \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
@@ -83,7 +83,7 @@ class AutomatedExportLinkRepository implements AutomatedExportLinkRepositoryInte
     }
 
     /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface|\DEG\CustomReports\Model\AutomatedExportLink $automatedExportLink
+     * @param AutomatedExportLinkInterface|AutomatedExportLink $automatedExportLink
      *
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException

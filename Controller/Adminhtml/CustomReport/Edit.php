@@ -4,15 +4,17 @@ namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-class Edit extends Action
+class Edit extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_edit';
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultPageFactory;
+    protected PageFactory $resultPageFactory;
 
     /**
      * Edit constructor.
@@ -30,9 +32,9 @@ class Edit extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function execute(): Page
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('DEG_CustomReports:customreports');

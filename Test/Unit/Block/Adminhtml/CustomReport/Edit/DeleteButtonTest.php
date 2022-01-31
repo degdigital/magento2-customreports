@@ -1,10 +1,13 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Block\Adminhtml\CustomReport\Edit;
 
 use DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\DeleteButton;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\TestCase;
 
 class DeleteButtonTest extends TestCase
@@ -12,10 +15,10 @@ class DeleteButtonTest extends TestCase
     /**
      * @var DeleteButton
      */
-    protected $deleteButton;
+    protected DeleteButton $deleteButton;
 
     /**
-     * @var Context|Mock
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
@@ -36,7 +39,7 @@ class DeleteButtonTest extends TestCase
     {
         parent::setUp();
         $this->context = $this->createMock(Context::class);
-        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->context->method('getUrlBuilder')->willReturn($this->url);
 
         $this->request = $this->createMock(RequestInterface::class);
@@ -61,11 +64,11 @@ class DeleteButtonTest extends TestCase
         $testUrl = 'https//local.local/123456';
         $this->url->method('getUrl')->willReturn($testUrl);
 
-        $this->assertEquals(array_keys($this->deleteButton->getButtonData()), [
+        $this->assertEquals([
             'label',
             'class',
             'on_click',
-            'sort_order'
-        ]);
+            'sort_order',
+        ], array_keys($this->deleteButton->getButtonData()));
     }
 }

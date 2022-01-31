@@ -19,7 +19,7 @@ interface CustomReportRepositoryInterface
     /**
      * @param $id
      *
-     * @return \DEG\CustomReports\Model\CustomReport
+     * @return \DEG\CustomReports\Api\Data\CustomReportInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id): CustomReport;

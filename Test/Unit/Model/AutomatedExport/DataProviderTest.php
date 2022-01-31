@@ -1,10 +1,14 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Model\AutomatedExport;
 
 use DEG\CustomReports\Model\AutomatedExport\DataProvider;
+use DEG\CustomReports\Model\ResourceModel\AutomatedExport\Collection;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\DataObject;
 use PHPUnit\Framework\TestCase;
 
 class DataProviderTest extends TestCase
@@ -12,42 +16,42 @@ class DataProviderTest extends TestCase
     /**
      * @var DataProvider
      */
-    protected $dataProvider;
+    protected DataProvider $dataProvider;
 
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      */
-    protected $primaryFieldName;
+    protected string $primaryFieldName;
 
     /**
      * @var string
      */
-    protected $requestFieldName;
+    protected string $requestFieldName;
 
     /**
-     * @var CollectionFactory|Mock
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var DataPersistorInterface|Mock
+     * @var DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataPersistor;
 
     /**
      * @var array
      */
-    protected $meta;
+    protected array $meta;
 
     /**
      * @var array
      */
-    protected $data;
+    protected array $data;
 
     /**
      * @var \DEG\CustomReports\Model\ResourceModel\AutomatedExport\Collection|\PHPUnit\Framework\MockObject\MockObject
@@ -66,14 +70,21 @@ class DataProviderTest extends TestCase
         $this->requestFieldName = '42';
 
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
-        $this->collectionMock = $this->createMock
-        (\DEG\CustomReports\Model\ResourceModel\AutomatedExport\Collection::class);
+        $this->collectionMock = $this->createMock(Collection::class);
         $this->collectionFactory->method('create')->willReturn($this->collectionMock);
 
         $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->meta = [];
         $this->data = [];
-        $this->dataProvider = new DataProvider($this->name, $this->primaryFieldName, $this->requestFieldName, $this->collectionFactory, $this->dataPersistor, $this->meta, $this->data);
+        $this->dataProvider = new DataProvider(
+            $this->name,
+            $this->primaryFieldName,
+            $this->requestFieldName,
+            $this->collectionFactory,
+            $this->dataPersistor,
+            $this->meta,
+            $this->data
+        );
     }
 
     /**
@@ -93,6 +104,9 @@ class DataProviderTest extends TestCase
         unset($this->data);
     }
 
+    /**
+     * @noinspection PhpExpressionResultUnusedInspection
+     */
     public function testPrepareMeta(): void
     {
         $this->dataProvider->prepareMeta([]);
@@ -102,7 +116,7 @@ class DataProviderTest extends TestCase
     {
         $this->collectionMock->method('addCustomreportIds')->willReturnSelf();
 
-        $dataObjectMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $dataObjectMock = $this->createMock(DataObject::class);
         $this->collectionMock->method('getItems')->willReturn([$dataObjectMock]);
 
         $this->dataPersistor->method('get')->willReturn(1);

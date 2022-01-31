@@ -4,21 +4,23 @@ namespace DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
-class Report extends Action
+class Report extends Action implements HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::customreport_view_report';
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    private $resultPageFactory;
+    private PageFactory $resultPageFactory;
 
     /**
      * @var Builder
      */
-    private $builder;
+    private Builder $builder;
 
     /**
      * Report constructor.
@@ -39,9 +41,9 @@ class Report extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
+     * @return \Magento\Framework\View\Result\Page
      */
-    public function execute()
+    public function execute(): Page
     {
         $customReport = $this->builder->build($this->getRequest());
         $resultPage = $this->resultPageFactory->create();

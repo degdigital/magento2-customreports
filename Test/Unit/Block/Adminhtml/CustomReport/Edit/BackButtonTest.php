@@ -1,20 +1,24 @@
 <?php
+declare(strict_types=1);
+/** @noinspection DuplicatedCode */
 
 namespace DEG\CustomReports\Test\Unit\Block\Adminhtml\CustomReport\Edit;
 
 use DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\BackButton;
 use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\TestCase;
 
 class BackButtonTest extends TestCase
 {
-    /**
-     * @var GenericButton
-     */
-    protected $backButton;
 
     /**
-     * @var Context|Mock
+     * @var \DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\BackButton
+     */
+    protected BackButton $backButton;
+
+    /**
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
@@ -31,7 +35,7 @@ class BackButtonTest extends TestCase
         parent::setUp();
 
         $this->context = $this->createMock(Context::class);
-        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->context->method('getUrlBuilder')->willReturn($this->url);
 
         $this->backButton = new BackButton($this->context);
@@ -53,11 +57,11 @@ class BackButtonTest extends TestCase
         $testUrl = 'https//local.local/123456';
         $this->url->method('getUrl')->willReturn($testUrl);
 
-        $this->assertEquals(array_keys($this->backButton->getButtonData()), [
-           'label',
+        $this->assertEquals([
+            'label',
             'on_click',
             'class',
-            'sort_order'
-        ]);
+            'sort_order',
+        ], array_keys($this->backButton->getButtonData()));
     }
 }

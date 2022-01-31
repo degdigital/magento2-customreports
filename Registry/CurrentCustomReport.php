@@ -9,7 +9,7 @@ class CurrentCustomReport
     /**
      * @var \DEG\CustomReports\Api\Data\CustomReportInterface|null
      */
-    private $currentCustomReport;
+    private ?CustomReportInterface $currentCustomReport;
 
     /**
      * @param \DEG\CustomReports\Api\Data\CustomReportInterface|null $currentCustomReport

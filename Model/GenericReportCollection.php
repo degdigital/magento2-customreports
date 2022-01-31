@@ -2,7 +2,6 @@
 
 namespace DEG\CustomReports\Model;
 
-use Exception;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -10,7 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
 
 class GenericReportCollection extends AbstractDb
@@ -21,21 +20,20 @@ class GenericReportCollection extends AbstractDb
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface    $entityFactory
      * @param \Psr\Log\LoggerInterface                                     $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null          $connection
      * @param \Magento\Framework\App\ResourceConnection|null               $resourceConnection
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
-        AdapterInterface $connection = null,
         ResourceConnection $resourceConnection = null
     ) {
         $resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
 
         /**
-         * @todo: Had to remove the connectionByName = 'readonly' temporarily until readonly connection
-         * is added to Magento Cloud Pro project by Magento Cloud support
+         * Previously, a custom 'readonly' connection was used here. This had to be removed to support Magento Cloud
+         * projects. Magento Cloud support can add 'readonly' connections to the database, but cannot actually define
+         * this connection in app/etc/env.php, and it cannot be defined manually as it will be removed on next deploy.
          */
         $connection = $resourceConnection->getConnectionByName('default');
 
@@ -44,8 +42,8 @@ class GenericReportCollection extends AbstractDb
 
     /**
      * Intentionally left empty since this is a generic resource.
-     *
-     * @noinspection PhpMissingReturnTypeInspection*/
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
+     */
     public function getResource()
     {
     }
@@ -56,11 +54,12 @@ class GenericReportCollection extends AbstractDb
      *
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function joinExtensionAttribute(
         JoinDataInterface $join,
         JoinProcessorInterface $extensionAttributesJoinProcessor
     ): GenericReportCollection {
-        throw new Exception('joinExtensionAttribute is not allowed in GenericReportCollection');
+        throw new LocalizedException(__('joinExtensionAttribute is not allowed in GenericReportCollection'));
     }
 }
