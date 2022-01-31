@@ -6,5 +6,10 @@ use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 
 interface CreateDynamicCronInterface
 {
+    /**
+     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
+     *
+     * @return void
+     */
     public function execute(AutomatedExportInterface $automatedExport);
 }

@@ -24,6 +24,7 @@ class DeleteDynamicCron implements DeleteDynamicCronInterface
     /**
      * @param string $automatedExportModelName
      *
+     * @return void
      * @throws \Exception
      * @noinspection PhpDeprecationInspection
      */

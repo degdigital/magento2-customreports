@@ -26,6 +26,7 @@ class CreateDynamicCron implements CreateDynamicCronInterface
     /**
      * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
      *
+     * @return void
      * @throws \Exception
      * @noinspection PhpDeprecationInspection
      */
