@@ -12,6 +12,27 @@
     <preference for="DEG\CustomReports\Api\CreateDynamicCronInterface" type="DEG\CustomReports\Model\Service\CreateDynamicCron"/>
     <preference for="DEG\CustomReports\Api\DeleteDynamicCronInterface" type="DEG\CustomReports\Model\Service\DeleteDynamicCron"/>
 
+    <preference for="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface" type="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPool"/>
+
+    <preference for="DEG\CustomReports\Api\ExportReportServiceInterface" type="DEG\CustomReports\Model\Service\ExportReportService"/>
+
+    <preference for="DEG\CustomReports\Api\CustomReportManagementInterface" type="DEG\CustomReports\Model\CustomReportManagement"/>
+
+    <preference for="DEG\CustomReports\Api\AutomatedExportManagementInterface" type="\DEG\CustomReports\Model\AutomatedExportManagement"/>
+
+    <type name="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="local_file_drop" xsi:type="array">
+                    <item name="class" xsi:type="string">DEG\CustomReports\Model\AutomatedExport\ExportType\LocalFileStreamsHandler</item>
+                </item>
+                <item name="remote_file_drop" xsi:type="array">
+                    <item name="class" xsi:type="string">DEG\CustomReports\Model\AutomatedExport\ExportType\RemoteFileStreamsHandler</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="DEG\CustomReports\Model\AutomatedExport\Cron">
         <arguments>
             <argument name="logger" xsi:type="object">Magento\Cron\Model\VirtualLogger</argument>

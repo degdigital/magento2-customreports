@@ -84,20 +84,32 @@
                 </item>
             </argument>
         </field>
+        <field name="customreport_ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Custom Reports to Export</item>
+                    <item name="formElement" xsi:type="string">multiselect</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataScope" xsi:type="string">customreport_ids</item>
+                </item>
+                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\CustomReports</item>
+            </argument>
+        </field>
         <field name="export_types">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Export Types</item>
                     <item name="formElement" xsi:type="string">multiselect</item>
-                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
                     <item name="dataScope" xsi:type="string">export_types</item>
                     <item name="placeholder" xsi:type="string">0 3 * * *</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                 </item>
-                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\ExportType</item>
+                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\ExportTypes</item>
 
             </argument>
         </field>
@@ -107,13 +119,13 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">File Types</item>
                     <item name="formElement" xsi:type="string">multiselect</item>
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
                     <item name="dataScope" xsi:type="string">file_types</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                 </item>
-                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\FileType</item>
+                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\FileTypes</item>
             </argument>
         </field>
         <field name="filename_pattern">
@@ -122,7 +134,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Filename Pattern</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                     <item name="dataScope" xsi:type="string">filename_pattern</item>
                     <item name="placeholder" xsi:type="string">%reportname%-%Y%-%m%-%d%-%h%-%i%-%s%</item>
                     <item name="validation" xsi:type="array">
@@ -140,7 +152,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Export Location</item>
                     <item name="formElement" xsi:type="string">input</item>
-                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
                     <item name="dataScope" xsi:type="string">export_location</item>
                     <item name="placeholder" xsi:type="string">var/export</item>
                     <item name="validation" xsi:type="array">
@@ -149,16 +161,64 @@
                 </item>
             </argument>
         </field>
-        <field name="customreport_ids">
+        <field name="remote_host">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Associated Custom Reports</item>
-                    <item name="formElement" xsi:type="string">multiselect</item>
-                    <item name="sortOrder" xsi:type="number">70</item>
-                    <item name="dataScope" xsi:type="string">customreport_ids</item>
+                    <item name="label" xsi:type="string" translate="true">Remote Export Host</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="dataScope" xsi:type="string">remote_host</item>
+                    <item name="placeholder" xsi:type="string">sftp.google.com</item>
                 </item>
-                <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\CustomReports</item>
+            </argument>
+        </field>
+        <field name="remote_port">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Remote Export Port</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="dataScope" xsi:type="string">remote_port</item>
+                    <item name="placeholder" xsi:type="string">defaults to 22 if left blank</item>
+                </item>
+            </argument>
+        </field>
+                <field name="remote_username">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Remote Export Username</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                    <item name="dataScope" xsi:type="string">remote_username</item>
+                    <item name="placeholder" xsi:type="string">sftp_username</item>
+                </item>
+            </argument>
+        </field>
+                <field name="remote_password">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Remote Export Password</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
+                    <item name="dataScope" xsi:type="string">remote_password</item>
+                    <item name="placeholder" xsi:type="string">sftp_password123</item>
+                </item>
+            </argument>
+        </field>
+        <field name="remote_location">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Remote Export Location</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
+                    <item name="dataScope" xsi:type="string">remote_location</item>
+                    <item name="placeholder" xsi:type="string">optional/sftp/folder/here</item>
+                </item>
             </argument>
         </field>
     </fieldset>

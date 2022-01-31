@@ -17,7 +17,12 @@
         <column xsi:type="varchar" name="export_types" nullable="false" length="255" comment="Export Types"/>
         <column xsi:type="varchar" name="file_types" nullable="false" length="255" comment="File Types"/>
         <column xsi:type="varchar" name="filename_pattern" nullable="false" length="255" comment="Filename Pattern"/>
-        <column xsi:type="text" name="export_location" nullable="false" comment="Export location"/>
+        <column xsi:type="text" name="export_location" nullable="false" comment="Local export location"/>
+        <column xsi:type="varchar" name="remote_host" nullable="true" length="255" comment="Remote Host"/>
+        <column xsi:type="smallint" name="remote_port" nullable="true" unsigned="true" comment="Remote Port"/>
+        <column xsi:type="varchar" name="remote_username" nullable="true" length="255" comment="Remote Username"/>
+        <column xsi:type="varchar" name="remote_password" nullable="true" length="255" comment="Remote Password"/>
+        <column xsi:type="varchar" name="remote_location" nullable="true" length="255" comment="Remote Location"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Modification Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

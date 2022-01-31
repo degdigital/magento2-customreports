@@ -3,63 +3,58 @@
 namespace DEG\CustomReports\Model\AutomatedExport;
 
 use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
-use DEG\CustomReports\Api\CustomReportRepositoryInterface;
 use DEG\CustomReports\Api\DeleteDynamicCronInterface;
-use DEG\CustomReports\Block\Adminhtml\Report\Grid;
-use DEG\CustomReports\Registry\CurrentCustomReport;
+use DEG\CustomReports\Api\ExportReportServiceInterface;
 use Exception;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Result\PageFactory;
 use Psr\Log\LoggerInterface;
 
 class Cron
 {
-    private $automatedExportRepository;
-    private $deleteDynamicCron;
-    private $resultPageFactory;
-    private $currentCustomReportRegistry;
-    private $customReportRepository;
-    private $logger;
+    protected AutomatedExportRepositoryInterface $automatedExportRepository;
+    protected DeleteDynamicCronInterface $deleteDynamicCron;
+    protected LoggerInterface $logger;
+
+    /**
+     * @var \DEG\CustomReports\Api\ExportReportServiceInterface
+     */
+    protected ExportReportServiceInterface $exportReportService;
 
     /**
      * Cron constructor.
      *
      * @param \DEG\CustomReports\Api\AutomatedExportRepositoryInterface $automatedExportRepository
-     * @param \DEG\CustomReports\Api\CustomReportRepositoryInterface    $customReportRepository
      * @param \DEG\CustomReports\Api\DeleteDynamicCronInterface         $deleteDynamicCron
-     * @param \Magento\Framework\View\Result\PageFactory                $resultPageFactory
-     * @param \DEG\CustomReports\Registry\CurrentCustomReport           $currentCustomReportRegistry
      * @param \Psr\Log\LoggerInterface                                  $logger
+     * @param \DEG\CustomReports\Api\ExportReportServiceInterface       $exportReportService
      */
     public function __construct(
         AutomatedExportRepositoryInterface $automatedExportRepository,
-        CustomReportRepositoryInterface $customReportRepository,
         DeleteDynamicCronInterface $deleteDynamicCron,
-        PageFactory $resultPageFactory,
-        CurrentCustomReport $currentCustomReportRegistry,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ExportReportServiceInterface $exportReportService
     ) {
         $this->automatedExportRepository = $automatedExportRepository;
         $this->deleteDynamicCron = $deleteDynamicCron;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->currentCustomReportRegistry = $currentCustomReportRegistry;
-        $this->customReportRepository = $customReportRepository;
         $this->logger = $logger;
+        $this->exportReportService = $exportReportService;
     }
 
     /**
      * @param \Magento\Cron\Model\Schedule $schedule
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute(Schedule $schedule)
+    public function execute(Schedule $schedule): bool
     {
         /** @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
         /** @var $exportBlock \DEG\CustomReports\Block\Adminhtml\Report\Export */
 
+        $jobCode = $schedule->getJobCode();
         try {
-            $jobCode = $schedule->getJobCode();
             preg_match('/automated_export_(\d+)/', $jobCode, $jobMatch);
             if (!isset($jobMatch[1])) {
                 throw new LocalizedException(__('No profile ID found in job_code.'));
@@ -71,29 +66,10 @@ class Cron
                 throw new LocalizedException(__('Automated Export ID %1 does not exist.', $automatedExportId));
             }
 
-            $customReportIds = $automatedExport->getCustomreportIds();
-            foreach ($customReportIds as $customReportId) {
-                $customReport = $this->customReportRepository->getById($customReportId);
-                $this->currentCustomReportRegistry->set($customReport);
-                $resultPage = $this->resultPageFactory->create();
-                $reportGrid = $resultPage->getLayout()->createBlock(Grid::class, 'report.grid');
-                $exportBlock = $reportGrid->getChildBlock('grid.export');
-                foreach ($automatedExport->getExportTypes() as $exportType) {
-                    //@todo: Extract exporter logic to its own class
-                    if ($exportType == 'local_file_drop') {
-                        foreach ($automatedExport->getFileTypes() as $fileType) {
-                            if ($fileType == 'csv') {
-                                $response = $exportBlock->getCronCsvFile($customReport, $automatedExport);
-                                if (isset($response['value'])) {
-                                    $this->logger->info(__('Successfully exported var/%1 file', $response['value']));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            $this->exportReportService->exportAll($automatedExport);
         } catch (Exception $e) {
             $this->logger->critical('Cronjob exception for job_code '.$jobCode.': '.$e->getMessage());
+            throw $e;
         }
 
         return true;
