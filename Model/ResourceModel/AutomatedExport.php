@@ -23,6 +23,16 @@ class AutomatedExport extends AbstractDb
      */
     private EncryptorInterface $encryptor;
 
+    /**
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context             $context
+     * @param \DEG\CustomReports\Model\AutomatedExportLinkFactory           $automatedExportLinkFactory
+     * @param \DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder                  $searchCriteriaBuilder
+     * @param \DEG\CustomReports\Api\CreateDynamicCronInterface             $createDynamicCronService
+     * @param \Magento\Framework\Encryption\EncryptorInterface              $encryptor
+     * @param                                                               $connectionName
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         Context $context,
         AutomatedExportLinkFactory $automatedExportLinkFactory,
@@ -142,12 +152,12 @@ class AutomatedExport extends AbstractDb
         }
 
         $exportTypes = $object->getExportTypes();
-        if (!is_array($exportTypes)) {
+        if (!is_array($exportTypes) && $exportTypes) {
             $object->setExportTypes(explode(',', $exportTypes));
         }
 
         $fileTypes = $object->getFileTypes();
-        if (!is_array($fileTypes)) {
+        if (!is_array($fileTypes) && $fileTypes) {
             $object->setFileTypes(explode(',', $fileTypes));
         }
 

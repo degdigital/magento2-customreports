@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Model\AutomatedExport;
 
+use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use DEG\CustomReports\Model\AutomatedExport\DataProvider;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExport\Collection;
 use DEG\CustomReports\Model\ResourceModel\AutomatedExport\CollectionFactory;
@@ -73,6 +74,8 @@ class DataProviderTest extends TestCase
         $this->collectionMock = $this->createMock(Collection::class);
         $this->collectionFactory->method('create')->willReturn($this->collectionMock);
 
+        $this->automatedExportRepository = $this->createMock(AutomatedExportRepositoryInterface::class);
+
         $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->meta = [];
         $this->data = [];
@@ -82,6 +85,7 @@ class DataProviderTest extends TestCase
             $this->requestFieldName,
             $this->collectionFactory,
             $this->dataPersistor,
+            $this->automatedExportRepository,
             $this->meta,
             $this->data
         );
