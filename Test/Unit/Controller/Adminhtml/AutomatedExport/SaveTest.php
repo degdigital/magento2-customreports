@@ -51,7 +51,7 @@ class SaveTest extends TestCase
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $redirectPageMock;
+    protected $redirectPageFactoryMock;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject

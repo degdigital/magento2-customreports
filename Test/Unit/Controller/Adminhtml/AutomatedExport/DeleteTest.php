@@ -40,7 +40,7 @@ class DeleteTest extends TestCase
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $redirectPageMock;
+    protected $redirectPageFactoryMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -111,8 +111,9 @@ class DeleteTest extends TestCase
         $this->requestMock->method('getParam')
             ->with('object_id')->willReturn(1);
 
-        $redirectPageMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
-        $this->redirectPageMock->method('create')
+        $redirectPageMock = $this->createMock(Redirect::class);
+        $redirectPageMock->method('setPath')->willReturn($redirectPageMock);
+        $this->redirectPageFactoryMock->method('create')
             ->willReturn($redirectPageMock);
 
         $this->customReportRepository->method('delete')
