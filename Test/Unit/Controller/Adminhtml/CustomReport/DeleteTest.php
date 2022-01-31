@@ -40,7 +40,7 @@ class DeleteTest extends TestCase
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $redirectPageMock;
+    protected $redirectPageFactoryMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
