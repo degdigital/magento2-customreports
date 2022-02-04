@@ -65,6 +65,10 @@ class Save extends Action implements HttpPostActionInterface
                 $data['automatedexport_id'] = null;
             }
 
+            if (empty($data['remote_port'])) {
+                $data['remote_port'] = null;
+            }
+
             $automatedExport = $this->automatedExportFactory->create();
 
             $id = $this->getRequest()->getParam('automatedexport_id');
