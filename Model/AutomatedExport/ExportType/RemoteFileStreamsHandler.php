@@ -113,9 +113,12 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     {
         $sftp = $this->sftpFactory->create();
         $automatedExport = $this->getAutomatedExport();
+        $host = $automatedExport->getRemoteHost();
+        if ($remotePort = $automatedExport->getRemotePort()) {
+            $host = $host . ':' . $remotePort;
+        }
         $sftp->open([
-            'host' => $automatedExport->getRemoteHost(),
-            'port' => $automatedExport->getRemotePort(),
+            'host' => $host,
             'username' => $automatedExport->getRemoteUsername(),
             'password' => $automatedExport->getRemotePassword(),
         ]);
