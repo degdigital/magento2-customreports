@@ -18,7 +18,7 @@ class DataProvider extends AbstractDataProvider
     /**
      * @var array
      */
-    protected array $loadedData;
+    protected array $loadedData = [];
 
     /**
      * @param string                 $name
