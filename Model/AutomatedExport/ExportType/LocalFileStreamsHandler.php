@@ -122,11 +122,14 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
         }
     }
 
+    /**
+     * @return void
+     */
     public function finalizeExport()
     {
-        foreach ($this->exportStreams as $exportMetadatum) {
-            $exportMetadatum->getStream()->unlock();
-            $exportMetadatum->getStream()->close();
+        foreach ($this->exportStreams as $exportStream) {
+            $exportStream->getStream()->unlock();
+            $exportStream->getStream()->close();
         }
     }
 }

@@ -1,0 +1,13 @@
+<!--@subject {{trans "Automated Export Error"}} @-->
+<!--@vars {
+"var automated_export.automatedexport_id":"1",
+"var custom_report_id":"1",
+"var exception":"PDOException: SQLSTATE..."
+} @-->
+
+<p>An error occurred attempting to run an automated export.</p>
+Automated Export ID: {{var automated_export.automatedexport_id}}
+<br />
+Custom Report ID: {{var custom_report_id}}
+<br />
+Exception Message: {{var exception}}

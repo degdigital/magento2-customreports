@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <deg_customreports>
+            <automated_exports>
+                <error_email_template>deg_customreports_automated_exports_error_email_template</error_email_template>
+            </automated_exports>
+        </deg_customreports>
+    </default>
+</config>

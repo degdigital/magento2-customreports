@@ -18,6 +18,13 @@
                     <resource id="DEG_CustomReports::automatedexport_delete" title="Delete Automated Export"/>
                     <resource id="DEG_CustomReports::automatedexport_view_automated_export" title="View Automated Export"/>
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="DEG_CustomReports::config" title="Custom Reports Settings" translate="title" sortOrder="70"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

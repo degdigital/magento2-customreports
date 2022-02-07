@@ -2,24 +2,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="DEG\CustomReports\Api\CustomReportRepositoryInterface" type="DEG\CustomReports\Model\CustomReportRepository"/>
     <preference for="DEG\CustomReports\Api\Data\CustomReportInterface" type="DEG\CustomReports\Model\CustomReport"/>
-
     <preference for="DEG\CustomReports\Api\AutomatedExportRepositoryInterface" type="DEG\CustomReports\Model\AutomatedExportRepository"/>
     <preference for="DEG\CustomReports\Api\Data\AutomatedExportInterface" type="DEG\CustomReports\Model\AutomatedExport"/>
-
-    <preference for="DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface" type="\DEG\CustomReports\Model\AutomatedExportLinkRepository"/>
+    <preference for="DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface" type="DEG\CustomReports\Model\AutomatedExportLinkRepository"/>
     <preference for="DEG\CustomReports\Api\Data\AutomatedExportLinkInterface" type="DEG\CustomReports\Model\AutomatedExportLink"/>
-
     <preference for="DEG\CustomReports\Api\CreateDynamicCronInterface" type="DEG\CustomReports\Model\Service\CreateDynamicCron"/>
     <preference for="DEG\CustomReports\Api\DeleteDynamicCronInterface" type="DEG\CustomReports\Model\Service\DeleteDynamicCron"/>
-
     <preference for="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface" type="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPool"/>
-
     <preference for="DEG\CustomReports\Api\ExportReportServiceInterface" type="DEG\CustomReports\Model\Service\ExportReportService"/>
-
     <preference for="DEG\CustomReports\Api\CustomReportManagementInterface" type="DEG\CustomReports\Model\CustomReportManagement"/>
-
-    <preference for="DEG\CustomReports\Api\AutomatedExportManagementInterface" type="\DEG\CustomReports\Model\AutomatedExportManagement"/>
-
+    <preference for="DEG\CustomReports\Api\AutomatedExportManagementInterface" type="DEG\CustomReports\Model\AutomatedExportManagement"/>
+    <preference for="DEG\CustomReports\Api\ConfigProviderInterface" type="DEG\CustomReports\Model\ConfigProvider"/>
+    <preference for="DEG\CustomReports\Api\SendErrorEmailServiceInterface" type="DEG\CustomReports\Model\Service\SendErrorEmailService"/>
     <type name="DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -32,7 +26,6 @@
             </argument>
         </arguments>
     </type>
-
     <type name="DEG\CustomReports\Model\AutomatedExport\Cron">
         <arguments>
             <argument name="logger" xsi:type="object">Magento\Cron\Model\VirtualLogger</argument>

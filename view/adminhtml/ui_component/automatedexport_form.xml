@@ -161,7 +161,20 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
-                    <item name="additionalInfo" xsi:type="string" translate="true">E.g. var/export</item>
+                    <item name="additionalInfo" xsi:type="string" translate="true">E.g. var/export. The location of local files. </item>
+                </item>
+            </argument>
+        </field>
+        <field name="error_emails">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Error Email Address</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="sortOrder" xsi:type="number">75</item>
+                    <item name="dataScope" xsi:type="string">error_emails</item>
+                    <item name="placeholder" xsi:type="string">errors@test.com</item>
+                    <item name="additionalInfo" xsi:type="string" translate="true">E.g. errors@test.com, admin@test.com. If set, will email an error if something goes wrong during an export. Supports a comma-delimited list of emails. </item>
                 </item>
             </argument>
         </field>

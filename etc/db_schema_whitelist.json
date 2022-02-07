@@ -20,6 +20,7 @@
             "file_types": true,
             "filename_pattern": true,
             "export_location": true,
+            "error_emails": true,
             "remote_host": true,
             "remote_username": true,
             "remote_password": true,
