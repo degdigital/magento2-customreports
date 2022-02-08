@@ -30,7 +30,7 @@ class AutomatedExport extends AbstractDb
      * @param \Magento\Framework\Api\SearchCriteriaBuilder                  $searchCriteriaBuilder
      * @param \DEG\CustomReports\Api\CreateDynamicCronInterface             $createDynamicCronService
      * @param \Magento\Framework\Encryption\EncryptorInterface              $encryptor
-     * @param                                                               $connectionName
+     * @param string|null                                                   $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -40,7 +40,7 @@ class AutomatedExport extends AbstractDb
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CreateDynamicCronInterface $createDynamicCronService,
         EncryptorInterface $encryptor,
-        $connectionName = null
+        ?string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->automatedExportLinkFactory = $automatedExportLinkFactory;
