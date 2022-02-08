@@ -2,6 +2,7 @@
 
 namespace DEG\CustomReports\Model\AutomatedExport\ExportType;
 
+use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -45,18 +46,24 @@ class StreamHandlerPool implements StreamHandlerPoolInterface
     }
 
     /**
-     * @return array|\DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerInterface[]
+     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
+     *
+     * @return \DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getHandlerInstances(): array
+    public function getHandlerInstances(AutomatedExportInterface $automatedExport): array
     {
         $handlerInstances = [];
         foreach ($this->handlerConfig as $handlerCode => $handler) {
-            if (empty($handler['class'])) {
-                throw new LocalizedException(__('The parameter "class" is missing. Set the "class" and try again.'));
-            }
+            foreach ($automatedExport->getExportTypes() as $exportType) {
+                if ($exportType == $handlerCode) {
+                    if (empty($handler['class'])) {
+                        throw new LocalizedException(__('The parameter "class" is missing.'));
+                    }
 
-            $handlerInstances[$handlerCode] = $this->factory->create($handler['class']);
+                    $handlerInstances[$handlerCode] = $this->factory->create($handler['class']);
+                }
+            }
         }
 
         return $handlerInstances;

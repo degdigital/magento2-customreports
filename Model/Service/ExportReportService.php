@@ -69,7 +69,7 @@ class ExportReportService implements ExportReportServiceInterface
         foreach ($customReportIds as $customReportId) {
             try {
                 $customReport = $this->customReportRepository->getById($customReportId);
-                $handlers = $this->exportTypeHandlerPool->getHandlerInstances();
+                $handlers = $this->exportTypeHandlerPool->getHandlerInstances($automatedExport);
                 foreach ($handlers as $handler) {
                     $handler->setAutomatedExport($automatedExport)->setCustomReport($customReport);
                     $handler->startExport();

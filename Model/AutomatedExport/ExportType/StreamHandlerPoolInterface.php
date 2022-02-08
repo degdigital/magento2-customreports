@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace DEG\CustomReports\Model\AutomatedExport\ExportType;
 
+use DEG\CustomReports\Api\Data\AutomatedExportInterface;
+
 /**
  * @api
  */
@@ -14,8 +16,9 @@ interface StreamHandlerPoolInterface
     public function getHandlerConfig(): array;
 
     /**
-     * @return array|\DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
+     *
+     * @return \DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerInterface[]
      */
-    public function getHandlerInstances(): array;
+    public function getHandlerInstances(AutomatedExportInterface $automatedExport): array;
 }
