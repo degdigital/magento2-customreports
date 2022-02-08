@@ -32,7 +32,7 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
         AutomatedExportInterface $automatedExport,
         CustomReportInterface $customReport
     ): string {
-        $formattedReportName = strtolower(str_replace(' ', '_', $customReport->getReportName()));
+        $formattedReportName = $customReport->getReportName();
 
         $replaceableVariables = [
             '%d%' => $this->timezone->date()->format('d'),
