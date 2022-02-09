@@ -111,7 +111,6 @@
                     </item>
                 </item>
                 <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\ExportTypes</item>
-
             </argument>
         </field>
         <field name="file_types">
@@ -145,7 +144,6 @@
                         <item name="description" xsi:type="string">Available variables: %reportname%, %d%, %m%, %y%, %Y%, %h%, %i%, %s%</item>
                     </item>
                     <item name="additionalInfo" xsi:type="string" translate="true">E.g. %reportname%-%Y%-%m%-%d%-%h%-%i%-%s%</item>
-
                 </item>
             </argument>
         </field>
@@ -229,7 +227,6 @@
                     <item name="dataScope" xsi:type="string">remote_password</item>
                     <item name="placeholder" xsi:type="string">sftp_password123</item>
                     <item name="additionalInfo" xsi:type="string" translate="true">E.g. sftp_password123</item>
-
                 </item>
             </argument>
         </field>
