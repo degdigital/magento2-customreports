@@ -204,7 +204,7 @@
                 </item>
             </argument>
         </field>
-                <field name="remote_username">
+        <field name="remote_username">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
