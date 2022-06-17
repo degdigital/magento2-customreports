@@ -38,4 +38,15 @@ crontab/default/jobs/automated_export_1/name = automated_export_1
 
 The popular third-party Magento tool, n98-magerun, can be used to run the automated exports manually from the command line using the above name, e.g. 'n98-magerun sys:cron:run automated_export_1'. 
 
+## Define column filters 
 
+Note: Only tested with datetime / date
+
+Place a comment block after your SQL, with format: column_name:type
+
+example:
+```mysql
+select entity_id, state, status, created_at, updated_at  from sales_order order by entity_id desc limit 500
+
+/* created_at:datetime, updated_at:datetime */
+```

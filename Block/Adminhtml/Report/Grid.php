@@ -47,7 +47,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $customReport = $this->currentCustomReportRegistry->get();
         $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
         $columnList = $this->customReportManagement->getColumnsList($customReport);
-        $this->addColumnSet($columnList);
+        $columnTypes = $this->customReportManagement->getColumnTypes($customReport);
+        $this->addColumnSet($columnList, $columnTypes);
         $this->addGridExportBlock();
         $this->setCollection($genericCollection);
         parent::_prepareLayout();
@@ -58,7 +59,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @return void
      */
-    public function addColumnSet($columnList)
+    public function addColumnSet($columnList, $columnTypes)
     {
         /** @var $columnSet \Magento\Backend\Block\Widget\Grid\ColumnSet * */
         $columnSet = $this->_layout->createBlock(
@@ -69,14 +70,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             if ($this->_defaultSort === false) {
                 $this->_defaultSort = $columnName;
             }
-            /** @var $column \Magento\Backend\Block\Widget\Grid\Column * */
+            $type = (isset($columnTypes[$columnName]))?$columnTypes[$columnName]:'text';
             $data = [
                 'data' => [
                     'header' => $columnName,
                     'index' => $columnName,
-                    'type' => 'text',
+                    'type' => $type,
                 ],
             ];
+            /** @var $column \Magento\Backend\Block\Widget\Grid\Column * */
             $column = $this->_layout->createBlock(
                 Column::class,
                 'deg_customreports_grid.grid.column.'.$columnName,
