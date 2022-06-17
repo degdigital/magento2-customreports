@@ -31,8 +31,7 @@ class CustomReportManagement implements CustomReportManagementInterface
     public function getGenericReportCollection(CustomReportInterface $customReport): GenericReportCollection
     {
         $genericReportCollection = $this->genericReportCollectionFactory->create();
-        $rawSql = $customReport->getReportSql();
-        $formattedSql = $this->formatSql($rawSql);
+        $formattedSql = $this->formatSql($customReport->getReportSql());
         $genericReportCollection->getSelect()->from(new Zend_Db_Expr('('.$formattedSql.')'));
 
         return $genericReportCollection;
