@@ -56,6 +56,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * @param $columnList
+     * @param $columnTypes
      *
      * @return void
      */
