@@ -88,9 +88,11 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
         $this->exportStreams = [];
         foreach ($automatedExport->getFileTypes() as $fileType) {
             $filename = $fileStem.'.'.$fileType;
-            $stream = $this->directory->openFile($directoryName.'/'.$filename, 'w+');
+            $localFilepath = $this->directory->getAbsolutePath().$directoryName.'/'.$filename;
+            $stream = $this->directory->openFile($localFilepath, 'w+');
             $this->exportStreams[] = $this->localFileStreamFactory->create()
                 ->setFilename($filename)
+                ->setFilepath($localFilepath)
                 ->setFileType($fileType)
                 ->setStream($stream);
         }

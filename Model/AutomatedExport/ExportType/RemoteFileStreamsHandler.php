@@ -126,7 +126,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
         foreach ($this->exportStreams as $exportStream) {
             // phpcs:disable Magento2.Functions.DiscouragedFunction
             $filePath = $automatedExport->getRemoteLocation().'/'.basename($exportStream->getFilename());
-            $sftp->write($filePath, $exportStream->getFilename());
+            $sftp->write($filePath, $exportStream->getFilepath());
         }
     }
 }
