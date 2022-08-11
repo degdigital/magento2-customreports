@@ -16,8 +16,10 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * @method AutomatedExportInterface getAutomatedExport()
  * @method CustomReportInterface    getCustomReport()
+ * @method StreamHandlerInterface[] getHandlers()
  * @method LocalFileStreamsHandler setAutomatedExport(AutomatedExportInterface $automatedExport)
  * @method LocalFileStreamsHandler setCustomReport(CustomReportInterface $customReport)
+ * @method LocalFileStreamsHandler setHandlers(StreamHandlerInterface[] $handlers)
  */
 class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterface
 {
@@ -133,5 +135,10 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
             $exportStream->getStream()->unlock();
             $exportStream->getStream()->close();
         }
+    }
+
+    public function getExportStreams()
+    {
+        return $this->exportStreams;
     }
 }

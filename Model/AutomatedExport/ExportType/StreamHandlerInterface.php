@@ -8,8 +8,10 @@ use DEG\CustomReports\Api\Data\CustomReportInterface;
 /**
  * @method AutomatedExportInterface getAutomatedExport()
  * @method CustomReportInterface    getCustomReport()
+ * @method StreamHandlerInterface[] getHandlers()
  * @method StreamHandlerInterface setAutomatedExport(AutomatedExportInterface $automatedExport)
  * @method StreamHandlerInterface setCustomReport(CustomReportInterface $customReport)
+ * @method StreamHandlerInterface setHandlers(StreamHandlerInterface[] $handlers)
  */
 interface StreamHandlerInterface
 {
@@ -20,4 +22,6 @@ interface StreamHandlerInterface
     public function exportChunk(array $dataToWrite);
 
     public function finalizeExport();
+
+    public function getExportStreams();
 }

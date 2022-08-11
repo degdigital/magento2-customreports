@@ -4,30 +4,34 @@ namespace DEG\CustomReports\Model\AutomatedExport\ExportType;
 
 use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 use DEG\CustomReports\Api\Data\CustomReportInterface;
-use DEG\CustomReports\Model\Config\Source\ExportTypes;
+use DEG\CustomReports\Model\AutomatedExport\ExportType\Stream\LocalFileStream;
+use Exception;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Io\SftpFactory;
 
 /**
  * @method AutomatedExportInterface getAutomatedExport()
  * @method CustomReportInterface    getCustomReport()
+ * @method StreamHandlerInterface[] getHandlers()
  * @method LocalFileStreamsHandler setAutomatedExport(AutomatedExportInterface $automatedExport)
  * @method LocalFileStreamsHandler setCustomReport(CustomReportInterface $customReport)
+ * @method LocalFileStreamsHandler setHandlers(StreamHandlerInterface[] $handlers)
  */
 class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterface
 {
     /**
-     * @var \DEG\CustomReports\Model\AutomatedExport\ExportType\LocalFileStreamsHandler
+     * @var LocalFileStreamsHandler
      */
     protected LocalFileStreamsHandler $localFileStreamsHandler;
 
     /**
-     * @var \Magento\Framework\Filesystem\Io\SftpFactory
+     * @var SftpFactory
      */
     protected SftpFactory $sftpFactory;
 
     /**
-     * @var \DEG\CustomReports\Model\AutomatedExport\ExportType\Stream\LocalFileStream[]
+     * @var LocalFileStream[]
      */
     protected array $exportStreams = [];
 
@@ -37,8 +41,8 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     protected bool $isLocalFileAlreadyBeingGenerated;
 
     /**
-     * @param \DEG\CustomReports\Model\AutomatedExport\ExportType\LocalFileStreamsHandler $localFileStreamsHandler
-     * @param \Magento\Framework\Filesystem\Io\SftpFactory                                $sftpFactory
+     * @param LocalFileStreamsHandler $localFileStreamsHandler
+     * @param SftpFactory $sftpFactory
      * @param array                                                                       $data
      */
     public function __construct(
@@ -52,17 +56,26 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     }
 
     /**
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function startExport()
     {
-        $this->exportStreams = $this->localFileStreamsHandler->setAutomatedExport($this->getAutomatedExport())
-            ->setCustomReport($this->getCustomReport())
-            ->startExport();
+        if (!$this->isLocalFileAlreadyBeingExported()) {
+            $this->exportStreams = $this->localFileStreamsHandler->setAutomatedExport($this->getAutomatedExport())
+                ->setCustomReport($this->getCustomReport())
+                ->startExport();
+        } else {
+            foreach ($this->getHandlers() as $handler) {
+                if ($handler instanceof LocalFileStreamsHandler) {
+                    $this->exportStreams = $handler->getExportStreams();
+                    break;
+                }
+            }
+        }
     }
 
     /**
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function exportHeaders()
     {
@@ -72,7 +85,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     }
 
     /**
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function exportChunk(array $dataToWrite)
     {
@@ -82,7 +95,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function finalizeExport()
     {
@@ -96,8 +109,8 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     {
         if (!isset($this->isLocalFileAlreadyBeingGenerated)) {
             $this->isLocalFileAlreadyBeingGenerated = false;
-            foreach ($this->getAutomatedExport()->getExportTypes() as $exportType) {
-                if ($exportType == ExportTypes::LOCAL_FILE_DROP) {
+            foreach ($this->getHandlers() as $handler) {
+                if ($handler instanceof LocalFileStreamsHandler) {
                     $this->isLocalFileAlreadyBeingGenerated = true;
                 }
             }
@@ -107,7 +120,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function uploadFiles()
     {
@@ -128,5 +141,10 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
             $filePath = $automatedExport->getRemoteLocation().'/'.basename($exportStream->getFilename());
             $sftp->write($filePath, $exportStream->getFilepath());
         }
+    }
+
+    public function getExportStreams()
+    {
+        return $this->exportStreams;
     }
 }

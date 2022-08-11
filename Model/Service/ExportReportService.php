@@ -71,7 +71,9 @@ class ExportReportService implements ExportReportServiceInterface
                 $customReport = $this->customReportRepository->getById($customReportId);
                 $handlers = $this->exportTypeHandlerPool->getHandlerInstances($automatedExport);
                 foreach ($handlers as $handler) {
-                    $handler->setAutomatedExport($automatedExport)->setCustomReport($customReport);
+                    $handler->setAutomatedExport($automatedExport)
+                        ->setCustomReport($customReport)
+                        ->setHandlers($handlers);
                     $handler->startExport();
                     $handler->exportHeaders();
                 }
