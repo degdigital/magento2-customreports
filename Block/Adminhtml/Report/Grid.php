@@ -47,9 +47,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $customReport = $this->currentCustomReportRegistry->get();
         $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
         $columnList = $this->customReportManagement->getColumnsList($customReport);
+        $this->setCollection($genericCollection);
         $this->addColumnSet($columnList);
         $this->addGridExportBlock();
-        $this->setCollection($genericCollection);
         parent::_prepareLayout();
     }
 
@@ -60,29 +60,32 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     public function addColumnSet($columnList)
     {
-        /** @var $columnSet \Magento\Backend\Block\Widget\Grid\ColumnSet * */
+        /** @var $columnSet \Magento\Backend\Block\Widget\Grid\ColumnSet */
         $columnSet = $this->_layout->createBlock(
             ColumnSet::class,
             'deg_customreports_grid.grid.columnSet'
         );
         foreach ($columnList as $columnName) {
+            $formattedColumnName = str_replace(' ', '_', $columnName);
+            $escapedColumName = $this->getCollection()->getConnection()->quoteIdentifier($columnName);
             if ($this->_defaultSort === false) {
-                $this->_defaultSort = $columnName;
+                $this->_defaultSort = $escapedColumName;
             }
-            /** @var $column \Magento\Backend\Block\Widget\Grid\Column * */
+            /** @var $column \Magento\Backend\Block\Widget\Grid\Column */
             $data = [
                 'data' => [
                     'header' => $columnName,
                     'index' => $columnName,
+                    'filter_index' => new \Zend_Db_Expr($escapedColumName),
                     'type' => 'text',
                 ],
             ];
             $column = $this->_layout->createBlock(
                 Column::class,
-                'deg_customreports_grid.grid.column.'.$columnName,
+                'deg_customreports_grid.grid.column.'.$formattedColumnName,
                 $data
             );
-            $columnSet->setChild($columnName, $column);
+            $columnSet->setChild($formattedColumnName, $column);
         }
         $this->setChild('grid.columnSet', $columnSet);
     }
