@@ -3,6 +3,7 @@
 namespace DEG\CustomReports\Controller\Adminhtml\AutomatedExport;
 
 use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
+use DEG\CustomReports\Api\DeleteDynamicCronInterface;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -14,13 +15,21 @@ class Delete extends Action
      * @var \DEG\CustomReports\Api\AutomatedExportRepositoryInterface
      */
     private $autoExportReportRepository;
+	
+	 /**
+     * @var \DEG\CustomReports\Api\DeleteDynamicCronInterface
+     */
+    private $deleteCronConfigData;
+	
 
     public function __construct(
         Context $context,
-        AutomatedExportRepositoryInterface $autoExportReportRepository
+        AutomatedExportRepositoryInterface $autoExportReportRepository,
+		DeleteDynamicCronInterface $deleteCronConfigData
     ) {
         parent::__construct($context);
         $this->autoExportReportRepository = $autoExportReportRepository;
+		$this->deleteCronConfigData = $deleteCronConfigData;
     }
 
     /**
@@ -32,11 +41,16 @@ class Delete extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
-                $customReport = $this->autoExportReportRepository->getById($id);
-                $this->autoExportReportRepository->delete($customReport);
-                $this->messageManager->addSuccessMessage(__('You have deleted the report.'));
-				
-                return $resultRedirect->setPath('*/*/listing');
+                $autoExport = $this->autoExportReportRepository->getById($id);
+				if($autoExport->getId()){
+					$automatedExportModelName = 'automated_export_'.$autoExport->getId();
+					$this->deleteCronConfigData->execute($automatedExportModelName);
+					$this->autoExportReportRepository->delete($customReport);
+					$this->messageManager->addSuccessMessage(__('You have deleted the report.'));
+					
+				}
+				 return $resultRedirect->setPath('*/*/listing');
+			
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
 
