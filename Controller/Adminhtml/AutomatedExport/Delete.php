@@ -47,6 +47,7 @@ class Delete extends Action
 					$this->deleteCronConfigData->execute($automatedExportModelName);
 					$this->autoExportReportRepository->delete($customReport);
 					$this->messageManager->addSuccessMessage(__('You have deleted the report.'));
+					
 				}
 				 return $resultRedirect->setPath('*/*/listing');
 			
