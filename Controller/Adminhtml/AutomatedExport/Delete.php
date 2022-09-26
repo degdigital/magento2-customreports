@@ -2,7 +2,7 @@
 
 namespace DEG\CustomReports\Controller\Adminhtml\AutomatedExport;
 
-use DEG\CustomReports\Api\CustomReportRepositoryInterface;
+use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -11,16 +11,16 @@ class Delete extends Action
 {
     const ADMIN_RESOURCE = 'DEG_CustomReports::automatedexport_delete';
     /**
-     * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
+     * @var \DEG\CustomReports\Api\AutomatedExportRepositoryInterface
      */
-    private $customReportRepository;
+    private $autoExportReportRepository;
 
     public function __construct(
         Context $context,
-        CustomReportRepositoryInterface $customReportRepository
+        AutomatedExportRepositoryInterface $autoExportReportRepository
     ) {
         parent::__construct($context);
-        $this->customReportRepository = $customReportRepository;
+        $this->autoExportReportRepository = $autoExportReportRepository;
     }
 
     /**
@@ -32,10 +32,9 @@ class Delete extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
-                $customReport = $this->customReportRepository->getById($id);
-                $this->customReportRepository->delete($customReport);
+                $customReport = $this->autoExportReportRepository->getById($id);
+                $this->autoExportReportRepository->delete($customReport);
                 $this->messageManager->addSuccessMessage(__('You have deleted the report.'));
-
                 return $resultRedirect->setPath('*/*/listing');
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
