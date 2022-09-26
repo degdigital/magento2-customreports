@@ -35,6 +35,7 @@ class Delete extends Action
                 $customReport = $this->autoExportReportRepository->getById($id);
                 $this->autoExportReportRepository->delete($customReport);
                 $this->messageManager->addSuccessMessage(__('You have deleted the report.'));
+				
                 return $resultRedirect->setPath('*/*/listing');
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
