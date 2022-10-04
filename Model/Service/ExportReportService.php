@@ -79,14 +79,9 @@ class ExportReportService implements ExportReportServiceInterface
                 }
 
                 $reportCollection = $this->customReportManagement->getGenericReportCollection($customReport);
-                $reportCollection->setPageSize(1000);
-                $numPages = $reportCollection->getLastPageNumber();
-                for ($currentPage = 1; $currentPage <= $numPages; $currentPage++) {
-                    $reportCollection->setCurPage($currentPage);
-                    foreach ($reportCollection as $reportRow) {
-                        foreach ($handlers as $handler) {
-                            $handler->exportChunk($reportRow->getData());
-                        }
+                foreach ($reportCollection as $reportRow) {
+                    foreach ($handlers as $handler) {
+                        $handler->exportChunk($reportRow->getData());
                     }
                 }
 
