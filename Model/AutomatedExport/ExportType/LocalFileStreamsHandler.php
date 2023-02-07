@@ -54,12 +54,11 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
     protected LocalFileStreamFactory $localFileStreamFactory;
 
     /**
-     * @param \Magento\Framework\Filesystem                             $filesystem
-     * @param \DEG\CustomReports\Api\CustomReportManagementInterface    $customReportManagement
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \DEG\CustomReports\Api\CustomReportManagementInterface $customReportManagement
      * @param \DEG\CustomReports\Api\AutomatedExportManagementInterface $automatedExportManagement
-     * @param LocalFileStreamFactory                                    $LocalFileStreamFactory
-     * @param array                                                     $data
-     *
+     * @param LocalFileStreamFactory $LocalFileStreamFactory
+     * @param array $data
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -89,8 +88,8 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
         $fileStem = $this->automatedExportManagement->getReplacedFilename($automatedExport, $customReport);
         $this->exportStreams = [];
         foreach ($automatedExport->getFileTypes() as $fileType) {
-            $filename = $fileStem.'.'.$fileType;
-            $localFilepath = $this->directory->getAbsolutePath().$directoryName.'/'.$filename;
+            $filename = $fileStem . '.' . $this->automatedExportManagement->getFileExtension($fileType);
+            $localFilepath = $this->directory->getAbsolutePath() . $directoryName . '/' . $filename;
             $stream = $this->directory->openFile($localFilepath, 'w+');
             $this->exportStreams[] = $this->localFileStreamFactory->create()
                 ->setFilename($filename)
@@ -119,10 +118,20 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
     public function exportChunk(array $dataToWrite)
     {
         foreach ($this->exportStreams as $exportStream) {
-            if ($exportStream->getFileType() == FileTypes::EXTENSION_CSV) {
-                $exportStream->getStream()->writeCsv($dataToWrite);
-                $exportStream->getStream()->lock();
-            } //@todo: add support for other file types
+            switch ($exportStream->getFileType()) {
+                case FileTypes::EXTENSION_CSV:
+                    $exportStream->getStream()->writeCsv($dataToWrite);
+                    $exportStream->getStream()->lock();
+                    break;
+                case FileTypes::EXTENSION_TSV:
+                    $exportStream->getStream()->writeCsv($dataToWrite, "\t");
+                    $exportStream->getStream()->lock();
+                    break;
+                case FileTypes::EXTENSION_TXT_PIPE:
+                    $exportStream->getStream()->writeCsv($dataToWrite, "|");
+                    $exportStream->getStream()->lock();
+                    break;
+            }
         }
     }
 
@@ -137,7 +146,7 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
         }
     }
 
-    public function getExportStreams()
+    public function getExportStreams(): array
     {
         return $this->exportStreams;
     }

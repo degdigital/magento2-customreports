@@ -15,7 +15,7 @@ This module has the potential to make irreversible changes to your database if s
 * Usage of a read-only database connection
 * Column filtering
 * Column sorting
-* CSV export
+* CSV, TSV, and TXT (pipe-delimited) export
 * Automated exports
 
 ## Custom Reports
