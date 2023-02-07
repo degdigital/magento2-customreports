@@ -1,0 +1,21 @@
+<!--@subject {{trans "%title - %n.%j.%Y" title=$custom_report.report_name Y=$Y n=$n j=$j}} @-->
+
+<!--@vars {
+"var automated_export.title":"Automated Export Title Here",
+"var custom_report.report_name":"Custom Report Title Here",
+"var Y":"2023 (the year)",
+"var d":"02 (the day)",
+"var j":"2 (the day)",
+"var m":"01 (the month)",
+"var n":"1 (the month)",
+"var H":"23 (the hour)",
+"var i":"59 (the minute)",
+"var s":"59 (the second)",
+"var c":"2023-02-07T14:00:43-06:00"
+} @-->
+
+<p>Please see attachments for the report.</p>
+
+<p>Custom Report: {{var custom_report.report_name}}</p>
+<p>Automated Export: {{var automated_export.title}}</p>
+<p>Date generated: {{var c}}</p>

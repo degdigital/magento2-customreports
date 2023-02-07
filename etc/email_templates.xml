@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
     <template id="deg_customreports_automated_exports_error_email_template" label="Custom Reports Error Email" file="export_error.html" type="html" module="DEG_CustomReports" area="adminhtml"/>
+    <template id="deg_customreports_automated_exports_default_export_email_template" label="Custom Reports Default Export Email" file="default_email_export.html" type="html" module="DEG_CustomReports" area="adminhtml"/>
 </config>

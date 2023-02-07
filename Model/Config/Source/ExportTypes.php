@@ -9,12 +9,14 @@ class ExportTypes implements OptionSourceInterface
 {
     public const LOCAL_FILE_DROP = 'local_file_drop';
     public const REMOTE_FILE_DROP = 'remote_file_drop';
+    public const EMAIL = 'email';
 
     public function toOptionArray(): array
     {
         return [
             ['value' => static::LOCAL_FILE_DROP, 'label' => __('Local File Drop')],
             ['value' => static::REMOTE_FILE_DROP, 'label' => __('Remote File Drop')],
+            ['value' => static::EMAIL, 'label' => __('Email')],
         ];
     }
 }
