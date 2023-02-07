@@ -18,11 +18,16 @@ class AutomatedExportManagementTest extends TestCase
 
         $this->timezone = $this->createMock(TimezoneInterface::class);
         $date = $this->createMock(DateTime::class);
-        $map = [
-            ['d', '01'],
-            ['Y', '1970'],
-        ];
-        $date->method('format')->will($this->returnValueMap($map));
+        $date->method('format')->will($this->returnCallback(function ($value) {
+            switch ($value) {
+                case 'd':
+                    return '01';
+                case 'Y':
+                    return '1970';
+                default:
+                    return '123';
+            }
+        }));
 
         $this->timezone->method('date')->willReturn($date);
 
@@ -31,18 +36,10 @@ class AutomatedExportManagementTest extends TestCase
 
     public function testGetReplacedFilename()
     {
-        $methods = array_merge(get_class_methods(AutomatedExportInterface::class), ['getFilenamePattern']);
-        $automatedExport = $this->getMockBuilder(AutomatedExportInterface::class)
-            ->addMethods($methods)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $automatedExport->method('getFilenamePattern')->willReturn('%reportname%-%Y%-%d%');
+        $automatedExport = $this->createStub(AutomatedExportInterface::class);
+        $customReport = $this->createStub(CustomReportInterface::class);
 
-        $methods = array_merge(get_class_methods(CustomReportInterface::class), ['getReportName']);
-        $customReport = $this->getMockBuilder(CustomReportInterface::class)
-            ->addMethods($methods)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $automatedExport->method('getFilenamePattern')->willReturn('%reportname%-%Y%-%d%');
         $customReport->method('getReportName')->willReturn('test');
 
         $replacedFilename = $this->automatedExportManagement->getReplacedFilename($automatedExport, $customReport);

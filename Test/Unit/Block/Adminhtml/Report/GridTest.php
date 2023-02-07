@@ -13,6 +13,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\ColumnSet;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
@@ -99,6 +100,8 @@ class GridTest extends TestCase
         $this->currentCustomReportRegistry->method('get')->willReturn($customReportMock);
 
         $genericCollectionMock = $this->createMock(GenericReportCollection::class);
+        $connection = $this->createStub(AdapterInterface::class);
+        $genericCollectionMock->method('getConnection')->willReturn($connection);
 
         $this->customReportManagement->method('getGenericReportCollection')
             ->willReturn($genericCollectionMock);
