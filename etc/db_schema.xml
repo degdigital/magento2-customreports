@@ -19,6 +19,8 @@
         <column xsi:type="varchar" name="filename_pattern" nullable="false" length="255" comment="Filename Pattern"/>
         <column xsi:type="text" name="export_location" nullable="false" comment="Local export location"/>
         <column xsi:type="text" name="error_emails" nullable="true" comment="Error Email Addresses"/>
+        <column xsi:type="text" name="email_recipients" nullable="true" comment="Recipient Email Addresses"/>
+        <column xsi:type="varchar" name="email_template" nullable="true" length="255"  comment="Email Template"/>
         <column xsi:type="varchar" name="remote_host" nullable="true" length="255" comment="Remote Host"/>
         <column xsi:type="smallint" name="remote_port" nullable="true" unsigned="true" comment="Remote Port"/>
         <column xsi:type="varchar" name="remote_username" nullable="true" length="255" comment="Remote Username"/>

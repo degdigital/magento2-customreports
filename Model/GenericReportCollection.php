@@ -2,6 +2,7 @@
 
 namespace DEG\CustomReports\Model;
 
+use Exception;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -9,7 +10,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface as Logger;
 
 class GenericReportCollection extends AbstractDb
@@ -17,10 +20,12 @@ class GenericReportCollection extends AbstractDb
     /**
      * GenericReportCollection constructor.
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface    $entityFactory
-     * @param \Psr\Log\LoggerInterface                                     $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\App\ResourceConnection|null               $resourceConnection
+     * @param EntityFactoryInterface $entityFactory
+     * @param Logger $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ResourceConnection|null $resourceConnection
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -30,12 +35,11 @@ class GenericReportCollection extends AbstractDb
     ) {
         $resourceConnection = $resourceConnection ?: ObjectManager::getInstance()->get(ResourceConnection::class);
 
-        /**
-         * Previously, a custom 'readonly' connection was used here. This had to be removed to support Magento Cloud
-         * projects. Magento Cloud support can add 'readonly' connections to the database, but cannot actually define
-         * this connection in app/etc/env.php, and it cannot be defined manually as it will be removed on next deploy.
-         */
-        $connection = $resourceConnection->getConnectionByName('default');
+        try {
+            $connection = $resourceConnection->getConnectionByName('readonly');
+        } catch (Exception) {
+            $connection = $resourceConnection->getConnectionByName('default');
+        }
 
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
     }
@@ -53,7 +57,7 @@ class GenericReportCollection extends AbstractDb
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function joinExtensionAttribute(

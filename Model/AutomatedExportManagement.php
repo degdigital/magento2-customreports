@@ -5,6 +5,7 @@ namespace DEG\CustomReports\Model;
 use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 use DEG\CustomReports\Api\AutomatedExportManagementInterface;
 use DEG\CustomReports\Api\Data\CustomReportInterface;
+use DEG\CustomReports\Model\Config\Source\FileTypes;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class AutomatedExportManagement implements AutomatedExportManagementInterface
@@ -24,8 +25,7 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
 
     /**
      * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
-     * @param \DEG\CustomReports\Api\Data\CustomReportInterface    $customReport
-     *
+     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
      * @return string
      */
     public function getReplacedFilename(
@@ -52,5 +52,15 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
             array_values($replaceableVariables),
             $filenamePattern
         );
+    }
+
+    public function getFileExtension(string $fileType): string
+    {
+        $fileExtension = $fileType;
+        if (str_contains($fileType, FileTypes::EXTENSION_METADATA_SEPARATOR)) {
+            $fileExtension = strtok($fileType, FileTypes::EXTENSION_METADATA_SEPARATOR);
+        }
+
+        return $fileExtension;
     }
 }

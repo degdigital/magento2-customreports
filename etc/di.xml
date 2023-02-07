@@ -23,6 +23,9 @@
                 <item name="remote_file_drop" xsi:type="array">
                     <item name="class" xsi:type="string">DEG\CustomReports\Model\AutomatedExport\ExportType\RemoteFileStreamsHandler</item>
                 </item>
+                <item name="email" xsi:type="array">
+                    <item name="class" xsi:type="string">DEG\CustomReports\Model\AutomatedExport\ExportType\EmailStreamsHandler</item>
+                </item>
             </argument>
         </arguments>
     </type>
