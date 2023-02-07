@@ -115,8 +115,8 @@ class AutomatedExport extends AbstractDb
 
             foreach ($customReportIds as $customReportId) {
                 $automatedExportLink = $this->automatedExportLinkFactory->create();
-                $automatedExportLink->setCustomreportId($customReportId);
-                $automatedExportLink->setAutomatedexportId($object->getId());
+                $automatedExportLink->setCustomreportId((int)$customReportId);
+                $automatedExportLink->setAutomatedexportId((int)$object->getId());
                 $this->automatedExportLinkRepository->save($automatedExportLink);
             }
         }

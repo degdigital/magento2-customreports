@@ -4,14 +4,17 @@ namespace DEG\CustomReports\Api\Data;
 
 use DEG\CustomReports\Model\CustomReport;
 
-/**
- * @method int getId()
- * @method string getReportName()
- * @method string getReportSql()
- * @method CustomReport setId(int $id)
- * @method CustomReport setReportName(string $reportName)
- * @method CustomReport setReportSql(string $reportSql)
- */
 interface CustomReportInterface
 {
+    public function getId();
+
+    public function getReportName(): string;
+
+    public function getReportSql(): string;
+
+    public function setId($id);
+
+    public function setReportName(string $reportName): CustomReport;
+
+    public function setReportSql(string $reportSql): CustomReport;
 }
