@@ -94,7 +94,7 @@ class ExportReportService implements ExportReportServiceInterface
                     $this->sendErrorEmailService->execute($errorEmailAddresses, [
                         'automated_export' => $automatedExport->getData(),
                         'custom_report_id' => $customReportId,
-                        'exception' => $exception,
+                        'exception' => $exception->__toString(),
                     ]);
                 }
             }
