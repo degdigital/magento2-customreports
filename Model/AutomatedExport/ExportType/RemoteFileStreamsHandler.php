@@ -143,7 +143,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
         }
     }
 
-    public function getExportStreams()
+    public function getExportStreams(): array
     {
         return $this->exportStreams;
     }
