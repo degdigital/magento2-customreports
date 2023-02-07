@@ -23,5 +23,5 @@ interface StreamHandlerInterface
 
     public function finalizeExport();
 
-    public function getExportStreams();
+    public function getExportStreams(): array;
 }
