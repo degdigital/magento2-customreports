@@ -17,4 +17,6 @@ interface AutomatedExportManagementInterface
         AutomatedExportInterface $automatedExport,
         CustomReportInterface $customReport
     ): string;
+
+    public function getFileExtension(string $fileType): string;
 }
