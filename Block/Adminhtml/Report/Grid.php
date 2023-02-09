@@ -3,51 +3,35 @@
 namespace DEG\CustomReports\Block\Adminhtml\Report;
 
 use DEG\CustomReports\Api\CustomReportManagementInterface;
+use DEG\CustomReports\Model\Config\Source\FileTypes;
 use DEG\CustomReports\Registry\CurrentCustomReport;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\ColumnSet;
 use Magento\Backend\Helper\Data;
+use Zend_Db_Expr;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
-    /**
-     * @var \DEG\CustomReports\Registry\CurrentCustomReport
-     */
-    private CurrentCustomReport $currentCustomReportRegistry;
+    protected $_template = 'DEG_CustomReports::widget/grid.phtml';
 
-    /**
-     * @var \DEG\CustomReports\Api\CustomReportManagementInterface
-     */
-    private CustomReportManagementInterface $customReportManagement;
-
-    /**
-     * Grid constructor.
-     *
-     * @param \Magento\Backend\Block\Template\Context                $context
-     * @param \Magento\Backend\Helper\Data                           $backendHelper
-     * @param \DEG\CustomReports\Registry\CurrentCustomReport        $currentCustomReportRegistry
-     * @param \DEG\CustomReports\Api\CustomReportManagementInterface $customReportManagement
-     * @param array                                                  $data
-     */
     public function __construct(
         Context $context,
         Data $backendHelper,
-        CurrentCustomReport $currentCustomReportRegistry,
-        CustomReportManagementInterface $customReportManagement,
+        protected CurrentCustomReport $currentCustomReportRegistry,
+        protected CustomReportManagementInterface $customReportManagement,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
-        $this->currentCustomReportRegistry = $currentCustomReportRegistry;
-        $this->customReportManagement = $customReportManagement;
     }
 
     public function _prepareLayout()
     {
         $customReport = $this->currentCustomReportRegistry->get();
         $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
-        $columnList = $this->customReportManagement->getColumnsList($customReport);
         $this->setCollection($genericCollection);
+        $this->_preparePage();
+        $columnList = $this->customReportManagement->getColumnsList($customReport);
         $this->addColumnSet($columnList);
         $this->addGridExportBlock();
         parent::_prepareLayout();
@@ -60,7 +44,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     public function addColumnSet($columnList)
     {
-        /** @var $columnSet \Magento\Backend\Block\Widget\Grid\ColumnSet */
+        /** @var $columnSet ColumnSet */
         $columnSet = $this->_layout->createBlock(
             ColumnSet::class,
             'deg_customreports_grid.grid.columnSet'
@@ -71,12 +55,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             if ($this->_defaultSort === false) {
                 $this->_defaultSort = $escapedColumName;
             }
-            /** @var $column \Magento\Backend\Block\Widget\Grid\Column */
+            /** @var $column Column */
             $data = [
                 'data' => [
                     'header' => $columnName,
                     'index' => $columnName,
-                    'filter_index' => new \Zend_Db_Expr($escapedColumName),
+                    'filter_index' => new Zend_Db_Expr($escapedColumName),
                     'type' => 'text',
                 ],
             ];
@@ -114,13 +98,21 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         return [
             'data' => [
                 'exportTypes' => [
-                    'csv' => [
-                        'urlPath' => '*/*/exportCsv',
-                        'label' => 'CSV',
+                    FileTypes::EXTENSION_CSV => [
+                        'urlPath' => '*/*/export/filetype/' . FileTypes::EXTENSION_CSV,
+                        'label' => FileTypes::LABEL_CSV,
                     ],
-                    'excel' => [
-                        'urlPath' => '*/*/exportXml',
-                        'label' => 'Excel XML',
+                    FileTypes::EXTENSION_TSV => [
+                        'urlPath' => '*/*/export/filetype/' . FileTypes::EXTENSION_TSV,
+                        'label' => FileTypes::LABEL_TSV,
+                    ],
+                    FileTypes::EXTENSION_TXT_PIPE => [
+                        'urlPath' => '*/*/export/filetype/' . FileTypes::EXTENSION_TXT_PIPE,
+                        'label' => FileTypes::LABEL_TXT_PIPE_DELIMITED,
+                    ],
+                    FileTypes::EXTENSION_XML_EXCEL => [
+                        'urlPath' => '*/*/export/filetype/' . FileTypes::EXTENSION_XML_EXCEL,
+                        'label' => FileTypes::LABEL_EXCEL_XML,
                     ],
                 ],
             ],
