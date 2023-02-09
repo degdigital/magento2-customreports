@@ -37,7 +37,11 @@
         </argument>
     </dataSource>
     <listingToolbar name="listing_top">
-        <paging name="listing_paging"/>
+        <paging name="listing_paging">
+            <settings>
+                <pageSize>200</pageSize>
+            </settings>
+        </paging>
     </listingToolbar>
     <columns name="automatedexport_listing_columns">
         <settings>
