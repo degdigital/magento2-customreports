@@ -27,7 +27,9 @@
             "remote_port": true,
             "remote_location": true,
             "created_at": true,
-            "updated_at": true
+            "updated_at": true,
+            "email_recipients": true,
+            "email_template": true
         },
         "constraint": {
             "PRIMARY": true
