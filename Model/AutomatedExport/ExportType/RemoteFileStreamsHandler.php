@@ -94,6 +94,17 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
         }
     }
 
+
+    /**
+     * @throws FileSystemException
+     */
+    public function exportFooters()
+    {
+        if (!$this->isLocalFileAlreadyBeingExported()) {
+            $this->localFileStreamsHandler->exportFooters();
+        }
+    }
+
     /**
      * @throws Exception
      */

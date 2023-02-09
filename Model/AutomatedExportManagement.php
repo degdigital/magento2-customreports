@@ -6,21 +6,18 @@ use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 use DEG\CustomReports\Api\AutomatedExportManagementInterface;
 use DEG\CustomReports\Api\Data\CustomReportInterface;
 use DEG\CustomReports\Model\Config\Source\FileTypes;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class AutomatedExportManagement implements AutomatedExportManagementInterface
 {
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    private TimezoneInterface $timezone;
 
-    /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     */
-    public function __construct(TimezoneInterface $timezone)
+    private Filesystem $filesystem;
+
+    public function __construct(protected TimezoneInterface $timezone, Filesystem $filesystem)
     {
-        $this->timezone = $timezone;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -28,22 +25,22 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
      * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
      * @return string
      */
-    public function getReplacedFilename(
+    public function getReplacedFilestem(
         AutomatedExportInterface $automatedExport,
         CustomReportInterface $customReport
     ): string {
         $formattedReportName = $customReport->getReportName();
 
         $replaceableVariables = [
-            '%d%' => $this->timezone->date()->format('d'),
-            '%m%' => $this->timezone->date()->format('m'),
-            '%y%' => $this->timezone->date()->format('y'),
-            '%Y%' => $this->timezone->date()->format('Y'),
-            '%h%' => $this->timezone->date()->format('H'),
-            '%i%' => $this->timezone->date()->format('i'),
-            '%s%' => $this->timezone->date()->format('s'),
-            '%W%' => $this->timezone->date()->format('W'),
-            '%reportname%' => $formattedReportName,
+            static::VARIABLE_D => $this->timezone->date()->format('d'),
+            static::VARIABLE_M => $this->timezone->date()->format('m'),
+            static::VARIABLE_Y => $this->timezone->date()->format('y'),
+            static::VARIABLE_Y_LONG => $this->timezone->date()->format('Y'),
+            static::VARIABLE_H => $this->timezone->date()->format('H'),
+            static::VARIABLE_I => $this->timezone->date()->format('i'),
+            static::VARIABLE_S => $this->timezone->date()->format('s'),
+            static::VARIABLE_W => $this->timezone->date()->format('W'),
+            static::VARIABLE_REPORTNAME => $formattedReportName,
         ];
         $filenamePattern = $automatedExport->getFilenamePattern();
 
@@ -54,6 +51,16 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
         );
     }
 
+    public function getFilename(
+        AutomatedExportInterface $automatedExport,
+        CustomReportInterface $customReport,
+        string $fileType
+    ): string {
+        $fileStem = $this->getReplacedFilestem($automatedExport, $customReport);
+
+        return $fileStem . '.' . $this->getFileExtension($fileType);
+    }
+
     public function getFileExtension(string $fileType): string
     {
         $fileExtension = $fileType;
@@ -62,5 +69,17 @@ class AutomatedExportManagement implements AutomatedExportManagementInterface
         }
 
         return $fileExtension;
+    }
+
+    public function getAbsoluteLocalFilepath(
+        AutomatedExportInterface $automatedExport,
+        CustomReportInterface $customReport,
+        string $fileType
+    ): string {
+        $fileStem = $this->getReplacedFilestem($automatedExport, $customReport);
+        $filename = $fileStem . '.' . $this->getFileExtension($fileType);
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+
+        return $directory->getAbsolutePath() . $automatedExport->getExportLocation() . '/' . $filename;
     }
 }
