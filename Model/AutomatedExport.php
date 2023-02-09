@@ -175,7 +175,7 @@ class AutomatedExport extends AbstractModel implements AutomatedExportInterface,
 
     public function setEmailRecipients(string $emailRecipients): AutomatedExportInterface
     {
-        return $this->setData('email_recipient', $emailRecipients);
+        return $this->setData('email_recipients', $emailRecipients);
     }
 
     public function setCreatedAt(string $createdAt): AutomatedExportInterface
