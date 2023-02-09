@@ -4,6 +4,24 @@ namespace DEG\CustomReports\Api\Data;
 
 interface AutomatedExportInterface
 {
+    public const FIELD_TITLE = 'title';
+    public const FIELD_CRON_EXPR = 'cron_expr';
+    public const FIELD_EXPORT_TYPES = 'export_types';
+    public const FIELD_FILE_TYPES = 'file_types';
+    public const FIELD_FILENAME_PATTERN = 'filename_pattern';
+    public const FIELD_ERROR_EMAILS = 'error_emails';
+    public const FIELD_EXPORT_LOCATION = 'export_location';
+    public const FIELD_REMOTE_HOST = 'remote_host';
+    public const FIELD_REMOTE_PORT = 'remote_port';
+    public const FIELD_REMOTE_USERNAME = 'remote_username';
+    public const FIELD_REMOTE_PASSWORD = 'remote_password';
+    public const FIELD_REMOTE_LOCATION = 'remote_location';
+    public const FIELD_EMAIL_TEMPLATE = 'email_template';
+    public const FIELD_EMAIL_RECIPIENTS = 'email_recipients';
+    public const FIELD_CREATED_AT = 'created_at';
+    public const FIELD_UPDATED_AT = 'updated_at';
+    public const FIELD_CUSTOMREPORT_IDS = 'customreport_ids';
+
     public function getId();
 
     public function getTitle(): string;
@@ -22,7 +40,7 @@ interface AutomatedExportInterface
 
     public function getErrorEmails(): ?string;
 
-    public function getExportLocation(): string;
+    public function getExportLocation(): ?string;
 
     public function getRemoteHost(): ?string;
 

@@ -4,50 +4,29 @@ namespace DEG\CustomReports\Model\ResourceModel;
 
 use DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface;
 use DEG\CustomReports\Api\CreateDynamicCronInterface;
+use DEG\CustomReports\Api\Data\AutomatedExportLinkInterface;
+use DEG\CustomReports\Model\AutomatedExport as AutomatedExportModel;
 use DEG\CustomReports\Model\AutomatedExportLinkFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 class AutomatedExport extends AbstractDb
 {
-    private AutomatedExportLinkFactory $automatedExportLinkFactory;
-    private AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository;
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-    private CreateDynamicCronInterface $createDynamicCronService;
-
-    /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context             $context
-     * @param \DEG\CustomReports\Model\AutomatedExportLinkFactory           $automatedExportLinkFactory
-     * @param \DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder                  $searchCriteriaBuilder
-     * @param \DEG\CustomReports\Api\CreateDynamicCronInterface             $createDynamicCronService
-     * @param \Magento\Framework\Encryption\EncryptorInterface              $encryptor
-     * @param string|null                                                   $connectionName
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
     public function __construct(
         Context $context,
-        AutomatedExportLinkFactory $automatedExportLinkFactory,
-        AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        CreateDynamicCronInterface $createDynamicCronService,
-        EncryptorInterface $encryptor,
+        protected AutomatedExportLinkFactory $automatedExportLinkFactory,
+        protected AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository,
+        protected SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected CreateDynamicCronInterface $createDynamicCronService,
+        protected EncryptorInterface $encryptor,
         ?string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->automatedExportLinkFactory = $automatedExportLinkFactory;
-        $this->automatedExportLinkRepository = $automatedExportLinkRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->createDynamicCronService = $createDynamicCronService;
-        $this->encryptor = $encryptor;
     }
 
     protected function _construct()
@@ -56,11 +35,10 @@ class AutomatedExport extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
-     *
-     * @return \DEG\CustomReports\Model\ResourceModel\AutomatedExport
+     * @param AbstractModel|AutomatedExportModel $object
+     * @return AutomatedExport
      */
-    protected function _beforeSave(AbstractModel $object): AutomatedExport
+    protected function _beforeSave(AbstractModel|AutomatedExportModel $object): AutomatedExport
     {
         $exportTypes = $object->getExportTypes();
         if (is_array($exportTypes)) {
@@ -78,13 +56,12 @@ class AutomatedExport extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
-     *
-     * @return \DEG\CustomReports\Model\ResourceModel\AutomatedExport
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param AbstractModel|AutomatedExportModel $object
+     * @return AutomatedExport
+     * @throws CouldNotDeleteException
+     * @throws CouldNotSaveException
      */
-    protected function _afterSave(AbstractModel $object): AutomatedExport
+    protected function _afterSave(AbstractModel|AutomatedExportModel $object): AutomatedExport
     {
         $this->saveAutomatedExportLinks($object);
         $this->createDynamicCron($object);
@@ -93,14 +70,13 @@ class AutomatedExport extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
-     *
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param AbstractModel|AutomatedExportModel $object
+     * @throws CouldNotDeleteException
+     * @throws CouldNotSaveException
      */
-    private function saveAutomatedExportLinks(AbstractModel $object): void
+    protected function saveAutomatedExportLinks(AbstractModel|AutomatedExportModel $object): void
     {
-        /** @var $automatedExportLink \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface */
+        /** @var AutomatedExportLinkInterface $automatedExportLink */
 
         $customReportIds = $object->getCustomreportIds();
         if (is_array($customReportIds)) {
@@ -123,21 +99,20 @@ class AutomatedExport extends AbstractDb
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
+     * @param AbstractModel|AutomatedExportModel $object
      */
-    private function createDynamicCron(AbstractModel $object)
+    protected function createDynamicCron(AbstractModel|AutomatedExportModel $object)
     {
         $this->createDynamicCronService->execute($object);
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel|\DEG\CustomReports\Model\AutomatedExport $object
-     *
-     * @return \DEG\CustomReports\Model\ResourceModel\AutomatedExport
+     * @param AbstractModel|AutomatedExportModel $object
+     * @return AutomatedExport
      */
-    protected function _afterLoad(AbstractModel $object): AutomatedExport
+    protected function _afterLoad(AbstractModel|AutomatedExportModel $object): AutomatedExport
     {
-        /** @var $automatedExportLink \DEG\CustomReports\Api\Data\AutomatedExportLinkInterface */
+        /** @var AutomatedExportLinkInterface $automatedExportLink */
 
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('automatedexport_id', $object->getId())
@@ -151,17 +126,18 @@ class AutomatedExport extends AbstractDb
             $object->setCustomreportIds($customReportIds);
         }
 
-        $exportTypes = $object->getExportTypes();
-        if (!is_array($exportTypes) && $exportTypes) {
-            $object->setExportTypes(explode(',', $exportTypes));
-        }
+        if ($object->getId()) {
+            $exportTypes = $object->getExportTypes();
+            if (!is_array($exportTypes) && $exportTypes) {
+                $object->setExportTypes(explode(',', $exportTypes));
+            }
 
-        $fileTypes = $object->getFileTypes();
-        if (!is_array($fileTypes) && $fileTypes) {
-            $object->setFileTypes(explode(',', $fileTypes));
+            $fileTypes = $object->getFileTypes();
+            if (!is_array($fileTypes) && $fileTypes) {
+                $object->setFileTypes(explode(',', $fileTypes));
+            }
+            $object->setRemotePassword($this->encryptor->decrypt($object->getRemotePassword()));
         }
-
-        $object->setRemotePassword($this->encryptor->decrypt($object->getRemotePassword()));
 
         return parent::_afterLoad($object);
     }
