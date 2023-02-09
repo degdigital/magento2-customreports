@@ -24,4 +24,6 @@ interface StreamHandlerInterface
     public function finalizeExport();
 
     public function getExportStreams(): array;
+
+    public function exportFooters();
 }

@@ -42,7 +42,7 @@ class AutomatedExportManagementTest extends TestCase
         $automatedExport->method('getFilenamePattern')->willReturn('%reportname%-%Y%-%d%');
         $customReport->method('getReportName')->willReturn('test');
 
-        $replacedFilename = $this->automatedExportManagement->getReplacedFilename($automatedExport, $customReport);
+        $replacedFilename = $this->automatedExportManagement->getReplacedFilestem($automatedExport, $customReport);
         $this->assertEquals('test-1970-01', $replacedFilename);
     }
 }

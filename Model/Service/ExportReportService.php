@@ -8,62 +8,21 @@ use DEG\CustomReports\Api\CustomReportManagementInterface;
 use DEG\CustomReports\Api\ExportReportServiceInterface;
 use DEG\CustomReports\Api\SendErrorEmailServiceInterface;
 use DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface;
-use DEG\CustomReports\Registry\CurrentCustomReport;
 use Exception;
 use Psr\Log\LoggerInterface;
 
 class ExportReportService implements ExportReportServiceInterface
 {
-    /**
-     * @var \DEG\CustomReports\Api\CustomReportRepositoryInterface
-     */
-    protected CustomReportRepositoryInterface $customReportRepository;
-
-    /**
-     * @var \DEG\CustomReports\Registry\CurrentCustomReport
-     */
-    protected CurrentCustomReport $currentCustomReportRegistry;
-
-    /**
-     * @var \DEG\CustomReports\Api\CustomReportManagementInterface
-     */
-    protected CustomReportManagementInterface $customReportManagement;
-
-    /**
-     * @var \DEG\CustomReports\Model\AutomatedExport\ExportType\StreamHandlerPoolInterface
-     */
-    protected StreamHandlerPoolInterface $exportTypeHandlerPool;
-
-    /**
-     * @var \DEG\CustomReports\Api\SendErrorEmailServiceInterface
-     */
-    protected SendErrorEmailServiceInterface $sendErrorEmailService;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
     public function __construct(
-        CustomReportRepositoryInterface $customReportRepository,
-        CustomReportManagementInterface $customReportManagement,
-        StreamHandlerPoolInterface $exportTypeHandlerPool,
-        SendErrorEmailServiceInterface $sendErrorEmailService,
-        LoggerInterface $logger
+        protected CustomReportRepositoryInterface $customReportRepository,
+        protected CustomReportManagementInterface $customReportManagement,
+        protected StreamHandlerPoolInterface $exportTypeHandlerPool,
+        protected SendErrorEmailServiceInterface $sendErrorEmailService,
+        protected LoggerInterface $logger
     ) {
-        $this->customReportRepository = $customReportRepository;
-        $this->customReportManagement = $customReportManagement;
-        $this->exportTypeHandlerPool = $exportTypeHandlerPool;
-        $this->sendErrorEmailService = $sendErrorEmailService;
-        $this->logger = $logger;
     }
 
-    /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
-     *
-     * @return void
-     */
-    public function exportAll(AutomatedExportInterface $automatedExport)
+    public function exportAll(AutomatedExportInterface $automatedExport): void
     {
         $customReportIds = $automatedExport->getCustomreportIds();
         foreach ($customReportIds as $customReportId) {
@@ -86,6 +45,7 @@ class ExportReportService implements ExportReportServiceInterface
                 }
 
                 foreach ($handlers as $handler) {
+                    $handler->exportFooters();
                     $handler->finalizeExport();
                 }
             } catch (Exception $exception) {

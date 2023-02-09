@@ -68,7 +68,7 @@ class ExportTest extends TestCase
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
         $this->timeZone = $this->createMock(TimezoneInterface::class);
         $this->data = [];
-        $this->export = new Export($this->context, $this->collectionFactory, $this->timeZone, $this->data);
+        $this->export = new Export($this->context, $this->collectionFactory, $this->data);
     }
 
     /**

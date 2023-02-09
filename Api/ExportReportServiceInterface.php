@@ -12,9 +12,9 @@ interface ExportReportServiceInterface
     /**
      * Export all reports associated to an automated export.
      *
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
+     * @param AutomatedExportInterface $automatedExport
      *
      * @return void
      */
-    public function exportAll(AutomatedExportInterface $automatedExport);
+    public function exportAll(AutomatedExportInterface $automatedExport): void;
 }

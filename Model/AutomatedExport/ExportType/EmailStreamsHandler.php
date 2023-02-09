@@ -82,6 +82,16 @@ class EmailStreamsHandler extends DataObject implements StreamHandlerInterface
     }
 
     /**
+     * @throws FileSystemException
+     */
+    public function exportFooters()
+    {
+        if (!$this->isLocalFileAlreadyBeingExported()) {
+            $this->localFileStreamsHandler->exportFooters();
+        }
+    }
+
+    /**
      * @throws Exception
      */
     public function finalizeExport()
