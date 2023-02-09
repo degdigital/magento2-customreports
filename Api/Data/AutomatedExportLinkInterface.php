@@ -6,6 +6,11 @@ use DEG\CustomReports\Model\AutomatedExportLink;
 
 interface AutomatedExportLinkInterface
 {
+    public const FIELD_CREATED_AT = 'created_at';
+    public const FIELD_UPDATED_AT = 'updated_at';
+    public const FIELD_CUSTOMREPORT_ID = 'customreport_id';
+    public const FIELD_AUTOMATEDEXPORT_ID = 'automatedexport_id';
+
     public function getId();
 
     public function getCustomreportId();

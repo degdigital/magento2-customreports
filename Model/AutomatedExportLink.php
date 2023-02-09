@@ -8,7 +8,7 @@ use Magento\Framework\Model\AbstractModel;
 
 class AutomatedExportLink extends AbstractModel implements AutomatedExportLinkInterface, IdentityInterface
 {
-    const CACHE_TAG = 'deg_customreports_automatedexport_link';
+    public const CACHE_TAG = 'deg_customreports_automatedexport_link';
 
     /**
      * @return string[]
@@ -25,41 +25,41 @@ class AutomatedExportLink extends AbstractModel implements AutomatedExportLinkIn
 
     public function getCustomreportId()
     {
-        return $this->getData('customreport_id');
+        return $this->getData(static::FIELD_CUSTOMREPORT_ID);
     }
 
     public function getAutomatedexportId(): int
     {
-        return (int)$this->getData('automatedexport_id');
+        return (int)$this->getData(static::FIELD_AUTOMATEDEXPORT_ID);
     }
 
     public function getCreatedAt(): ?string
     {
-        return $this->getData('created_at');
+        return $this->getData(static::FIELD_CREATED_AT);
     }
 
     public function getUpdatedAt(): ?string
     {
-        return $this->getData('updated_at');
+        return $this->getData(static::FIELD_UPDATED_AT);
     }
 
     public function setCustomreportId(int $customreportId): AutomatedExportLink
     {
-        return $this->setData('customreport_id', $customreportId);
+        return $this->setData(static::FIELD_CUSTOMREPORT_ID, $customreportId);
     }
 
     public function setAutomatedexportId(int $automatedexportId): AutomatedExportLink
     {
-        return $this->setData('automatedexport_id', $automatedexportId);
+        return $this->setData(static::FIELD_AUTOMATEDEXPORT_ID, $automatedexportId);
     }
 
     public function setCreatedAt(string $createdAt): AutomatedExportLink
     {
-        return $this->setData('created_at', $createdAt);
+        return $this->setData(static::FIELD_CREATED_AT, $createdAt);
     }
 
     public function setUpdatedAt(string $updatedAt): AutomatedExportLink
     {
-        return $this->setData('updated_at', $updatedAt);
+        return $this->setData(static::FIELD_UPDATED_AT, $updatedAt);
     }
 }
