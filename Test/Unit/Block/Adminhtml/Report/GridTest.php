@@ -64,8 +64,12 @@ class GridTest extends TestCase
 
         $this->context = $this->createMock(Context::class);
         $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $mathRandom = $this->createStub(\Magento\Framework\Math\Random::class);
+        $request = $this->createStub(\Magento\Framework\App\Request\Http::class);
         $this->customReportManagement = $this->createMock(CustomReportManagementInterface::class);
         $this->context->method('getLayout')->willReturn($this->layoutMock);
+        $this->context->method('getMathRandom')->willReturn($mathRandom);
+        $this->context->method('getRequest')->willReturn($request);
 
         $this->backendHelper = $this->createMock(Data::class);
         $this->currentCustomReportRegistry = $this->createMock(CurrentCustomReport::class);
@@ -118,11 +122,13 @@ class GridTest extends TestCase
         $exportBlockMock = $this->createMock(Export::class);
         $exportBlockMock->method('lazyPrepareLayout')->willReturn($exportBlockMock);
 
+        $this->layoutMock->method('getChildName')->willReturn('deg_customreports_grid.grid.columnSet');
+        $this->layoutMock->method('getBlock')->with('deg_customreports_grid.grid.columnSet')->willReturn($columnSetBlockMock);
+
         $this->layoutMock->method('createBlock')
             ->will(
                 $this->returnValueMap(
                     [
-                        [ColumnSet::class, 'deg_customreports_grid.grid.columnSet', [], $columnSetBlockMock],
                         [Column::class, 'deg_customreports_grid.grid.column.'.'test_key', [], $columnBlockMock],
                         [
                             Export::class,

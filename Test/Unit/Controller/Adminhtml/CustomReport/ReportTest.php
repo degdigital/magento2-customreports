@@ -9,9 +9,13 @@ use DEG\CustomReports\Controller\Adminhtml\CustomReport\Report;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReportTest extends TestCase
@@ -22,22 +26,22 @@ class ReportTest extends TestCase
     protected Report $report;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var PageFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageFactory|MockObject
      */
     protected $resultPageFactory;
 
     /**
-     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
+     * @var Builder|MockObject
      */
     protected $builder;
 
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
@@ -50,7 +54,14 @@ class ReportTest extends TestCase
 
         $this->context = $this->createMock(Context::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
+        $messageManager = $this->createStub(ManagerInterface::class);
+        $resultRedirectFactory = $this->createStub(RedirectFactory::class);
+        $resultRedirect = $this->createStub(Redirect::class);
+
+        $resultRedirectFactory->method('create')->willReturn($resultRedirect);
         $this->context->method('getRequest')->willReturn($this->requestMock);
+        $this->context->method('getMessageManager')->willReturn($messageManager);
+        $this->context->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
 
         $this->resultPageFactory = $this->createMock(PageFactory::class);
         $this->builder = $this->createMock(Builder::class);
