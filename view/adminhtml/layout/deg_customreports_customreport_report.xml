@@ -3,7 +3,11 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <block class="DEG\CustomReports\Block\Adminhtml\Report" name="deg_customreports_report_grid" as="deg.customreports.report.grid"/>
+            <block class="DEG\CustomReports\Block\Adminhtml\Report" name="deg_customreports_report_grid_container" as="deg.customreports.report.grid.container">
+                <block class="DEG\CustomReports\Block\Adminhtml\Report\Grid" name="deg_customreports_report_grid" as="grid">
+                    <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="deg_customreports_grid.grid.columnSet" />
+                </block>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -17,22 +17,6 @@ class Report extends Container
     }
 
     /**
-     * @return string
-     */
-    public function getBackUrl(): string
-    {
-        return $this->getUrl('*/*/listing');
-    }
-
-    /**
-     * @return string
-     */
-    public function getEditUrl(): string
-    {
-        return $this->getUrl('*/*/edit', ['customreport_id' => $this->currentCustomReportRegistry->get()->getId()]);
-    }
-
-    /**
      * constructor
      *
      * @return void
@@ -46,6 +30,22 @@ class Report extends Container
         $this->removeButton('add');
         $this->_addBackButton();
         $this->_addEditButton();
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackUrl(): string
+    {
+        return $this->getUrl('*/*/listing');
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditUrl(): string
+    {
+        return $this->getUrl('*/*/edit', ['customreport_id' => $this->currentCustomReportRegistry->get()->getId()]);
     }
 
     /**
