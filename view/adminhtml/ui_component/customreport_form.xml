@@ -13,6 +13,7 @@
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="string">DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\BackButton</item>
+            <item name="report" xsi:type="string">DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\ReportButton</item>
             <item name="delete" xsi:type="string">DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\DeleteButton</item>
             <item name="reset" xsi:type="string">DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\ResetButton</item>
             <item name="save" xsi:type="string">DEG\CustomReports\Block\Adminhtml\CustomReport\Edit\SaveButton</item>
