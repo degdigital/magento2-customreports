@@ -65,6 +65,7 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
             $filename = $this->automatedExportManagement->getFilename($automatedExport, $customReport, $fileType);
             $localFilepath = $this->directory->getAbsolutePath() . $directoryName . '/' . $filename;
             $stream = $this->directory->openFile($localFilepath, 'w+');
+            $stream->lock();
             $this->exportStreams[] = $this->localFileStreamFactory->create()
                 ->setFilename($filename)
                 ->setFilepath($localFilepath)
@@ -97,7 +98,6 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
                 $exportStream->getStream()->write($xmlData);
             }
             $this->exportChunk($columnList);
-            $exportStream->getStream()->lock();
         }
     }
 
@@ -111,7 +111,6 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
                 $xmlData = $this->excelConverter->getXmlFooter();
                 $exportStream->getStream()->write($xmlData);
             }
-            $exportStream->getStream()->lock();
         }
     }
 
@@ -136,7 +135,6 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
                     $exportStream->getStream()->write($xmlData);
                     break;
             }
-            $exportStream->getStream()->lock();
         }
     }
 
