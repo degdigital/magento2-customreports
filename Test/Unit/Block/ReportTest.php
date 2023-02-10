@@ -31,7 +31,7 @@ class ReportTest extends TestCase
         $buttonList = $this->createMock(ButtonList::class);
         $this->context->method('getButtonList')->willReturn($buttonList);
         $this->data = [];
-        $this->report = new Report($this->context, $this->data, $this->data);
+        $this->report = new Report($this->context, $this->currentCustomReportRegistry, $this->data);
     }
 
     protected function tearDown(): void
