@@ -5,7 +5,8 @@
             "report_name": true,
             "report_sql": true,
             "created_at": true,
-            "updated_at": true
+            "updated_at": true,
+            "allow_count_query": true
         },
         "constraint": {
             "PRIMARY": true

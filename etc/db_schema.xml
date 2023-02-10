@@ -4,6 +4,7 @@
         <column xsi:type="int" name="customreport_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" name="report_name" nullable="false" length="255" comment="Report Name"/>
         <column xsi:type="text" name="report_sql" nullable="false" comment="Report Name"/>
+        <column xsi:type="boolean" name="allow_count_query" nullable="false" default="true" comment="Allow Count Query"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Modification Time"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
