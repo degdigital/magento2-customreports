@@ -8,16 +8,15 @@ use DEG\CustomReports\Model\GenericReportCollection;
 interface CustomReportManagementInterface
 {
     /**
-     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
-     *
+     * @param CustomReportInterface $customReport
      * @return GenericReportCollection
      */
     public function getGenericReportCollection(CustomReportInterface $customReport): GenericReportCollection;
 
     /**
-     * @param \DEG\CustomReports\Api\Data\CustomReportInterface $customReport
-     *
+     * @param CustomReportInterface $customReport
+     * @param bool $filtersPresent
      * @return string[]
      */
-    public function getColumnsList(CustomReportInterface $customReport): array;
+    public function getColumnsList(CustomReportInterface $customReport, bool $filtersPresent): array;
 }

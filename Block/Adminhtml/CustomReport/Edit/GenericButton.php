@@ -35,9 +35,17 @@ class GenericButton
     /**
      * @return string
      */
+    public function getReportUrl(): string
+    {
+        return $this->getUrl('*/*/report', ['customreport_id' => $this->getObjectId()]);
+    }
+
+    /**
+     * @return string
+     */
     public function getDeleteUrl(): string
     {
-        return $this->getUrl('*/*/delete', ['object_id' => $this->getObjectId()]);
+        return $this->getUrl('*/*/delete', ['customreport_id' => $this->getObjectId()]);
     }
 
     /**

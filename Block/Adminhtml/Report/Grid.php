@@ -15,6 +15,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 {
     protected $_template = 'DEG_CustomReports::widget/grid.phtml';
 
+    /**
+     * Increase the default limit to improve usefulness of "total-less" grids (allow_pagination disabled)
+     */
+    protected $_defaultLimit = 200;
+
     public function __construct(
         Context $context,
         Data $backendHelper,
@@ -31,7 +36,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
         $this->setCollection($genericCollection);
         $this->_preparePage();
-        $columnList = $this->customReportManagement->getColumnsList($customReport);
+        $filtersPresent = (bool) $this->getParam($this->getVarNameFilter());
+        $columnList = $this->customReportManagement->getColumnsList($customReport, $filtersPresent);
         $this->addColumnSet($columnList);
         $this->addGridExportBlock();
         parent::_prepareLayout();

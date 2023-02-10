@@ -15,9 +15,9 @@ class CustomReportManagement implements CustomReportManagementInterface
     ) {
     }
 
-    public function getGenericReportCollection(CustomReportInterface $customReport): GenericReportCollection
+    public function getGenericReportCollection(CustomReportInterface $customReport, bool $forceReload = false): GenericReportCollection
     {
-        if (empty($this->reportCollections[$customReport->getId()])) {
+        if (empty($this->reportCollections[$customReport->getId()]) || $forceReload) {
             $genericReportCollection = $this->genericReportCollectionFactory->create();
             $formattedSql = $this->formatSql($customReport->getReportSql());
             $genericReportCollection->getSelect()->from(new Zend_Db_Expr('(' . $formattedSql . ')'));
@@ -28,9 +28,9 @@ class CustomReportManagement implements CustomReportManagementInterface
         return $this->reportCollections[$customReport->getId()];
     }
 
-    public function getColumnsList(CustomReportInterface $customReport): array
+    public function getColumnsList(CustomReportInterface $customReport, bool $filtersPresent): array
     {
-        $columnsCollection = $this->getGenericReportCollection($customReport);
+        $columnsCollection = $this->getGenericReportCollection($customReport, $filtersPresent);
         $firstItem = $columnsCollection->getFirstItem();
 
         return array_keys($firstItem->getData());
