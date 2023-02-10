@@ -6,7 +6,7 @@ use DEG\CustomReports\Model\CustomReport;
 
 interface CustomReportInterface
 {
-    public const FIELD_ALLOW_PAGINATION = 'allow_pagination';
+    public const FIELD_ALLOW_COUNT_QUERY = 'allow_count_query';
     public const FIELD_REPORT_SQL = 'report_sql';
     public const FIELD_REPORT_NAME = 'report_name';
 
@@ -16,9 +16,13 @@ interface CustomReportInterface
 
     public function getReportSql(): string;
 
+    public function getAllowCountQuery(): string;
+
     public function setId($id);
 
     public function setReportName(string $reportName): CustomReport;
 
     public function setReportSql(string $reportSql): CustomReport;
+
+    public function setAllowCountQuery(bool $allowCountQuery): CustomReport;
 }

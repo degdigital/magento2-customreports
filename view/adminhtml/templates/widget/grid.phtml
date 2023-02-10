@@ -1,12 +1,5 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-?>
-<?php
-/**
  * Template for \Magento\Backend\Block\Widget\Grid
  *
  *  getId()
@@ -18,8 +11,12 @@
  */
 /* @var $block \Magento\Backend\Block\Widget\Grid */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \DEG\CustomReports\Model\GenericReportCollection $collection */
 
+$collection = $block->getCollection();
 $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
+$canCountTotals = $collection->canCountTotals();
+$canQueryTotals = $collection->getCustomReport()->getAllowCountQuery();
 ?>
 <?php if ($block->getCollection()): ?>
 
@@ -52,13 +49,17 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                     <?= $block->getMainButtonsHtml() ? '<div class="admin__filter-actions">' .
                         $block->getMainButtonsHtml() . '</div>' : '' ?>
                 <?php endif; ?>
-                    <?php $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
-                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count"
-                            <?= /* @noEscape */ $block->getUiId('total-count') ?>>
-                            <?= /* @noEscape */ $countRecords ?>
-                        </span>
-                        <?= $block->escapeHtml(__('records found')) ?>
+                        <?php if ($canCountTotals || $canQueryTotals): ?>
+                            <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count"
+                                <?= /* @noEscape */ $block->getUiId('total-count') ?>>
+                                <?= /* @noEscape */ $collection->getSize() ?>
+                            </span>
+                            <?= $block->escapeHtml(__('records found')) ?>
+                        <?php else: ?>
+                            <p><?= $block->escapeHtml(__('Unknown number of records found. To allow querying for the total count, edit the report and set Allow Count Query to Yes, but doing so may decrease performance.')) ?></p>
+                            <p><?= $block->escapeHtml(__('Note that combining filtering and pagination may unexpectedly return no results. In that case, navigate to page one.')) ?></p>
+                        <?php endif; ?>
                         <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
                               class="mass-select-info _empty"><strong data-role="counter">0</strong>
                             <span><?= $block->escapeHtml(__('selected')) ?></span>
@@ -126,10 +127,14 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
 
                             <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId())
                             ?>_page-current">
+                                <?php if ($canCountTotals): ?>
+                                    <?= /* @noEscape */ __('of %1', '<span>1</span>') ?>
+                                <?php elseif ($canQueryTotals): ?>
                                 <?= /* @noEscape */ __('of %1', '<span>' .
                                     $block->getCollection()->getLastPageNumber() . '</span>') ?>
+                                <?php endif; ?>
                             </label>
-                            <?php if ($_curPage < $_lastPage): ?>
+                            <?php if ($_curPage < $_lastPage || !$canQueryTotals): ?>
                                 <button type="button" title="<?= $block->escapeHtmlAttr(__('Next page')) ?>"
                                         class="action-next">
                                     <span><?= $block->escapeHtml(__('Next page')) ?></span>

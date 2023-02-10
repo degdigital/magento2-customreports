@@ -9,6 +9,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\ColumnSet;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\Exception\LocalizedException;
 use Zend_Db_Expr;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid
@@ -16,7 +17,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     protected $_template = 'DEG_CustomReports::widget/grid.phtml';
 
     /**
-     * Increase the default limit to improve usefulness of "total-less" grids (allow_pagination disabled)
+     * Increase the default limit to improve usefulness of "total-less" grids (allow_count_query disabled)
      */
     protected $_defaultLimit = 200;
 
@@ -30,14 +31,23 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         parent::__construct($context, $backendHelper, $data);
     }
 
-    public function _prepareLayout()
+    /**
+     * Performance note: if filters or sort orderings are present ($filtersPresent), getColumnsList triggers a fresh
+     * query to get the column list. Unfortunately, it does not seem feasible to avoid this second query when filters
+     * are present, because $this->_prepareCollection()'s filter initialization requires the column list, but if the
+     * column list runs first (so, without the filters) then the cached collection result is unfiltered. So the filters
+     * require the columns and the columns/collection result require the filters, resulting in a cyclical dependency
+     * that can only avoided by running two queries, one to retrieve column list without filters, then one to retrieve
+     * the collection results after filters have been processed.
+     */
+    public function _prepareLayout(): void
     {
-        $customReport = $this->currentCustomReportRegistry->get();
-        $genericCollection = $this->customReportManagement->getGenericReportCollection($customReport);
+        $currentCustomReport = $this->currentCustomReportRegistry->get();
+        $genericCollection = $this->customReportManagement->getGenericReportCollection($currentCustomReport);
         $this->setCollection($genericCollection);
         $this->_preparePage();
-        $filtersPresent = (bool) $this->getParam($this->getVarNameFilter());
-        $columnList = $this->customReportManagement->getColumnsList($customReport, $filtersPresent);
+        $filtersPresent = ($this->getParam($this->getVarNameFilter()) || $this->getParam($this->getVarNameSort()));
+        $columnList = $this->customReportManagement->getColumnsList($currentCustomReport, $filtersPresent);
         $this->addColumnSet($columnList);
         $this->addGridExportBlock();
         parent::_prepareLayout();
@@ -50,11 +60,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     public function addColumnSet($columnList)
     {
-        /** @var $columnSet ColumnSet */
-        $columnSet = $this->_layout->createBlock(
-            ColumnSet::class,
-            'deg_customreports_grid.grid.columnSet'
-        );
+        /** @var ColumnSet $columnSet */
+        $columnSet = $this->getChildBlock('deg_customreports_grid.grid.columnSet');
         foreach ($columnList as $columnName) {
             $formattedColumnName = str_replace(' ', '_', $columnName);
             $escapedColumName = $this->getCollection()->getConnection()->quoteIdentifier($columnName);

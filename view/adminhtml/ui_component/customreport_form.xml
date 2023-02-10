@@ -84,5 +84,24 @@
                 </item>
             </argument>
         </field>
+        <field name="allow_count_query">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Allow Count Query</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="rows" xsi:type="string">20</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataScope" xsi:type="string">allow_count_query</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[Defaults to 'Yes', which allows the report grid to display the total records count and total pages count, but this requires running another query (select count(*) from (original query)). <br><br>If the report query is slow, and total records and total pages count do not need to be shown on the grid interface, this flag can be set to 'No' to improve grid performance.<br><br>Even if set to 'No', total records count can still be shown in some cases, .e.g if the number of records on the first page is less than the page size.]]></item>
+                    </item>
+                </item>
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+            </argument>
+        </field>
     </fieldset>
 </form>

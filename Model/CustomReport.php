@@ -8,7 +8,7 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomReport extends AbstractModel implements CustomReportInterface, IdentityInterface
 {
-    const CACHE_TAG = 'deg_customreports_customreport';
+    public const CACHE_TAG = 'deg_customreports_customreport';
 
     /**
      * @return string[]
@@ -25,21 +25,31 @@ class CustomReport extends AbstractModel implements CustomReportInterface, Ident
 
     public function getReportName(): string
     {
-        return $this->getData('report_name');
+        return $this->getData(static::FIELD_REPORT_NAME);
     }
 
     public function getReportSql(): string
     {
-        return $this->getData('report_sql');
+        return $this->getData(static::FIELD_REPORT_SQL);
+    }
+
+    public function getAllowCountQuery(): string
+    {
+        return $this->getData(static::FIELD_ALLOW_COUNT_QUERY);
     }
 
     public function setReportName(string $reportName): CustomReport
     {
-        return $this->setData('report_name', $reportName);
+        return $this->setData(static::FIELD_REPORT_NAME, $reportName);
     }
 
     public function setReportSql(string $reportSql): CustomReport
     {
-        return $this->setData('report_sql', $reportSql);
+        return $this->setData(static::FIELD_REPORT_SQL, $reportSql);
+    }
+
+    public function setAllowCountQuery(bool $allowCountQuery): CustomReport
+    {
+        return $this->setData(static::FIELD_ALLOW_COUNT_QUERY, $allowCountQuery);
     }
 }

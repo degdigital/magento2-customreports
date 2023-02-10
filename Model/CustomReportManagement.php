@@ -19,6 +19,7 @@ class CustomReportManagement implements CustomReportManagementInterface
     {
         if (empty($this->reportCollections[$customReport->getId()]) || $forceReload) {
             $genericReportCollection = $this->genericReportCollectionFactory->create();
+            $genericReportCollection->setCustomReport($customReport);
             $formattedSql = $this->formatSql($customReport->getReportSql());
             $genericReportCollection->getSelect()->from(new Zend_Db_Expr('(' . $formattedSql . ')'));
 
