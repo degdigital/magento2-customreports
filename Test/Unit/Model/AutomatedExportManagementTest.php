@@ -31,7 +31,9 @@ class AutomatedExportManagementTest extends TestCase
 
         $this->timezone->method('date')->willReturn($date);
 
-        $this->automatedExportManagement = new AutomatedExportManagement($this->timezone);
+        $filesystem = $this->createStub(\Magento\Framework\Filesystem::class);
+
+        $this->automatedExportManagement = new AutomatedExportManagement($this->timezone, $filesystem);
     }
 
     public function testGetReplacedFilename()

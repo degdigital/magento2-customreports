@@ -2,11 +2,10 @@
 declare(strict_types=1);
 /** @noinspection DuplicatedCode */
 
-namespace Tests\Unit\DEG\CustomReports\Controller\Adminhtml\AutomatedExport;
+namespace Tests\Unit\DEG\CustomReports\Controller\Adminhtml\CustomReport;
 
 use DEG\CustomReports\Block\Adminhtml\Report\Export;
-use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Builder;
-use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\ExportXml;
+use DEG\CustomReports\Controller\Adminhtml\CustomReport\Builder;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -16,12 +15,9 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
 
-class ExportXmlTest extends TestCase
+class ExportTest extends TestCase
 {
-    /**
-     * @var ExportXml
-     */
-    protected ExportXml $exportXml;
+    protected Export $export;
 
     /**
      * @var Context|\PHPUnit\Framework\MockObject\MockObject
@@ -31,7 +27,7 @@ class ExportXmlTest extends TestCase
     /**
      * @var FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $fileFactory;
+    protected $collectionFactory;
 
     /**
      * @var Builder|\PHPUnit\Framework\MockObject\MockObject
@@ -60,19 +56,17 @@ class ExportXmlTest extends TestCase
     {
         parent::setUp();
 
-        $this->context = $this->createMock(Context::class);
+        $this->context = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->context->method('getRequest')->willReturn($this->requestMock);
-
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        $this->context->method('getView')->willReturn($this->viewMock);
+        $this->context->method('getFilesystem')->willReturn($this->filesystem);
 
         $this->layoutMock = $this->createMock(LayoutInterface::class);
-        $this->viewMock->method('getLayout')->willReturn($this->layoutMock);
 
-        $this->fileFactory = $this->createMock(FileFactory::class);
+        $this->collectionFactory = $this->createMock(\Magento\Framework\Data\CollectionFactory::class);
         $this->builder = $this->createMock(Builder::class);
-        $this->exportXml = new ExportXml($this->context, $this->fileFactory, $this->builder);
+        $this->export = new Export($this->context, $this->collectionFactory);
     }
 
     /**
@@ -82,26 +76,9 @@ class ExportXmlTest extends TestCase
     {
         parent::tearDown();
 
-        unset($this->exportXml);
+        unset($this->export);
         unset($this->context);
-        unset($this->fileFactory);
+        unset($this->collectionFactory);
         unset($this->builder);
-    }
-
-    /**
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
-    public function testExecute(): void
-    {
-        $blockMock = $this->createMock(AbstractBlock::class);
-        $this->layoutMock->method('createBlock')->willReturn($blockMock);
-
-        $blockExport = $this->createMock(Export::class);
-        $blockMock->method('getChildBlock')->willReturn($blockExport);
-
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $this->fileFactory->method('create')->willReturn($responseMock);
-
-        $this->exportXml->execute();
     }
 }
