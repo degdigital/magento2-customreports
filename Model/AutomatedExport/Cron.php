@@ -8,51 +8,27 @@ use DEG\CustomReports\Api\ExportReportServiceInterface;
 use Exception;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 class Cron
 {
-    protected AutomatedExportRepositoryInterface $automatedExportRepository;
-    protected DeleteDynamicCronInterface $deleteDynamicCron;
-    protected LoggerInterface $logger;
-
-    /**
-     * @var \DEG\CustomReports\Api\ExportReportServiceInterface
-     */
-    protected ExportReportServiceInterface $exportReportService;
-
-    /**
-     * Cron constructor.
-     *
-     * @param \DEG\CustomReports\Api\AutomatedExportRepositoryInterface $automatedExportRepository
-     * @param \DEG\CustomReports\Api\DeleteDynamicCronInterface         $deleteDynamicCron
-     * @param \Psr\Log\LoggerInterface                                  $logger
-     * @param \DEG\CustomReports\Api\ExportReportServiceInterface       $exportReportService
-     */
     public function __construct(
-        AutomatedExportRepositoryInterface $automatedExportRepository,
-        DeleteDynamicCronInterface $deleteDynamicCron,
-        LoggerInterface $logger,
-        ExportReportServiceInterface $exportReportService
+        protected AutomatedExportRepositoryInterface $automatedExportRepository,
+        protected DeleteDynamicCronInterface $deleteDynamicCron,
+        protected LoggerInterface $logger,
+        protected ExportReportServiceInterface $exportReportService
     ) {
-        $this->automatedExportRepository = $automatedExportRepository;
-        $this->deleteDynamicCron = $deleteDynamicCron;
-        $this->logger = $logger;
-        $this->exportReportService = $exportReportService;
     }
 
     /**
-     * @param \Magento\Cron\Model\Schedule $schedule
-     *
+     * @param Schedule $schedule
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function execute(Schedule $schedule): bool
     {
-        /** @var $reportGrid \DEG\CustomReports\Block\Adminhtml\Report\Grid */
-        /** @var $exportBlock \DEG\CustomReports\Block\Adminhtml\Report\Export */
-
         $jobCode = $schedule->getJobCode();
         try {
             preg_match('/automated_export_(\d+)/', $jobCode, $jobMatch);
@@ -68,7 +44,7 @@ class Cron
 
             $this->exportReportService->exportAll($automatedExport);
         } catch (Exception $e) {
-            $this->logger->critical('Cronjob exception for job_code '.$jobCode.': '.$e->getMessage());
+            $this->logger->critical('Cronjob exception for job_code ' . $jobCode . ': ' . $e->getMessage());
             throw $e;
         }
 
