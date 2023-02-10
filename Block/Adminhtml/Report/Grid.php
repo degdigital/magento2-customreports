@@ -131,4 +131,43 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             ],
         ];
     }
+
+    /**
+     * Fix 'Reset Filter' link not properly clearing sort order
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function _prepareFilterButtons(): void
+    {
+        $this->setChild(
+            'reset_filter_button',
+            $this->getLayout()->createBlock(
+                \Magento\Backend\Block\Widget\Button::class
+            )->setData(
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => 'setLocation(\'' . $this->getReportUrl() . '\');',
+                    'class' => 'action-reset action-tertiary'
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-reset'])
+        );
+        $this->setChild(
+            'search_button',
+            $this->getLayout()->createBlock(
+                \Magento\Backend\Block\Widget\Button::class
+            )->setData(
+                [
+                    'label' => __('Search'),
+                    'onclick' => $this->getJsObjectName() . '.doFilter()',
+                    'class' => 'action-secondary',
+                ]
+            )->setDataAttribute(['action' => 'grid-filter-apply'])
+        );
+    }
+
+    public function getReportUrl(): string
+    {
+        return $this->getUrl('*/*/report', ['customreport_id' => $this->currentCustomReportRegistry->get()->getId()]);
+    }
 }
