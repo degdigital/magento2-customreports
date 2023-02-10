@@ -29,7 +29,7 @@ class CustomReportManagement implements CustomReportManagementInterface
         return $this->reportCollections[$customReport->getId()];
     }
 
-    public function getColumnsList(CustomReportInterface $customReport, bool $filtersPresent): array
+    public function getColumnsList(CustomReportInterface $customReport, bool $filtersPresent = false): array
     {
         $columnsCollection = $this->getGenericReportCollection($customReport, $filtersPresent);
         $firstItem = $columnsCollection->getFirstItem();
