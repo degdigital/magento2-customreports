@@ -168,7 +168,8 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Error Email Address</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="rows" xsi:type="string">1</item>
                     <item name="sortOrder" xsi:type="number">75</item>
                     <item name="dataScope" xsi:type="string">error_emails</item>
                     <item name="placeholder" xsi:type="string">errors@test.com</item>
@@ -262,7 +263,8 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Email Recipient(s)</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="rows" xsi:type="string">1</item>
                     <item name="dataScope" xsi:type="string">email_recipients</item>
                     <item name="placeholder" xsi:type="string">email@example.com,email2@example.com</item>
                     <item name="notice" xsi:type="string" translate="true">Comma-separated list of email recipients for the "Email" export type.</item>
