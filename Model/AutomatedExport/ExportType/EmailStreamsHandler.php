@@ -12,7 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
-use DEG\CustomReports\Model\Mail\Template\TransportBuilder;
+use DEG\CustomReports\Model\Mail\Template\TransportBuilderFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -34,7 +34,7 @@ class EmailStreamsHandler extends DataObject implements StreamHandlerInterface
 
     public function __construct(
         protected LocalFileStreamsHandler $localFileStreamsHandler,
-        protected TransportBuilder $transportBuilder,
+        protected TransportBuilderFactory $transportBuilderFactory,
         protected ConfigProviderInterface $configProvider,
         protected TimezoneInterface $timezone,
         array $data = []
@@ -138,17 +138,18 @@ class EmailStreamsHandler extends DataObject implements StreamHandlerInterface
         }
 
         foreach ($this->exportStreams as $exportStream) {
-            $this->transportBuilder->addAttachment(
+            $transportBuilder = $this->transportBuilderFactory->create();
+            $transportBuilder->addAttachment(
                 $exportStream->getStream()->readAll(),
                 basename($exportStream->getFilename())
             );
             foreach (explode(',', $emailRecipients) as $emailRecipient) {
-                $this->transportBuilder->addTo($emailRecipient);
+                $transportBuilder->addTo($emailRecipient);
             }
-            $this->transportBuilder->setFromByScope($this->configProvider->getEmailFrom());
+            $transportBuilder->setFromByScope($this->configProvider->getEmailFrom());
 
             $emailTemplate = $automatedExport->getEmailTemplate();
-            $this->transportBuilder->setTemplateIdentifier($emailTemplate)
+            $transportBuilder->setTemplateIdentifier($emailTemplate)
                 ->setTemplateOptions(['area' => Area::AREA_ADMINHTML, 'store' => 0])
                 ->setTemplateVars([
                     'automated_export' => $automatedExport,
@@ -164,7 +165,7 @@ class EmailStreamsHandler extends DataObject implements StreamHandlerInterface
                     's' => $this->timezone->date()->format('s'),
                     'c' => $this->timezone->date()->format('c'),
                 ]);
-            $this->transportBuilder->getTransport()->sendMessage();
+            $transportBuilder->getTransport()->sendMessage();
         }
     }
 }
