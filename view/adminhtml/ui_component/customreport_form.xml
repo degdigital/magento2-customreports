@@ -90,7 +90,6 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Allow Count Query</item>
                     <item name="formElement" xsi:type="string">select</item>
-                    <item name="rows" xsi:type="string">20</item>
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="dataScope" xsi:type="string">allow_count_query</item>
                     <item name="validation" xsi:type="array">

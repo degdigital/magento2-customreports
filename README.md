@@ -42,7 +42,7 @@ With no filters applied and 'Allow Count Query' set to 'No', the report query wi
 From the admin panel > Reports > Custom Reports > Automated Exports interface, jobs can be created to export one or more custom reports. Currently, two types of exports are supported:
 1. Local file drops, in which a file is created on the server in which the Magento cron runs from in a configurable location, with var/export being the suggested location.
 2. Remote file drops, in which a file is created the same as a local file drop and then uploaded to an SFTP server with the provided credentials.
-3. Email, in which a file is sent as an attachment to the email recipient(s).
+3. Email, in which a file is sent as an attachment to the email recipient(s). If "Send as one combined email" is set to 'No' (the default), N*M emails will be sent with one attachment each, where N is the number of custom reports and M is the number of file types. If it is set to 'Yes', then only one email will be sent with N*M attachments.
 
 If both types are selected, the system will run the query and generate the local file only once. This is useful for especially heavy queries.
 

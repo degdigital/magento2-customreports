@@ -21,6 +21,10 @@ class CustomReportManagement implements CustomReportManagementInterface
             $genericReportCollection = $this->genericReportCollectionFactory->create();
             $genericReportCollection->setCustomReport($customReport);
             $formattedSql = $this->formatSql($customReport->getReportSql());
+
+            // Some queries can be negatively impacted (performance-wise) by being wrapped in a "select * from (...)"
+            // statement like this (i.e., the performance of getting a single page of results is equivalent to getting
+            // all pages). But there is no known library to actually parse a query string and generate a Zend_Db_Select.
             $genericReportCollection->getSelect()->from(new Zend_Db_Expr('(' . $formattedSql . ')'));
 
             $this->reportCollections[$customReport->getId()] = $genericReportCollection;
