@@ -12,61 +12,40 @@ use DEG\CustomReports\Api\Data\AutomatedExportInterfaceFactory;
 use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Save;
 use DEG\CustomReports\Model\AutomatedExport;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 class SaveTest extends TestCase
 {
-    /**
-     * @var Save
-     */
     protected Save $save;
 
-    /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $context;
+    protected Context|MockObject $context;
 
-    /**
-     * @var DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $dataPersistor;
+    protected MockObject|DataPersistorInterface $dataPersistor;
 
-    /**
-     * @var CustomReportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $automatedExportRepository;
+    protected AutomatedExportRepositoryInterface|MockObject|CustomReportRepositoryInterface $automatedExportRepository;
 
-    /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $requestMock;
+    protected Http|MockObject|RequestInterface $requestMock;
 
-    /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $redirectPageFactoryMock;
+    protected RedirectFactory|MockObject $redirectPageFactoryMock;
 
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $objectManagerMock;
+    protected ObjectManagerInterface|MockObject $objectManagerMock;
 
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $messageManagerMock;
+    protected ManagerInterface|MockObject $messageManagerMock;
 
-    /**
-     * @var AutomatedExportInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $automatedExportFactory;
+    protected AutomatedExportInterfaceFactory|MockObject $automatedExportFactory;
+
+    protected Manager|Stub $cacheManager;
 
     /**
      * {@inheritdoc}
@@ -91,8 +70,14 @@ class SaveTest extends TestCase
         $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
         $this->automatedExportRepository = $this->createMock(AutomatedExportRepositoryInterface::class);
         $this->automatedExportFactory = $this->createMock(AutomatedExportInterfaceFactory::class);
+        $this->cacheManager = $this->createStub(Manager::class);
+
         $this->save = new Save(
-            $this->context, $this->dataPersistor, $this->automatedExportRepository, $this->automatedExportFactory
+            $this->context,
+            $this->dataPersistor,
+            $this->automatedExportRepository,
+            $this->automatedExportFactory,
+            $this->cacheManager
         );
     }
 
@@ -110,7 +95,7 @@ class SaveTest extends TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testExecute(): void
     {
