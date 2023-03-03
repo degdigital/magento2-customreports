@@ -143,12 +143,7 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
     {}
 
     public function finalizeExport(): void
-    {
-        foreach ($this->exportStreams as $exportStream) {
-            $exportStream->getStream()->unlock();
-            $exportStream->getStream()->close();
-        }
-    }
+    {}
 
     public function getExportStreams(): array
     {
