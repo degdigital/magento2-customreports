@@ -30,7 +30,7 @@ class Delete extends Action implements HttpGetActionInterface
      */
     public function execute(): Redirect
     {
-        $id = $this->getRequest()->getParam('object_id');
+        $id = $this->getRequest()->getParam('customreport_id');
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
