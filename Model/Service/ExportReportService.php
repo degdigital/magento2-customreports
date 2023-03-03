@@ -22,31 +22,54 @@ class ExportReportService implements ExportReportServiceInterface
     ) {
     }
 
+    /**
+     * For the given automated export, export all custom reports, for all configured export types, for all file types.
+     * Performance note: this method specifically works in its current way to optimize performance. For a given custom
+     * report, its query must only be run once, even if there are many export types and file types configured. This is
+     * mission-critical as a single query might take minutes on its own, so all necessary export operations must be done
+     * on that single query, despite the code being less intuitive/harder to follow.
+     *
+     * @param AutomatedExportInterface $automatedExport
+     * @return void
+     */
     public function exportAll(AutomatedExportInterface $automatedExport): void
     {
         $customReportIds = $automatedExport->getCustomreportIds();
+        $handlers = $this->exportTypeHandlerPool->getHandlerInstances($automatedExport);
+
+        try {
+            foreach ($handlers as $handler) {
+                $handler->setAutomatedExport($automatedExport)->setHandlers($handlers)->startExport();
+            }
+        } catch (Exception $exception) {
+            $this->logger->critical($exception);
+            if ($errorEmailAddresses = $automatedExport->getErrorEmails()) {
+                $this->sendErrorEmailService->execute($errorEmailAddresses, [
+                    'automated_export' => $automatedExport->getData(),
+                    'exception' => $exception->__toString(),
+                ]);
+            }
+        }
+
         foreach ($customReportIds as $customReportId) {
             try {
                 $customReport = $this->customReportRepository->getById($customReportId);
-                $handlers = $this->exportTypeHandlerPool->getHandlerInstances($automatedExport);
                 foreach ($handlers as $handler) {
-                    $handler->setAutomatedExport($automatedExport)
-                        ->setCustomReport($customReport)
-                        ->setHandlers($handlers);
-                    $handler->startExport();
-                    $handler->exportHeaders();
+                    $handler->setCustomReport($customReport);
+                    $handler->startReportExport();
+                    $handler->exportReportHeaders();
                 }
 
                 $reportCollection = $this->customReportManagement->getGenericReportCollection($customReport);
                 foreach ($reportCollection as $reportRow) {
                     foreach ($handlers as $handler) {
-                        $handler->exportChunk($reportRow->getData());
+                        $handler->exportReportChunk($reportRow->getData());
                     }
                 }
 
                 foreach ($handlers as $handler) {
-                    $handler->exportFooters();
-                    $handler->finalizeExport();
+                    $handler->exportReportFooters();
+                    $handler->finalizeReportExport();
                 }
             } catch (Exception $exception) {
                 $this->logger->critical($exception);
@@ -57,6 +80,20 @@ class ExportReportService implements ExportReportServiceInterface
                         'exception' => $exception->__toString(),
                     ]);
                 }
+            }
+        }
+
+        try {
+            foreach ($handlers as $handler) {
+                $handler->finalizeExport();
+            }
+        } catch (Exception $exception) {
+            $this->logger->critical($exception);
+            if ($errorEmailAddresses = $automatedExport->getErrorEmails()) {
+                $this->sendErrorEmailService->execute($errorEmailAddresses, [
+                    'automated_export' => $automatedExport->getData(),
+                    'exception' => $exception->__toString(),
+                ]);
             }
         }
     }

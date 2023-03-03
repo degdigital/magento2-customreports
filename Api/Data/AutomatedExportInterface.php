@@ -17,6 +17,8 @@ interface AutomatedExportInterface
     public const FIELD_REMOTE_PASSWORD = 'remote_password';
     public const FIELD_REMOTE_LOCATION = 'remote_location';
     public const FIELD_EMAIL_TEMPLATE = 'email_template';
+    public const FIELD_EMAIL_SENDER = 'email_sender';
+    public const FIELD_IS_COMBINED_EMAIL = 'is_combined_email';
     public const FIELD_EMAIL_RECIPIENTS = 'email_recipients';
     public const FIELD_CREATED_AT = 'created_at';
     public const FIELD_UPDATED_AT = 'updated_at';
@@ -37,6 +39,10 @@ interface AutomatedExportInterface
     public function getEmailTemplate(): ?string;
 
     public function getEmailRecipients(): ?string;
+
+    public function getEmailSender(): ?string;
+
+    public function getIsCombinedEmail(): ?bool;
 
     public function getErrorEmails(): ?string;
 
@@ -77,6 +83,10 @@ interface AutomatedExportInterface
     public function setEmailTemplate(string $emailTemplate): AutomatedExportInterface;
 
     public function setEmailRecipients(string $emailRecipients): AutomatedExportInterface;
+
+    public function setEmailSender(string $emailSender): AutomatedExportInterface;
+
+    public function setIsCombinedEmail(bool $isCombinedEmail): AutomatedExportInterface;
 
     public function setRemoteHost(string $remoteHost): AutomatedExportInterface;
 

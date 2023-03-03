@@ -93,6 +93,16 @@ class AutomatedExport extends AbstractModel implements AutomatedExportInterface,
         return $this->getData(static::FIELD_EMAIL_RECIPIENTS);
     }
 
+    public function getEmailSender(): ?string
+    {
+        return $this->getData(static::FIELD_EMAIL_SENDER);
+    }
+
+    public function getIsCombinedEmail(): ?bool
+    {
+        return (bool)$this->getData(static::FIELD_IS_COMBINED_EMAIL);
+    }
+
     public function getCreatedAt(): ?string
     {
         return $this->getData(static::FIELD_CREATED_AT);
@@ -176,6 +186,16 @@ class AutomatedExport extends AbstractModel implements AutomatedExportInterface,
     public function setEmailRecipients(string $emailRecipients): AutomatedExportInterface
     {
         return $this->setData(static::FIELD_EMAIL_RECIPIENTS, $emailRecipients);
+    }
+
+    public function setEmailSender(string $emailSender): AutomatedExportInterface
+    {
+        return $this->setData(static::FIELD_EMAIL_SENDER, $emailSender);
+    }
+
+    public function setIsCombinedEmail(bool $isCombinedEmail): AutomatedExportInterface
+    {
+        return $this->setData(static::FIELD_IS_COMBINED_EMAIL, $isCombinedEmail);
     }
 
     public function setCreatedAt(string $createdAt): AutomatedExportInterface

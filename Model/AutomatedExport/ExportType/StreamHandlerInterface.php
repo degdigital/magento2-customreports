@@ -17,13 +17,17 @@ interface StreamHandlerInterface
 {
     public function startExport();
 
-    public function exportHeaders();
+    public function startReportExport();
 
-    public function exportChunk(array $dataToWrite);
+    public function exportReportHeaders();
+
+    public function exportReportChunk(array $dataToWrite);
+
+    public function finalizeReportExport();
 
     public function finalizeExport();
 
-    public function getExportStreams(): array;
+    public function exportReportFooters();
 
-    public function exportFooters();
+    public function getExportStreams(): array;
 }

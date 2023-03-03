@@ -2,7 +2,6 @@
 
 namespace DEG\CustomReports\Model\AutomatedExport\ExportType;
 
-use ArrayIterator;
 use DEG\CustomReports\Api\AutomatedExportManagementInterface;
 use DEG\CustomReports\Api\CustomReportManagementInterface;
 use DEG\CustomReports\Api\Data\AutomatedExportInterface;
@@ -12,14 +11,14 @@ use DEG\CustomReports\Model\AutomatedExport\ExportType\Stream\LocalFileStream;
 use DEG\CustomReports\Model\AutomatedExport\ExportType\Stream\LocalFileStreamFactory;
 use DEG\CustomReports\Model\Config\Source\FileTypes;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Convert\Excel;
-use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
+ * Responsible for exporting a 'stream' (of query results) to a file on the local file system.
+ *
  * @method AutomatedExportInterface getAutomatedExport()
  * @method CustomReportInterface    getCustomReport()
  * @method StreamHandlerInterface[] getHandlers()
@@ -51,10 +50,13 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
         $this->directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
     }
 
+    public function startExport(): void
+    {}
+
     /**
      * @throws FileSystemException
      */
-    public function startExport(): array
+    public function startReportExport(): array
     {
         $automatedExport = $this->getAutomatedExport();
         $customReport = $this->getCustomReport();
@@ -65,7 +67,6 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
             $filename = $this->automatedExportManagement->getFilename($automatedExport, $customReport, $fileType);
             $localFilepath = $this->directory->getAbsolutePath() . $directoryName . '/' . $filename;
             $stream = $this->directory->openFile($localFilepath, 'w+');
-            $stream->lock();
             $this->exportStreams[] = $this->localFileStreamFactory->create()
                 ->setFilename($filename)
                 ->setFilepath($localFilepath)
@@ -79,7 +80,7 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
     /**
      * @throws FileSystemException
      */
-    public function exportHeaders()
+    public function exportReportHeaders()
     {
         $customReport = $this->getCustomReport();
         if ($customReport && ($columnList = $this->customReportManagement->getColumnsList($customReport))) {
@@ -97,14 +98,14 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
                 $xmlData = $this->excelConverter->getXmlHeader();
                 $exportStream->getStream()->write($xmlData);
             }
-            $this->exportChunk($columnList);
+            $this->exportReportChunk($columnList);
         }
     }
 
     /**
      * @throws FileSystemException
      */
-    public function exportFooters()
+    public function exportReportFooters()
     {
         foreach ($this->exportStreams as $exportStream) {
             if ($exportStream->getFileType() == FileTypes::EXTENSION_XML_EXCEL) {
@@ -117,7 +118,7 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
     /**
      * @throws FileSystemException
      */
-    public function exportChunk(array $dataToWrite, string $rowType = null)
+    public function exportReportChunk(array $dataToWrite, string $rowType = null)
     {
         foreach ($this->exportStreams as $exportStream) {
             switch ($exportStream->getFileType()) {
@@ -137,6 +138,9 @@ class LocalFileStreamsHandler extends DataObject implements StreamHandlerInterfa
             }
         }
     }
+
+    public function finalizeReportExport(): void
+    {}
 
     public function finalizeExport(): void
     {

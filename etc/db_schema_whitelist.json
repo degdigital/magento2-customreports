@@ -30,7 +30,9 @@
             "created_at": true,
             "updated_at": true,
             "email_recipients": true,
-            "email_template": true
+            "email_template": true,
+            "email_sender": true,
+            "is_combined_email": true
         },
         "constraint": {
             "PRIMARY": true

@@ -81,7 +81,9 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. 0 3 * * *</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. 0 3 * * *.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -93,8 +95,12 @@
                     <item name="formElement" xsi:type="string">multiselect</item>
                     <item name="sortOrder" xsi:type="number">30</item>
                     <item name="dataScope" xsi:type="string">customreport_ids</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[Hold down the 'Control' key to multi-select options.]]></item>
+                    </item>
                 </item>
                 <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\CustomReports</item>
+
             </argument>
         </field>
         <field name="export_types">
@@ -109,8 +115,12 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA['Remote File Drop' and 'Email' export types both require a local file, which must be generated whether or not 'Local File Drop' is selected.]]></item>
+                    </item>
                 </item>
                 <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\ExportTypes</item>
+
             </argument>
         </field>
         <field name="file_types">
@@ -126,6 +136,7 @@
                     </item>
                 </item>
                 <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\FileTypes</item>
+
             </argument>
         </field>
         <field name="filename_pattern">
@@ -141,9 +152,8 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string">Available variables: %reportname%, %d%, %m%, %y%, %Y%, %h%, %i%, %s%</item>
+                        <item name="description" xsi:type="string"><![CDATA[E.g. %reportname%-%Y%-%m%-%d%-%h%-%i%-%s%. Available variables: %reportname%, %d%, %m%, %y%, %Y%, %h%, %i%, %s%.]]></item>
                     </item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. %reportname%-%Y%-%m%-%d%-%h%-%i%-%s%</item>
                 </item>
             </argument>
         </field>
@@ -159,7 +169,9 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. export/custom_report_exports. The location of local files in the var/ directory. </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. export/custom_report_exports. The location of local files in the var/ directory.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -173,7 +185,9 @@
                     <item name="sortOrder" xsi:type="number">75</item>
                     <item name="dataScope" xsi:type="string">error_emails</item>
                     <item name="placeholder" xsi:type="string">errors@test.com</item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. errors@test.com, admin@test.com. If set, will email an error if something goes wrong during an export. Supports a comma-delimited list of emails. </item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. errors@test.com, admin@test.com. If set, will email an error if something goes wrong during an export. Supports a comma-delimited list of emails.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -186,7 +200,9 @@
                     <item name="sortOrder" xsi:type="number">80</item>
                     <item name="dataScope" xsi:type="string">remote_host</item>
                     <item name="placeholder" xsi:type="string">sftp.example.com</item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. sftp.example.com</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp.example.com.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -199,7 +215,9 @@
                     <item name="sortOrder" xsi:type="number">90</item>
                     <item name="dataScope" xsi:type="string">remote_port</item>
                     <item name="placeholder" xsi:type="string">Defaults to 22 if left blank</item>
-                    <item name="notice" xsi:type="string" translate="true">Defaults to 22 if left blank</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[Defaults to 22 if left blank.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -212,7 +230,9 @@
                     <item name="sortOrder" xsi:type="number">100</item>
                     <item name="dataScope" xsi:type="string">remote_username</item>
                     <item name="placeholder" xsi:type="string">sftp_username</item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. sftp_username</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp_username.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -227,7 +247,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="dataScope" xsi:type="string">remote_password</item>
                     <item name="placeholder" xsi:type="string">sftp_password123</item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. sftp_password123</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp_password123.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -240,7 +262,9 @@
                     <item name="sortOrder" xsi:type="number">120</item>
                     <item name="dataScope" xsi:type="string">remote_location</item>
                     <item name="placeholder" xsi:type="string">optional/sftp/folder/here</item>
-                    <item name="notice" xsi:type="string" translate="true">E.g. optional/sftp/folder/here</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[E.g. optional/sftp/folder/here.]]></item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -251,9 +275,8 @@
                     <item name="label" xsi:type="string" translate="true">Email Template</item>
                     <item name="dataScope" xsi:type="string">email_template</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string">Available variables: %reportname%, %d%, %m%, %y%, %Y%, %h%, %i%, %s%</item>
+                        <item name="description" xsi:type="string"><![CDATA[Email template used when "Email" export type is enabled.<br><br>A 'Custom Reports Combined Export Email' exists as a basic starting template for a 'combined' email to display multiple custom report names. But, only one 'default' (living in the codebase) template can be specified, so to use that email template, create a new email template in Marketing > Communications > Email Templates and click Load Template > DEG CustomReports > Custom Reports Combined Export Email.]]></item>
                     </item>
-                    <item name="notice" xsi:type="string" translate="true">Email template used when "Email" export type is enabled.</item>
                 </item>
                 <item name="options" xsi:type="object">DEG\CustomReports\Model\Config\Source\ExportEmailTemplate</item>
             </argument>
@@ -267,8 +290,41 @@
                     <item name="rows" xsi:type="string">1</item>
                     <item name="dataScope" xsi:type="string">email_recipients</item>
                     <item name="placeholder" xsi:type="string">email@example.com,email2@example.com</item>
-                    <item name="notice" xsi:type="string" translate="true">Comma-separated list of email recipients for the "Email" export type.</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string"><![CDATA[Comma-separated list of email recipients for the "Email" export type.]]></item>
+                    </item>
                 </item>
+            </argument>
+        </field>
+        <field name="email_sender">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Email Sender</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">email_sender</item>
+                    <item name="placeholder" xsi:type="string">email@example.com:Firstname Lastname</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description"
+                              xsi:type="string"><![CDATA[E.g. email@example.com:Firstname Lastname. The colon separates the email sender's email address from the email sender's name. If unspecified, the email 'sender' will be the configuration specified in Stores > Settings > General > Store Email Addresses > General Contact. <br><br> Using a text input (instead of a select and 'Magento\Config\Model\Config \Source\Email\Identity' as the options) was chosen to allow for more customization.]]></item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_combined_email">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Send as one combined email</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="dataScope" xsi:type="string">is_combined_email</item>
+                    <item name="placeholder" xsi:type="string">email@example.com:Firstname Lastname</item>
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description"
+                              xsi:type="string"><![CDATA[Default is 'No', which causes each report and filetype to produce its own email with one attachment. This is ideal for large reports that may hit the attachment size limit (either the limit configured on this Adobe Commerce server or the limit configured on the recipient's email system). <br><br> Set to 'Yes' to send one email per automation with all attachments included. Setting to 'Yes' may cause email failures if the attachment limit is hit. <br><br> If set to 'Yes', it may be desirable to create a custom email template that references each of the custom reports being generated. This is possible. Create a new email template in Marketing > Communications > Email Templates and click Load Template > DEG CustomReports > Custom Reports Combined Export Email for a starting point.]]></item>
+                    </item>
+                </item>
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
             </argument>
         </field>
     </fieldset>

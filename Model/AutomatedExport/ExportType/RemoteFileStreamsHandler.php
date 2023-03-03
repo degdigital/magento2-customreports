@@ -11,6 +11,11 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Io\SftpFactory;
 
 /**
+ * Responsible for exporting a 'stream' (of query results) to a file on the local file system and uploading it to the
+ * configured SFTP server. Whether the 'Local File Drop' export type is selected or not, this exporter must create a
+ * local file to upload. If the 'Local File Drop' export type IS selected, this exporter does NOT duplicate a local
+ * file. It will use the file created by the other exporter to prevent duplicate work.
+ *
  * @method AutomatedExportInterface getAutomatedExport()
  * @method CustomReportInterface    getCustomReport()
  * @method StreamHandlerInterface[] getHandlers()
@@ -43,7 +48,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     /**
      * @param LocalFileStreamsHandler $localFileStreamsHandler
      * @param SftpFactory $sftpFactory
-     * @param array                                                                       $data
+     * @param array $data
      */
     public function __construct(
         LocalFileStreamsHandler $localFileStreamsHandler,
@@ -55,15 +60,22 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
         $this->localFileStreamsHandler = $localFileStreamsHandler;
     }
 
+    public function startExport()
+    {
+        if (!$this->isLocalFileAlreadyBeingExported()) {
+            $this->localFileStreamsHandler->startExport();
+        }
+    }
+
     /**
      * @throws FileSystemException
      */
-    public function startExport()
+    public function startReportExport()
     {
         if (!$this->isLocalFileAlreadyBeingExported()) {
             $this->exportStreams = $this->localFileStreamsHandler->setAutomatedExport($this->getAutomatedExport())
                 ->setCustomReport($this->getCustomReport())
-                ->startExport();
+                ->startReportExport();
         } else {
             foreach ($this->getHandlers() as $handler) {
                 if ($handler instanceof LocalFileStreamsHandler) {
@@ -77,43 +89,49 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     /**
      * @throws FileSystemException
      */
-    public function exportHeaders()
+    public function exportReportHeaders()
     {
         if (!$this->isLocalFileAlreadyBeingExported()) {
-            $this->localFileStreamsHandler->exportHeaders();
+            $this->localFileStreamsHandler->exportReportHeaders();
         }
     }
 
     /**
      * @throws FileSystemException
      */
-    public function exportChunk(array $dataToWrite)
+    public function exportReportChunk(array $dataToWrite)
     {
         if (!$this->isLocalFileAlreadyBeingExported()) {
-            $this->localFileStreamsHandler->exportChunk($dataToWrite);
+            $this->localFileStreamsHandler->exportReportChunk($dataToWrite);
         }
     }
-
 
     /**
      * @throws FileSystemException
      */
-    public function exportFooters()
+    public function exportReportFooters()
     {
         if (!$this->isLocalFileAlreadyBeingExported()) {
-            $this->localFileStreamsHandler->exportFooters();
+            $this->localFileStreamsHandler->exportReportFooters();
         }
     }
 
     /**
      * @throws Exception
      */
-    public function finalizeExport()
+    public function finalizeReportExport()
+    {
+        if (!$this->isLocalFileAlreadyBeingExported()) {
+            $this->localFileStreamsHandler->finalizeReportExport();
+        }
+        $this->uploadFiles();
+    }
+
+    public function finalizeExport(): void
     {
         if (!$this->isLocalFileAlreadyBeingExported()) {
             $this->localFileStreamsHandler->finalizeExport();
         }
-        $this->uploadFiles();
     }
 
     protected function isLocalFileAlreadyBeingExported(): bool
