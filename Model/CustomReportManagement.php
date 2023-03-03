@@ -43,6 +43,6 @@ class CustomReportManagement implements CustomReportManagementInterface
 
     protected function formatSql(string $rawSql): string
     {
-        return trim($rawSql, ';');
+        return trim($rawSql, ";\r\n");
     }
 }
