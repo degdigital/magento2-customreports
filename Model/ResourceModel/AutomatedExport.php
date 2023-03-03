@@ -5,6 +5,7 @@ namespace DEG\CustomReports\Model\ResourceModel;
 use DEG\CustomReports\Api\AutomatedExportLinkRepositoryInterface;
 use DEG\CustomReports\Api\CreateDynamicCronInterface;
 use DEG\CustomReports\Api\Data\AutomatedExportLinkInterface;
+use DEG\CustomReports\Api\DeleteDynamicCronInterface;
 use DEG\CustomReports\Model\AutomatedExport as AutomatedExportModel;
 use DEG\CustomReports\Model\AutomatedExportLinkFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -18,11 +19,12 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class AutomatedExport extends AbstractDb
 {
     public function __construct(
-        Context $context,
+        protected Context $context,
         protected AutomatedExportLinkFactory $automatedExportLinkFactory,
         protected AutomatedExportLinkRepositoryInterface $automatedExportLinkRepository,
         protected SearchCriteriaBuilder $searchCriteriaBuilder,
         protected CreateDynamicCronInterface $createDynamicCronService,
+        protected DeleteDynamicCronInterface $deleteDynamicCronService,
         protected EncryptorInterface $encryptor,
         ?string $connectionName = null
     ) {
@@ -69,6 +71,13 @@ class AutomatedExport extends AbstractDb
         return parent::_afterSave($object);
     }
 
+    protected function _afterDelete(AbstractModel|AutomatedExportModel $object): AutomatedExport
+    {
+        $this->deleteDynamicCron($object);
+
+        return parent::_afterSave($object);
+    }
+
     /**
      * @param AbstractModel|AutomatedExportModel $object
      * @throws CouldNotDeleteException
@@ -103,7 +112,17 @@ class AutomatedExport extends AbstractDb
      */
     protected function createDynamicCron(AbstractModel|AutomatedExportModel $object)
     {
-        $this->createDynamicCronService->execute($object);
+        if ($object->getOrigData('cron_expr') != $object->getCronExpr()) {
+            $this->createDynamicCronService->execute($object);
+        }
+    }
+
+    /**
+     * @param AbstractModel|AutomatedExportModel $object
+     */
+    protected function deleteDynamicCron(AbstractModel|AutomatedExportModel $object)
+    {
+        $this->deleteDynamicCronService->execute($object);
     }
 
     /**

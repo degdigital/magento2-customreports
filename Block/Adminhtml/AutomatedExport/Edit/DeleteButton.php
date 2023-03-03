@@ -16,7 +16,7 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
         }
 
         return [
-            'label' => __('Delete Report'),
+            'label' => __('Delete Automated Export'),
             'class' => 'delete',
             'on_click' => 'deleteConfirm( \''.__(
                 'Are you sure you want to do this?'

@@ -5,8 +5,11 @@ namespace Tests\Unit\DEG\CustomReports\Model\Service;
 
 use DEG\CustomReports\Model\AutomatedExport;
 use DEG\CustomReports\Model\Service\CreateDynamicCron;
+use Exception;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CreateDynamicCronTest extends TestCase
@@ -17,7 +20,7 @@ class CreateDynamicCronTest extends TestCase
     protected CreateDynamicCron $createDynamicCron;
 
     /**
-     * @var ValueFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ValueFactory|MockObject
      */
     protected $configValueFactory;
 
@@ -29,7 +32,8 @@ class CreateDynamicCronTest extends TestCase
         parent::setUp();
 
         $this->configValueFactory = $this->createMock(ValueFactory::class);
-        $this->createDynamicCron = new CreateDynamicCron($this->configValueFactory);
+        $this->cacheManager = $this->createStub(Manager::class);
+        $this->createDynamicCron = new CreateDynamicCron($this->configValueFactory, $this->cacheManager);
     }
 
     /**
@@ -44,7 +48,7 @@ class CreateDynamicCronTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testExecute(): void
     {

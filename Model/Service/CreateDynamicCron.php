@@ -5,35 +5,28 @@ namespace DEG\CustomReports\Model\Service;
 use DEG\CustomReports\Api\Data\AutomatedExportInterface;
 use DEG\CustomReports\Api\CreateDynamicCronInterface;
 use DEG\CustomReports\Model\AutomatedExport\Cron;
+use Exception;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Config\ValueFactory;
 
 class CreateDynamicCron implements CreateDynamicCronInterface
 {
-    /**
-     * @var \Magento\Framework\App\Config\ValueFactory
-     */
-    protected ValueFactory $configValueFactory;
-
-    /**
-     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     */
     public function __construct(
-        ValueFactory $configValueFactory
+        protected ValueFactory $configValueFactory,
+        protected Manager $cacheManager
     ) {
-        $this->configValueFactory = $configValueFactory;
     }
 
     /**
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterface $automatedExport
-     *
+     * @param AutomatedExportInterface $automatedExport
      * @return void
-     * @throws \Exception
+     * @throws Exception
      * @noinspection PhpDeprecationInspection
      */
-    public function execute(AutomatedExportInterface $automatedExport)
+    public function execute(AutomatedExportInterface $automatedExport): void
     {
         $automatedExportId = $automatedExport->getId();
-        $automatedExportModelName = 'automated_export_'.$automatedExportId;
+        $automatedExportModelName = 'automated_export_' . $automatedExportId;
 
         $cronStringPath = "crontab/default/jobs/$automatedExportModelName/schedule/cron_expr";
         $cronModelPath = "crontab/default/jobs/$automatedExportModelName/run/model";
@@ -54,5 +47,7 @@ class CreateDynamicCron implements CreateDynamicCronInterface
             ->setValue($automatedExportModelName)
             ->setPath($cronNamePath)
             ->save();
+
+        $this->cacheManager->clean(['config']);
     }
 }

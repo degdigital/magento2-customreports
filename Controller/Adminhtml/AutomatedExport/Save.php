@@ -7,10 +7,10 @@ use DEG\CustomReports\Api\Data\AutomatedExportInterfaceFactory;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Save extends Action implements HttpPostActionInterface
 {
@@ -19,48 +19,23 @@ class Save extends Action implements HttpPostActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'DEG_CustomReports::automatedexport_save';
+    public const ADMIN_RESOURCE = 'DEG_CustomReports::automatedexport_save';
 
-    /**
-     * @var DataPersistorInterface
-     */
-    protected DataPersistorInterface $dataPersistor;
-    /**
-     * @var \DEG\CustomReports\Api\AutomatedExportRepositoryInterface
-     */
-    private AutomatedExportRepositoryInterface $automatedExportRepository;
-    private AutomatedExportInterfaceFactory $automatedExportFactory;
-
-    private Manager $cacheManager;
-
-    /**
-     * @param Action\Context                                              $context
-     * @param DataPersistorInterface                                      $dataPersistor
-     * @param \DEG\CustomReports\Api\AutomatedExportRepositoryInterface   $automatedExportRepository
-     * @param \DEG\CustomReports\Api\Data\AutomatedExportInterfaceFactory $automatedExportFactory
-     * @param \Magento\Framework\App\Cache\Manager $cacheManager
-     */
     public function __construct(
-        Action\Context $context,
-        DataPersistorInterface $dataPersistor,
-        AutomatedExportRepositoryInterface $automatedExportRepository,
-        AutomatedExportInterfaceFactory $automatedExportFactory,
-        Manager $cacheManager
+        protected Action\Context $context,
+        protected DataPersistorInterface $dataPersistor,
+        protected AutomatedExportRepositoryInterface $automatedExportRepository,
+        protected AutomatedExportInterfaceFactory $automatedExportFactory
     ) {
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
-        $this->automatedExportRepository = $automatedExportRepository;
-        $this->automatedExportFactory = $automatedExportFactory;
-        $this->cacheManager = $cacheManager;
     }
 
     /**
-     * Save action
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
-     * @return \Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return ResultInterface
+     * @throws NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function execute(): ResultInterface
     {
@@ -88,7 +63,6 @@ class Save extends Action implements HttpPostActionInterface
                 $this->automatedExportRepository->save($automatedExport);
                 $this->messageManager->addSuccessMessage(__('You saved the automated export.'));
                 if ($automatedExport->getOrigData('cron_expr') != $automatedExport->getCronExpr()) {
-                    $this->cacheManager->clean(['config']);
                     $this->messageManager->addSuccessMessage(__('Configuration cache has been cleaned to register the updated cron expression.'));
                 }
                 $this->dataPersistor->clear('deg_customreports_automatedexport');

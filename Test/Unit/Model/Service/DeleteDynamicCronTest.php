@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace DEG\CustomReports\Test\Unit\Model\Service;
 
+use DEG\CustomReports\Model\AutomatedExport;
 use DEG\CustomReports\Model\Service\DeleteDynamicCron;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +30,9 @@ class DeleteDynamicCronTest extends TestCase
         parent::setUp();
 
         $this->configValueFactory = $this->createMock(ValueFactory::class);
-        $this->deleteDynamicCron = new DeleteDynamicCron($this->configValueFactory);
+        $this->cacheManager = $this->createStub(Manager::class);
+
+        $this->deleteDynamicCron = new DeleteDynamicCron($this->configValueFactory, $this->cacheManager);
     }
 
     /**
@@ -47,7 +51,8 @@ class DeleteDynamicCronTest extends TestCase
      */
     public function testExecute(): void
     {
-        $automatedExportModelName = 'pathModel';
+        $automatedExport = $this->createMock(AutomatedExport::class);
+
 
         $valueMock = $this->getMockBuilder(Value::class)
             ->setMethods(['load', 'setValue', 'setPath', 'save', 'delete'])
@@ -58,6 +63,6 @@ class DeleteDynamicCronTest extends TestCase
         $valueMock->method('load')->willReturnSelf();
         $valueMock->method('delete')->willReturnSelf();
 
-        $this->deleteDynamicCron->execute($automatedExportModelName);
+        $this->deleteDynamicCron->execute($automatedExport);
     }
 }

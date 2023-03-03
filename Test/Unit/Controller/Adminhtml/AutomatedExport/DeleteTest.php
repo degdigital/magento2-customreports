@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\DEG\CustomReports\Controller\Adminhtml\AutomatedExport;
 
-use DEG\CustomReports\Api\CustomReportRepositoryInterface;
+use DEG\CustomReports\Api\AutomatedExportRepositoryInterface;
 use DEG\CustomReports\Controller\Adminhtml\AutomatedExport\Delete;
 use Exception;
 use Magento\Backend\App\Action\Context;
@@ -28,9 +28,9 @@ class DeleteTest extends TestCase
     protected $context;
 
     /**
-     * @var CustomReportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AutomatedExportRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected $customReportRepository;
+    protected $automatedExportRepository;
 
     /**
      * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -64,8 +64,8 @@ class DeleteTest extends TestCase
         $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->context->method('getMessageManager')->willReturn($this->messageManagerMock);
 
-        $this->customReportRepository = $this->createMock(CustomReportRepositoryInterface::class);
-        $this->delete = new Delete($this->context, $this->customReportRepository);
+        $this->automatedExportRepository = $this->createMock(AutomatedExportRepositoryInterface::class);
+        $this->delete = new Delete($this->context, $this->automatedExportRepository);
     }
 
     /**
@@ -77,7 +77,7 @@ class DeleteTest extends TestCase
 
         unset($this->delete);
         unset($this->context);
-        unset($this->customReportRepository);
+        unset($this->automatedExportRepository);
     }
 
     public function testExecuteIdUndefined(): void
@@ -116,7 +116,7 @@ class DeleteTest extends TestCase
         $this->redirectPageFactoryMock->method('create')
             ->willReturn($redirectPageMock);
 
-        $this->customReportRepository->method('delete')
+        $this->automatedExportRepository->method('delete')
             ->willThrowException(new Exception('test failed deleted'));
 
         $this->delete->execute();
