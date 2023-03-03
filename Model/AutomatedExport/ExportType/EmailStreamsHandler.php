@@ -261,7 +261,7 @@ class EmailStreamsHandler extends DataObject implements StreamHandlerInterface
         array $templateVars
     ): void {
         foreach (explode(',', $emailRecipients) as $emailRecipient) {
-            $transportBuilder->addTo($emailRecipient);
+            $transportBuilder->addTo(trim($emailRecipient));
         }
 
         $senderParts = [];
