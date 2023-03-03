@@ -7,6 +7,7 @@ use DEG\CustomReports\Api\Data\AutomatedExportInterfaceFactory;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -30,22 +31,27 @@ class Save extends Action implements HttpPostActionInterface
     private AutomatedExportRepositoryInterface $automatedExportRepository;
     private AutomatedExportInterfaceFactory $automatedExportFactory;
 
+    private Manager $cacheManager;
+
     /**
      * @param Action\Context                                              $context
      * @param DataPersistorInterface                                      $dataPersistor
      * @param \DEG\CustomReports\Api\AutomatedExportRepositoryInterface   $automatedExportRepository
      * @param \DEG\CustomReports\Api\Data\AutomatedExportInterfaceFactory $automatedExportFactory
+     * @param \Magento\Framework\App\Cache\Manager $cacheManager
      */
     public function __construct(
         Action\Context $context,
         DataPersistorInterface $dataPersistor,
         AutomatedExportRepositoryInterface $automatedExportRepository,
-        AutomatedExportInterfaceFactory $automatedExportFactory
+        AutomatedExportInterfaceFactory $automatedExportFactory,
+        Manager $cacheManager
     ) {
         $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
         $this->automatedExportRepository = $automatedExportRepository;
         $this->automatedExportFactory = $automatedExportFactory;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -81,6 +87,10 @@ class Save extends Action implements HttpPostActionInterface
             try {
                 $this->automatedExportRepository->save($automatedExport);
                 $this->messageManager->addSuccessMessage(__('You saved the automated export.'));
+                if ($automatedExport->getOrigData('cron_expr') != $automatedExport->getCronExpr()) {
+                    $this->cacheManager->clean(['config']);
+                    $this->messageManager->addSuccessMessage(__('Configuration cache has been cleaned to register the updated cron expression.'));
+                }
                 $this->dataPersistor->clear('deg_customreports_automatedexport');
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath(

@@ -92,10 +92,7 @@ class SaveTest extends TestCase
         $this->automatedExportRepository = $this->createMock(AutomatedExportRepositoryInterface::class);
         $this->automatedExportFactory = $this->createMock(AutomatedExportInterfaceFactory::class);
         $this->save = new Save(
-            $this->context,
-            $this->dataPersistor,
-            $this->automatedExportRepository,
-            $this->automatedExportFactory
+            $this->context, $this->dataPersistor, $this->automatedExportRepository, $this->automatedExportFactory
         );
     }
 
