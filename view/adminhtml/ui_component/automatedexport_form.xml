@@ -199,9 +199,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="sortOrder" xsi:type="number">80</item>
                     <item name="dataScope" xsi:type="string">remote_host</item>
-                    <item name="placeholder" xsi:type="string">sftp.example.com</item>
+                    <item name="placeholder" xsi:type="string">(s)ftp.example.com</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp.example.com.]]></item>
+                        <item name="description" xsi:type="string"><![CDATA[E.g. (s)ftp.example.com.]]></item>
                     </item>
                 </item>
             </argument>
@@ -214,9 +214,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="sortOrder" xsi:type="number">90</item>
                     <item name="dataScope" xsi:type="string">remote_port</item>
-                    <item name="placeholder" xsi:type="string">Defaults to 22 if left blank</item>
+                    <item name="placeholder" xsi:type="string">Defaults to 22 if left blank, use 21 for an FTP connection</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string"><![CDATA[Defaults to 22 if left blank.]]></item>
+                        <item name="description" xsi:type="string"><![CDATA[Defaults to 22 if left blank, use 21 for an FTP connection.]]></item>
                     </item>
                 </item>
             </argument>
@@ -229,9 +229,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                     <item name="dataScope" xsi:type="string">remote_username</item>
-                    <item name="placeholder" xsi:type="string">sftp_username</item>
+                    <item name="placeholder" xsi:type="string">(s)ftp_username</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp_username.]]></item>
+                        <item name="description" xsi:type="string"><![CDATA[E.g. (s)ftp_username.]]></item>
                     </item>
                 </item>
             </argument>
@@ -246,9 +246,9 @@
                     <item name="sortOrder" xsi:type="number">110</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="dataScope" xsi:type="string">remote_password</item>
-                    <item name="placeholder" xsi:type="string">sftp_password123</item>
+                    <item name="placeholder" xsi:type="string">(s)ftp_password123</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string"><![CDATA[E.g. sftp_password123.]]></item>
+                        <item name="description" xsi:type="string"><![CDATA[E.g. (s)ftp_password123.]]></item>
                     </item>
                 </item>
             </argument>
@@ -261,9 +261,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                     <item name="dataScope" xsi:type="string">remote_location</item>
-                    <item name="placeholder" xsi:type="string">optional/sftp/folder/here</item>
+                    <item name="placeholder" xsi:type="string">optional/(s)ftp/folder/here</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string"><![CDATA[E.g. optional/sftp/folder/here.]]></item>
+                        <item name="description" xsi:type="string"><![CDATA[E.g. optional/(s)ftp/folder/here.]]></item>
                     </item>
                 </item>
             </argument>
