@@ -22,7 +22,7 @@ First, add a readonly user to your MySQL instance;
 
 ```
 CREATE USER 'readonly'@'localhost' IDENTIFIED BY 'readonly-password';
-GRANT SELECT on your-database.* to 'your-username'@'localhost';
+GRANT SELECT on your-database.* to 'readonly'@'localhost';
 ```
 
 Then, add a connection called `readonly` in `app/etc/env.php`:
