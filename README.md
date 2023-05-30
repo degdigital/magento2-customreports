@@ -14,6 +14,48 @@ composer require degdigital/magento2-customreports
 bin/magento setup:upgrade
 ```
 
+## Creating a readonly connection
+
+It is advised to use a readonly connection in order to avoid accidentally updating/inserting/deleting data. 
+
+First, add a readonly user to your MySQL instance;
+
+```
+CREATE USER 'readonly'@'localhost' IDENTIFIED BY 'readonly-password';
+GRANT SELECT on your-database.* to 'your-username'@'localhost';
+```
+
+Then, add a connection called `readonly` in `app/etc/env.php`:
+
+```php
+<?php
+return [
+    'db' => [
+        'table_prefix' => '',
+        'connection' => [
+            'default' => [
+                ... your default connection
+            ],
+            'readonly' => [
+                'host' => 'localhost',
+                'dbname' => 'your-database',
+                'username' => 'readonly',
+                'password' => 'readonly-password',
+                'model' => 'mysql4',
+                'engine' => 'innodb',
+                'initStatements' => 'SET NAMES utf8;',
+                'active' => '1',
+                'driver_options' => [
+                    1014 => false
+                ]
+            ]
+        ]
+    ]
+];
+```
+
+The extension will now automatically use the `readonly` connection.
+
 ## Usage
 In the admin, navigate to Reports > (Custom Reports) Custom Reports. Click Add New to add a new report.
 
