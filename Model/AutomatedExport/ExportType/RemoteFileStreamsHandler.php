@@ -9,10 +9,11 @@ use Exception;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Io\SftpFactory;
+use Magento\Framework\Filesystem\Io\FtpFactory;
 
 /**
  * Responsible for exporting a 'stream' (of query results) to a file on the local file system and uploading it to the
- * configured SFTP server. Whether the 'Local File Drop' export type is selected or not, this exporter must create a
+ * configured (S)FTP server. Whether the 'Local File Drop' export type is selected or not, this exporter must create a
  * local file to upload. If the 'Local File Drop' export type IS selected, this exporter does NOT duplicate a local
  * file. It will use the file created by the other exporter to prevent duplicate work.
  *
@@ -36,6 +37,11 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     protected SftpFactory $sftpFactory;
 
     /**
+     * @var FtpFactory
+     */
+    protected FtpFactory $ftpFactory;
+
+    /**
      * @var LocalFileStream[]
      */
     protected array $exportStreams = [];
@@ -48,15 +54,18 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
     /**
      * @param LocalFileStreamsHandler $localFileStreamsHandler
      * @param SftpFactory $sftpFactory
+     * @param FtpFactory $ftpFactory
      * @param array $data
      */
     public function __construct(
         LocalFileStreamsHandler $localFileStreamsHandler,
         SftpFactory $sftpFactory,
+        FtpFactory $ftpFactory,
         array $data = []
     ) {
         parent::__construct($data);
         $this->sftpFactory = $sftpFactory;
+        $this->ftpFactory = $ftpFactory;
         $this->localFileStreamsHandler = $localFileStreamsHandler;
     }
 
@@ -153,13 +162,14 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
      */
     protected function uploadFiles()
     {
-        $sftp = $this->sftpFactory->create();
         $automatedExport = $this->getAutomatedExport();
         $host = $automatedExport->getRemoteHost();
         if ($remotePort = $automatedExport->getRemotePort()) {
             $host = $host . ':' . $remotePort;
         }
-        $sftp->open([
+
+        $connection = ($remotePort == '21' ? $this->ftpFactory->create() : $this->sftpFactory->create());
+        $connection->open([
             'host' => $host,
             'username' => $automatedExport->getRemoteUsername(),
             'password' => $automatedExport->getRemotePassword(),
@@ -168,7 +178,7 @@ class RemoteFileStreamsHandler extends DataObject implements StreamHandlerInterf
         foreach ($this->exportStreams as $exportStream) {
             // phpcs:disable Magento2.Functions.DiscouragedFunction
             $filePath = $automatedExport->getRemoteLocation().'/'.basename($exportStream->getFilename());
-            $sftp->write($filePath, $exportStream->getFilepath());
+            $connection->write($filePath, $exportStream->getFilepath());
         }
     }
 
